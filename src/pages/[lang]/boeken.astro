@@ -1,0 +1,23 @@
+---
+import Bare from '../../layouts/Bare.astro';
+import BookBody from '../../components/BookBody.astro';
+import shopData from '../../data/shop.json';
+import { localizedShop, availableLangs } from '../../lib/shop.js';
+import { t } from '../../i18n/ui.js';
+import { bookingCfg } from '../../lib/booking.js';
+
+// See [lang]/index.astro — no `de` block in shop.json means no route at all.
+export function getStaticPaths() {
+  return availableLangs(shopData)
+    .filter((l) => l !== 'nl')
+    .map((l) => ({ params: { lang: l } }));
+}
+
+const lang = Astro.params.lang;
+const shop = localizedShop(shopData, lang);
+const T = t(lang);
+---
+
+<Bare shop={shop} lang={lang} title={T.bookTitle}>
+  <BookBody shop={shop} lang={lang} T={T} cfg={bookingCfg(shop, lang)} />
+</Bare>

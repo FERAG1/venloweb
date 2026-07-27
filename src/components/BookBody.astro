@@ -1,0 +1,881 @@
+---
+import Icon from './Icon.astro';
+import { base } from '../i18n/ui.js';
+const { shop, lang, T, cfg } = Astro.props;
+const homeHref = `${base(lang)}/`;
+---
+
+  <main id="bkPage">
+    <!-- progress — connectors live between the dots (see .steps li::before/::after)
+         rather than as one full-width rail underneath, so the filled length always
+         stops exactly at the step you're on. -->
+    <div class="prog">
+      <div class="prog-in">
+        <ol class="steps" id="bkSteps">
+          {[['1',T.stepService],['2',T.stepBarber],['3',T.stepDate],['4',T.stepDetails]].map(([n,label]) => (
+            <li data-s={n} class={n === '1' ? 'on' : undefined}>
+              <span>
+                <i>{n}</i>
+                <svg class="ck" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </span>
+              <b>{label}</b>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+
+    <div class="col">
+      <!-- 1 — service -->
+      <section class="pane on" data-p="1">
+        <h1>{T.q1Title}</h1>
+        <p class="sub">{T.q1Sub}</p>
+
+        <!-- Shown only to someone who booked here before (localStorage). Skips
+             straight to the date step with service + barber already filled. -->
+        <button type="button" class="again" id="bkAgain" hidden>
+          <span class="again-ic"><Icon name="clock" size={17} stroke={2} /></span>
+          <span class="again-main">
+            <strong>{T.againTitle}</strong>
+            <em id="bkAgainWhat"></em>
+          </span>
+          <span class="again-go"><Icon name="arrow" size={16} stroke={2} /></span>
+        </button>
+
+        <div class="opts" id="bkServices"></div>
+      </section>
+
+      <!-- 2 — barber -->
+      <section class="pane" data-p="2">
+        <h1>{T.q2Title}</h1>
+        <p class="sub">{T.q2Sub}</p>
+        <div class="opts" id="bkTeam"></div>
+      </section>
+
+      <!-- 3 — date + time -->
+      <section class="pane" data-p="3">
+        <h1>{T.q3Title}</h1>
+        <p class="sub">{T.q3Sub}</p>
+        <div class="days" id="bkDays"></div>
+        <div class="slots-head">
+          <span id="bkSlotLbl">{T.ctxPickDayFirst}</span>
+        </div>
+        <div class="slots" id="bkSlots"></div>
+      </section>
+
+      <!-- 4 — details -->
+      <section class="pane" data-p="4">
+        <h1>{T.q4Title}</h1>
+        <p class="sub">{T.q4Sub}</p>
+        <div class="summary" id="bkSummary"></div>
+        <form class="frm" id="bkForm" novalidate>
+          <label>
+            <span>{T.fieldName}</span>
+            <input name="naam" type="text" autocomplete="name" required placeholder={T.fieldNamePh} />
+          </label>
+          <label>
+            <span>{T.fieldTel}</span>
+            <input name="tel" type="tel" autocomplete="tel" required placeholder="06 12345678" />
+          </label>
+          <label class="full">
+            <span>{T.fieldMail} <i>{T.optional}</i></span>
+            <input name="mail" type="email" autocomplete="email" placeholder="jij@email.nl" />
+          </label>
+          <label class="full">
+            <span>{T.fieldNote} <i>{T.optional}</i></span>
+            <input name="opm" type="text" placeholder={T.notePh} />
+          </label>
+          <p class="err" id="bkErr" hidden></p>
+        </form>
+        <p class="note">
+          <Icon name="check" size={14} stroke={2.4} />
+          Je WhatsApp opent met de afspraak er al in — jij drukt op verzenden.
+        </p>
+      </section>
+
+      <!-- 5 — thank you -->
+      <section class="pane done-pane" data-p="5">
+        <div class="tick" aria-hidden="true">
+          <svg viewBox="0 0 52 52">
+            <circle class="tick-ring" cx="26" cy="26" r="24" />
+            <path class="tick-mark" d="M15 27l8 8 15-16" />
+          </svg>
+        </div>
+
+        <h1>{T.doneTitle}</h1>
+        <p class="sub done-sub" id="bkDoneSub"></p>
+
+        <div class="summary" id="bkDoneSum"></div>
+
+        <div class="retry">
+          <span>{T.retryLabel}</span>
+          <button type="button" id="bkRetry">{T.retryBtn}</button>
+        </div>
+
+        <div class="done-acts">
+          <a class="btn btn-lg full" id="bkCal" href="#" target="_blank" rel="noopener">
+            <Icon name="calendar" size={17} />{T.addCal}
+          </a>
+          <!-- The repeat-visit nudge: an all-day reminder 4 weeks out, which is
+               roughly when a cut grows out. Costs the customer one tap. -->
+          <a class="btn btn-lg btn-light full" id="bkCalNext" href="#" target="_blank" rel="noopener">
+            <Icon name="clock" size={17} stroke={2} />{T.remindMe}
+          </a>
+        </div>
+
+        <p class="done-foot">
+          <a href={homeHref}>{T.backToSite}</a> · {T.ratherCall}
+          <a href={`tel:${shop.phone.replace(/\s/g, '')}`}>{shop.phone}</a>
+        </p>
+      </section>
+    </div>
+
+    <!-- sticky action bar -->
+    <div class="dockbar">
+      <div class="dockbar-in">
+        <button class="btn btn-light nav-back" id="bkBack" hidden>
+          <Icon name="arrow" size={16} stroke={2} />
+        </button>
+        <span class="ctx" id="bkCtx">{T.ctxPickService}</span>
+        <button class="btn nav-next" id="bkNext" disabled>
+          <span id="bkNextLbl">{T.next}</span>
+          <Icon name="arrow" size={16} />
+        </button>
+      </div>
+    </div>
+  </main>
+
+<script type="application/json" id="bkCfg" set:html={JSON.stringify(cfg)}></script>
+
+<script>
+  const cfg = JSON.parse(document.getElementById('bkCfg').textContent);
+  const T = cfg.t;   // UI strings, serialised in by the page
+  const fmt = (str, vars = {}) => String(str).replace(/\{(\w+)\}/g, (m, k) => (vars[k] ?? ''));
+  const $ = (id) => document.getElementById(id);
+  const state = { step: 1, service: null, barber: null, day: null, slot: null };
+
+  // "09:00 – 18:00" → [540, 1080]. Note: en-dash, not hyphen.
+  const parseHours = (t) => {
+    const m = t.match(/(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})/);
+    return m ? [+m[1] * 60 + +m[2], +m[3] * 60 + +m[4]] : null;
+  };
+  const toHM = (m) => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+  const durOf = (s) => parseInt(s.time) || 30;
+  // hours[] is Monday-first; getDay() is Sunday-first
+  const hoursForDate = (d) => cfg.hours[(d.getDay() + 6) % 7];
+  const fmtDay = (d) => d.toLocaleDateString(cfg.locale, { weekday: 'long', day: 'numeric', month: 'long' });
+
+  /* ---------- static lists ---------- */
+  $('bkServices').innerHTML = cfg.services
+    .map((s, i) => `<button class="opt" data-i="${i}">
+        <span class="opt-main"><strong>${s.name}</strong><em>${s.desc || ''}</em></span>
+        <span class="opt-meta"><i>${s.time}</i><b>€${s.price}</b></span>
+      </button>`).join('');
+
+  /* Lucide paths, inlined — the summary and team rows are built via innerHTML
+     so they can't use the Icon component. */
+  const ico = (d, s = 16) =>
+    `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+  const P = {
+    scissors: '<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/>',
+    clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    cal: '<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+    users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  };
+
+  const avatar = (t, size) =>
+    t && t.photo
+      ? `<span class="av" style="width:${size}px;height:${size}px"><img src="${t.photo}" alt="" loading="lazy"></span>`
+      : `<span class="av av-any" style="width:${size}px;height:${size}px">${ico(P.users, size * 0.45)}</span>`;
+
+  $('bkTeam').innerHTML =
+    `<button class="opt" data-i="-1">
+       ${avatar(null, 46)}
+       <span class="opt-main"><strong>${T.anyBarber}</strong><em>${T.anyBarberSub}</em></span>
+     </button>` +
+    cfg.team.map((t, i) => `<button class="opt" data-i="${i}">
+        ${avatar(t, 46)}
+        <span class="opt-main"><strong>${t.name}</strong><em>${t.role}</em></span>
+      </button>`).join('');
+
+  /* ---------- 21 days ---------- */
+  const days = (() => {
+    const out = [], now = new Date();
+    for (let i = 0; i < 21; i++) {
+      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+      out.push({
+        date: d,
+        closed: !parseHours(hoursForDate(d).time),
+        dow: d.toLocaleDateString(cfg.locale, { weekday: 'short' }).replace('.', ''),
+        num: d.getDate(),
+        mon: d.toLocaleDateString(cfg.locale, { month: 'short' }).replace('.', ''),
+      });
+    }
+    $('bkDays').innerHTML = out.map((o, i) =>
+      `<button class="day${o.closed ? ' off' : ''}" data-i="${i}" ${o.closed ? 'disabled' : ''}>
+        <span class="d-dow">${o.dow}</span><span class="d-num">${o.num}</span><span class="d-mon">${o.mon}</span>
+      </button>`).join('');
+    return out;
+  })();
+
+  function renderSlots() {
+    const box = $('bkSlots'), lbl = $('bkSlotLbl');
+    if (state.day == null) { box.innerHTML = ''; lbl.textContent = 'Kies eerst een dag'; return; }
+    const day = days[state.day];
+    const open = parseHours(hoursForDate(day.date).time);
+    const dur = durOf(state.service);
+    const now = new Date();
+    const isToday = day.date.toDateString() === now.toDateString();
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+
+    const slots = [];
+    for (let t = open[0]; t + dur <= open[1]; t += 30) {
+      if (isToday && t <= nowMin + 45) continue; // no same-hour bookings
+      slots.push(t);
+    }
+    lbl.textContent = slots.length ? `${fmtDay(day.date)} — ${fmt(T.slotsFree, { n: slots.length })}` : T.ctxNoSlots;
+    box.innerHTML = slots.map((t) => `<button class="slot" data-t="${t}">${toHM(t)}</button>`).join('');
+  }
+
+  /* ---------- step machine ---------- */
+  const canAdvance = () =>
+    state.step === 1 ? !!state.service :
+    state.step === 2 ? !!state.barber :
+    state.step === 3 ? state.day != null && state.slot != null : true;
+
+  function ctxLine() {
+    if (state.step === 1) return state.service ? `${state.service.name} · €${state.service.price}` : T.ctxPickService;
+    if (state.step === 2) return state.barber || T.ctxPickBarber;
+    if (state.step === 3) {
+      if (state.day == null) return T.ctxPickDay;
+      const d = days[state.day].date;
+      return state.slot == null
+        ? d.toLocaleDateString(cfg.locale, { weekday: 'short', day: 'numeric', month: 'short' })
+        : `${d.toLocaleDateString(cfg.locale, { weekday: 'short', day: 'numeric', month: 'short' })} · ${toHM(state.slot)}`;
+    }
+    return 'Controleer en verstuur';
+  }
+
+  function paint() {
+    document.querySelectorAll('.pane').forEach((p) => p.classList.toggle('on', +p.dataset.p === state.step));
+    document.querySelectorAll('#bkSteps li').forEach((li) => {
+      const s = +li.dataset.s;
+      li.classList.toggle('on', s === state.step);
+      li.classList.toggle('done', s < state.step);
+      if (s === state.step) li.setAttribute('aria-current', 'step');
+      else li.removeAttribute('aria-current');
+    });
+    // step 5 is terminal — drop the progress rail and the action bar entirely
+    document.body.classList.toggle('done', state.step === 5);
+    $('bkBack').hidden = state.step === 1;
+    $('bkNext').disabled = !canAdvance();
+    $('bkNextLbl').textContent = state.step === 4 ? T.sendWhatsApp : T.next;
+    $('bkCtx').textContent = ctxLine();
+    // step 4's button label is wide enough to crush the context line to "C…",
+    // and the full summary is already on screen there anyway
+    document.querySelector('.dockbar').classList.toggle('final', state.step === 4);
+  }
+
+  const cap = (s) => s[0].toUpperCase() + s.slice(1);
+
+  function ticketHTML() {
+    const d = days[state.day].date;
+    const t = state.barberT;
+    return `
+      <div class="sum-head">
+        ${avatar(t, 52)}
+        <div class="sum-who">
+          <strong>${state.barber}</strong>
+          <span>${t ? t.role : T.firstFree}</span>
+        </div>
+      </div>
+      <div class="sum-rows">
+        <div class="sum-row">
+          <span class="sum-ic">${ico(P.scissors)}</span>
+          <span class="sum-lbl">${state.service.name}</span>
+          <b>€${state.service.price}</b>
+        </div>
+        <div class="sum-row">
+          <span class="sum-ic">${ico(P.cal)}</span>
+          <span class="sum-lbl">${cap(fmtDay(d))}</span>
+        </div>
+        <div class="sum-row">
+          <span class="sum-ic">${ico(P.clock)}</span>
+          <span class="sum-lbl">${toHM(state.slot)} · ${state.service.time}</span>
+        </div>
+      </div>`;
+  }
+
+  function summary() { $('bkSummary').innerHTML = ticketHTML(); }
+
+  const pick = (host, cls) => (e) => {
+    const b = e.target.closest('.' + cls);
+    if (!b || b.disabled) return null;
+    host.querySelectorAll('.' + cls).forEach((o) => o.classList.remove('sel'));
+    b.classList.add('sel');
+    return b;
+  };
+
+  $('bkServices').addEventListener('click', (e) => {
+    const b = pick($('bkServices'), 'opt')(e); if (!b) return;
+    state.service = cfg.services[+b.dataset.i];
+    state.slot = null; // duration changed, old slot may no longer fit
+    paint();
+  });
+
+  $('bkTeam').addEventListener('click', (e) => {
+    const b = pick($('bkTeam'), 'opt')(e); if (!b) return;
+    const i = +b.dataset.i;
+    state.barberT = i === -1 ? null : cfg.team[i];         // kept for the avatar
+    state.barber = i === -1 ? T.anyBarber : cfg.team[i].name;
+    paint();
+  });
+
+  $('bkDays').addEventListener('click', (e) => {
+    const b = pick($('bkDays'), 'day')(e); if (!b) return;
+    state.day = +b.dataset.i;
+    state.slot = null;
+    renderSlots();
+    paint();
+  });
+
+  $('bkSlots').addEventListener('click', (e) => {
+    const b = pick($('bkSlots'), 'slot')(e); if (!b) return;
+    state.slot = +b.dataset.t;
+    paint();
+  });
+
+  $('bkBack').addEventListener('click', () => { state.step--; paint(); scrollTo({ top: 0 }); });
+
+  $('bkNext').addEventListener('click', () => {
+    if (!canAdvance()) return;
+    if (state.step === 4) return submit();
+    state.step++;
+    if (state.step === 3) renderSlots();
+    if (state.step === 4) summary();
+    paint();
+    scrollTo({ top: 0 });
+  });
+
+  /* ---------- submit → WhatsApp ---------- */
+  function submit() {
+    const f = $('bkForm');
+    const naam = f.naam.value.trim(), tel = f.tel.value.trim(), err = $('bkErr');
+    if (naam.length < 2 || tel.replace(/\D/g, '').length < 8) {
+      err.textContent = T.errInvalid;
+      err.hidden = false;
+      (naam.length < 2 ? f.naam : f.tel).focus();
+      return;
+    }
+    err.hidden = true;
+    const d = days[state.day].date;
+
+    // WhatsApp markup: *bold*, _italic_. Date and time lead because that's the
+    // first thing the barber checks when the notification comes in.
+    //
+    // Deliberately emoji-free: WhatsApp Desktop renders them as U+FFFD boxes on
+    // some setups, and a garbled message is a bad first impression of the shop.
+    // Bold and blank lines carry the hierarchy instead, and every character here
+    // is latin-1 safe so it survives any client.
+    const lines = [
+      `*${T.waNew}*`,
+      '',
+      `*${cap(fmtDay(d))} · ${toHM(state.slot)}*`,
+      `${state.service.name} · ${state.service.time} · *€${state.service.price}*`,
+      `${T.waWith}: ${state.barber}`,
+      '',
+      `*${T.waDetails}*`,
+      naam,
+      tel,
+    ];
+    if (f.mail.value) lines.push(f.mail.value);
+    if (f.opm.value) lines.push('', `_${f.opm.value}_`);
+    lines.push('', `_${fmt(T.waSentVia, { shop: cfg.shopName })}_`);
+
+    waUrl = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(lines.join('\n'))}`;
+    window.open(waUrl, '_blank');
+    thanks(naam);
+  }
+
+  /* ---------- thank you ---------- */
+  let waUrl = '';
+
+  function thanks(naam) {
+    const first = naam.split(' ')[0];
+    // Honest copy: the message is sent from THEIR WhatsApp, so we can't claim
+    // it's confirmed — only that it's queued and waiting on their tap.
+    doneName = first;
+    $('bkDoneSub').innerHTML = fmt(T.doneSub, { first, shop: cfg.shopName });
+    $('bkDoneSum').innerHTML = ticketHTML();
+
+    // Google Calendar link — works on every platform, no .ics download
+    const d = days[state.day].date;
+    const start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), Math.floor(state.slot / 60), state.slot % 60);
+    const end = new Date(start.getTime() + durOf(state.service) * 60000);
+    const pad = (n) => String(n).padStart(2, '0');
+    const stamp = (x) => `${x.getFullYear()}${pad(x.getMonth() + 1)}${pad(x.getDate())}T${pad(x.getHours())}${pad(x.getMinutes())}00`;
+    const q = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: `${state.service.name} ${T.calAt} ${cfg.shopName}`,
+      dates: `${stamp(start)}/${stamp(end)}`,
+      details: `${T.calBarber}: ${state.barber}\n${T.calTel}: ${cfg.phone}`,
+      location: cfg.address,
+      ctz: 'Europe/Amsterdam',
+    });
+    $('bkCal').href = `https://calendar.google.com/calendar/render?${q}`;
+
+    // All-day nudge 4 weeks out — Google wants an exclusive end date, hence +1.
+    const back = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 28);
+    const backEnd = new Date(back.getFullYear(), back.getMonth(), back.getDate() + 1);
+    const dstamp = (x) => `${x.getFullYear()}${pad(x.getMonth() + 1)}${pad(x.getDate())}`;
+    const q2 = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: `${T.calRemind} — ${cfg.shopName}`,
+      dates: `${dstamp(back)}/${dstamp(backEnd)}`,
+      details: `${T.calLastTime}: ${state.service.name} ${T.calAt} ${state.barber}.\n\n`
+        + `${T.calRebook}: ${location.origin}${cfg.base}/boeken`,
+      location: cfg.address,
+      ctz: 'Europe/Amsterdam',
+    });
+    $('bkCalNext').href = `https://calendar.google.com/calendar/render?${q2}`;
+
+    saveLast();
+    state.step = 5;
+    paint();
+    scrollTo({ top: 0 });
+  }
+
+  $('bkRetry').addEventListener('click', () => waUrl && window.open(waUrl, '_blank'));
+
+  // WhatsApp takes focus immediately, so this screen is really the RETURN
+  // state — most people first see it when they switch back to the browser.
+  // Reword it for that moment instead of repeating the "press send" nudge.
+  let doneName = '';
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible' || state.step !== 5) return;
+    $('bkDoneSub').innerHTML =
+      fmt(T.doneBack, { name: doneName ? ', ' + doneName : '', shop: cfg.shopName });
+  });
+
+  $('bkForm').addEventListener('submit', (e) => { e.preventDefault(); submit(); });
+
+  /* ---------- entry points ----------
+     Two ways in besides a cold start: a ?dienst= deep link from the price list,
+     and the "weer hetzelfde" card for someone who booked here before. Both just
+     prefill state and jump the step machine forward. */
+
+  // Keyed per shop — several demo sites can share an origin (*.pages.dev).
+  const LAST_KEY = `vw:last:${cfg.slug}`;
+  const LAST_MAX_AGE = 1000 * 60 * 60 * 24 * 180; // 6 months; older is noise
+
+  function readLast() {
+    try {
+      const v = JSON.parse(localStorage.getItem(LAST_KEY) || 'null');
+      if (!v || Date.now() - v.at > LAST_MAX_AGE) return null;
+      // Prices and staff change — only offer it back if it still exists.
+      const i = cfg.services.findIndex((s) => s.slug === v.svc);
+      if (i === -1) return null;
+      const barber = v.barber && cfg.team.some((t) => t.name === v.barber) ? v.barber : null;
+      return { i, barber };
+    } catch { return null; }
+  }
+
+  function saveLast() {
+    try {
+      localStorage.setItem(LAST_KEY, JSON.stringify({
+        svc: state.service.slug,
+        barber: state.barber === T.anyBarber ? null : state.barber,
+        at: Date.now(),
+      }));
+    } catch { /* private mode — the flow works fine without it */ }
+  }
+
+  // Mark a service card selected without going through the click handler.
+  function selectService(i) {
+    state.service = cfg.services[i];
+    state.slot = null;
+    const btn = $('bkServices').querySelector(`.opt[data-i="${i}"]`);
+    if (btn) {
+      $('bkServices').querySelectorAll('.opt').forEach((o) => o.classList.remove('sel'));
+      btn.classList.add('sel');
+    }
+  }
+
+  const wanted = new URLSearchParams(location.search).get('dienst');
+  const deepIdx = wanted ? cfg.services.findIndex((s) => s.slug === wanted) : -1;
+  const last = readLast();
+
+  if (deepIdx !== -1) {
+    // Came from a price row — service is settled, start at the barber step.
+    selectService(deepIdx);
+    state.step = 2;
+  } else if (last) {
+    const svc = cfg.services[last.i];
+    $('bkAgainWhat').textContent = last.barber ? `${svc.name} bij ${last.barber}` : svc.name;
+    $('bkAgain').hidden = false;
+    $('bkAgain').addEventListener('click', () => {
+      selectService(last.i);
+      if (last.barber) {
+        state.barber = last.barber;
+        state.barberT = cfg.team.find((t) => t.name === last.barber) || null;
+        const bi = cfg.team.findIndex((t) => t.name === last.barber);
+        const bbtn = $('bkTeam').querySelector(`.opt[data-i="${bi}"]`);
+        if (bbtn) {
+          $('bkTeam').querySelectorAll('.opt').forEach((o) => o.classList.remove('sel'));
+          bbtn.classList.add('sel');
+        }
+      }
+      // Skip to the date step when we know both, otherwise just the barber step.
+      state.step = last.barber ? 3 : 2;
+      if (state.step === 3) renderSlots();
+      paint();
+      scrollTo({ top: 0 });
+    });
+  }
+
+  paint();
+</script>
+
+<style is:global>
+  #bkPage [hidden] { display: none !important; }
+
+  #bkPage { padding-bottom: 110px; }
+
+  /* ---------- progress ---------- */
+  #bkPage .prog {
+    position: sticky; top: 67px; z-index: 30;
+    background: rgba(241, 240, 236, 0.9);
+    backdrop-filter: saturate(180%) blur(16px);
+    -webkit-backdrop-filter: saturate(180%) blur(16px);
+    border-bottom: 1px solid var(--line);
+  }
+  #bkPage .prog-in { max-width: 720px; margin: 0 auto; padding: 0 var(--gut); }
+
+  /* ---------- repeat booking ----------
+     Deliberately not styled like an .opt row: it's a shortcut past the whole
+     wizard, so it reads as the brand-coloured thing above the list. */
+  #bkPage .again {
+    width: 100%; margin: 0 0 18px;
+    display: flex; align-items: center; gap: 13px;
+    padding: 14px 16px; text-align: left;
+    background: var(--brand); color: var(--brand-ink);
+    border: 0; border-radius: var(--r-md, 14px); cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 6px 18px -8px rgba(0, 0, 0, 0.45);
+    transition: transform 0.18s var(--ease-out), box-shadow 0.18s var(--ease-out);
+  }
+  #bkPage .again:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,.18), 0 12px 26px -10px rgba(0,0,0,.5); }
+  #bkPage .again:active { transform: translateY(0); }
+  #bkPage .again-ic {
+    width: 34px; height: 34px; flex: none;
+    display: grid; place-items: center; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+  }
+  #bkPage .again-main { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; }
+  #bkPage .again-main strong { font-weight: 600; font-size: 0.98rem; }
+  #bkPage .again-main em {
+    font-style: normal; font-size: 0.85rem; opacity: 0.72;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  #bkPage .again-go { flex: none; opacity: 0.7; }
+  #bkPage .steps {
+    display: flex; list-style: none;
+    padding: 13px 0 11px;
+  }
+  /* flex:1 makes the four steps split the full width evenly, so a dot's
+     horizontal position is an honest read of how far along you are. */
+  #bkPage .steps li {
+    position: relative;
+    flex: 1 1 0; min-width: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    font-size: 0.72rem; font-weight: 550; color: var(--ink-soft);
+    text-align: center;
+    transition: color 0.3s var(--ease-out);
+  }
+  #bkPage .steps li b {
+    font-weight: 550;
+    max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  /* Connector track + fill, drawn between this dot and the previous one.
+     ::after scales from 0→1 only once its step is reached, so the line can
+     never run further than the dot you're standing on. */
+  #bkPage .steps li::before,
+  #bkPage .steps li::after {
+    content: ''; position: absolute;
+    top: 11px; left: -50%; right: 50%;
+    margin: 0 17px; height: 2px; border-radius: 2px;
+  }
+  #bkPage .steps li::before { background: var(--line); }
+  #bkPage .steps li::after {
+    background: var(--brand);
+    transform: scaleX(0); transform-origin: left center;
+    transition: transform 0.45s var(--ease-out);
+  }
+  #bkPage .steps li:first-child::before,
+  #bkPage .steps li:first-child::after { display: none; }
+  #bkPage .steps li.on::after,
+  #bkPage .steps li.done::after { transform: scaleX(1); }
+
+  #bkPage .steps li span {
+    width: 22px; height: 22px; flex: none;
+    display: grid; place-items: center; border-radius: 50%;
+    background: var(--line); color: var(--ink-soft);
+    font-size: 0.7rem; font-weight: 650; line-height: 1;
+    transition: background 0.3s var(--ease-out), color 0.3s var(--ease-out),
+                box-shadow 0.3s var(--ease-out);
+  }
+  #bkPage .steps li span > * { grid-area: 1 / 1; }        /* number and tick share one cell */
+  #bkPage .steps li span .ck { width: 12px; height: 12px; opacity: 0; transform: scale(0.6); }
+  #bkPage .steps li span i { font-style: normal; transition: opacity 0.2s var(--ease-out); }
+
+  /* done — filled dot, number swapped for a tick */
+  #bkPage .steps li.done span { background: var(--brand); color: var(--brand-ink); }
+  #bkPage .steps li.done span i { opacity: 0; }
+  #bkPage .steps li.done span .ck {
+    opacity: 1; transform: scale(1);
+    transition: opacity 0.25s var(--ease-out) 0.1s, transform 0.35s var(--ease-out) 0.1s;
+  }
+  /* current — filled dot with a halo, so it reads as "you are here", not "finished" */
+  #bkPage .steps li.on { color: var(--ink); font-weight: 650; }
+  #bkPage .steps li.on span {
+    background: var(--brand); color: var(--brand-ink);
+    box-shadow: 0 0 0 4px var(--brand-halo, rgba(33, 30, 27, 0.12));
+  }
+
+  /* ---------- column ---------- */
+  #bkPage .col { max-width: 720px; margin: 0 auto; padding: clamp(28px, 6vw, 48px) var(--gut) 0; }
+  /* panes are <section> elements — kill the global section padding */
+  #bkPage .pane { display: none; padding: 0; animation: bkIn 0.4s var(--ease-out) both; }
+  #bkPage .pane.on { display: block; }
+  @keyframes bkIn { from { opacity: 0; transform: translateY(12px); } }
+  #bkPage h1 { font-size: clamp(1.7rem, 5.4vw, 2.3rem); letter-spacing: -0.04em; }
+  #bkPage .sub { color: var(--ink-mid); margin: 10px 0 var(--s4); }
+
+  /* ---------- options ---------- */
+  #bkPage .opts { display: grid; gap: 9px; }
+  #bkPage .opt {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    width: 100%; text-align: left; padding: 16px 18px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r); box-shadow: inset 0 1px 0 #fff, var(--sh-1);
+    cursor: pointer; font: inherit; color: inherit;
+    transition: border-color 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+  }
+  #bkPage .opt:hover { transform: translateY(-1px); box-shadow: inset 0 1px 0 #fff, var(--sh-2); }
+  #bkPage .opt.sel {
+    border-color: var(--brand);
+    box-shadow: inset 0 1px 0 #fff, 0 0 0 2px rgba(var(--brand-rgb), 0.15), var(--sh-2);
+  }
+  #bkPage .opt-main { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+
+  /* barber avatar — real portraits drop straight in via team[].photo */
+  #bkPage .av {
+    flex: none;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1px var(--hair), 0 1px 2px rgba(14, 14, 16, 0.08);
+  }
+  #bkPage .av img { width: 100%; height: 100%; object-fit: cover; }
+  #bkPage .av-any { color: var(--ink-soft); background: var(--bg); }
+  #bkPage .opt-main strong { font-weight: 550; }
+  #bkPage .opt-main em { font-style: normal; font-size: 0.85rem; color: var(--ink-soft); }
+  #bkPage .opt-meta { display: flex; align-items: center; gap: 14px; flex: none; }
+  #bkPage .opt-meta i {
+    font-style: normal; font-size: 0.78rem; color: var(--ink-soft);
+    padding: 4px 10px; border: 1px solid var(--line); border-radius: 100px;
+  }
+  #bkPage .opt-meta b { font-size: 1.04rem; font-weight: 620; letter-spacing: -0.03em; }
+
+  /* ---------- days ---------- */
+  #bkPage .days {
+    display: flex; gap: 8px; overflow-x: auto;
+    /* overflow-x:auto makes overflow-y computed `auto` too, so the selected
+       card's 2px ring and drop shadow get clipped top and bottom. This padding
+       (with a matching negative margin) gives them room inside the scroller. */
+    padding: 6px 4px 14px;
+    margin: -6px -4px var(--s3);
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  #bkPage .days::-webkit-scrollbar { display: none; }
+  #bkPage .day {
+    flex: none; width: 66px;
+    display: flex; flex-direction: column; align-items: center; gap: 1px;
+    padding: 12px 6px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r); box-shadow: inset 0 1px 0 #fff, var(--sh-1);
+    cursor: pointer; font: inherit; color: inherit;
+    transition: border-color 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+  }
+  #bkPage .day:hover:not(.off) { transform: translateY(-1px); box-shadow: inset 0 1px 0 #fff, var(--sh-2); }
+  #bkPage .day.sel {
+    border-color: var(--brand);
+    box-shadow: inset 0 1px 0 #fff, 0 0 0 2px rgba(var(--brand-rgb), 0.15), var(--sh-2);
+  }
+  #bkPage .day.off { opacity: 0.34; cursor: not-allowed; box-shadow: none; }
+  #bkPage .d-dow, #bkPage .d-mon { font-size: 0.67rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); }
+  #bkPage .d-num { font-size: 1.28rem; font-weight: 620; letter-spacing: -0.03em; }
+
+  #bkPage .slots-head { font-size: 0.86rem; color: var(--ink-soft); margin-bottom: 12px; }
+  #bkPage .slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; }
+  #bkPage .slot {
+    padding: 13px 6px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-sm); box-shadow: inset 0 1px 0 #fff, var(--sh-1);
+    cursor: pointer; color: inherit;
+    /* was `font: 550 0.94rem inherit` — invalid shorthand. The shorthand needs a
+       family, so "inherit" was parsed as a font NAME and the times fell back to
+       the browser default face, which is why they read light and generic. */
+    font-family: inherit;
+    font-size: 0.91rem;
+    font-weight: 550;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    transition: border-color 0.16s var(--ease-out), box-shadow 0.16s var(--ease-out), transform 0.16s var(--ease-out);
+  }
+  #bkPage .slot:hover { transform: translateY(-1px); box-shadow: inset 0 1px 0 #fff, var(--sh-2); }
+  /* full override — the base `inset 0 1px 0 #fff` reads as a white halo on a
+     dark fill, which is what made the selected pill look broken */
+  #bkPage .slot.sel {
+    background: var(--brand);
+    color: var(--brand-ink);
+    border-color: rgba(0, 0, 0, 0.3);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.28),
+      0 1px 2px rgba(var(--brand-rgb), 0.24),
+      0 4px 10px rgba(var(--brand-rgb), 0.22);
+  }
+
+  /* ---------- summary + form ---------- */
+  /* summary reads as a ticket: who at the top, then the details */
+  #bkPage .summary {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r); margin-bottom: var(--s4); overflow: hidden;
+    box-shadow: inset 0 1px 0 #fff, var(--sh-2);
+  }
+  #bkPage .sum-head {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 18px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
+  }
+  #bkPage .sum-who { display: flex; flex-direction: column; min-width: 0; }
+  #bkPage .sum-who strong { font-size: 1.02rem; font-weight: 600; letter-spacing: -0.02em; }
+  #bkPage .sum-who span { font-size: 0.85rem; color: var(--ink-soft); }
+
+  #bkPage .sum-rows { padding: 4px 18px; }
+  #bkPage .sum-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 0; font-size: 0.95rem;
+  }
+  #bkPage .sum-row + .sum-row { border-top: 1px solid var(--line); }
+  #bkPage .sum-ic { flex: none; display: grid; place-items: center; color: var(--gold); }
+  #bkPage .sum-lbl { flex: 1; min-width: 0; font-weight: 500; }
+  #bkPage .sum-row b {
+    font-size: 1.06rem; font-weight: 620; letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  #bkPage .frm { display: grid; gap: 13px; }
+  #bkPage .frm label { display: flex; flex-direction: column; gap: 6px; }
+  #bkPage .frm label > span { font-size: 0.83rem; font-weight: 550; color: var(--ink-mid); }
+  #bkPage .frm label i { font-style: normal; font-weight: 400; color: var(--ink-soft); }
+  #bkPage .frm input {
+    padding: 14px 15px;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--r-sm); box-shadow: inset 0 1px 2px rgba(14, 14, 16, 0.04);
+    font: inherit; color: var(--ink);
+    transition: border-color 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
+  }
+  #bkPage .frm input:focus {
+    outline: none; border-color: var(--brand);
+    box-shadow: inset 0 1px 2px rgba(14, 14, 16, 0.04), 0 0 0 3px rgba(var(--brand-rgb), 0.14);
+  }
+  #bkPage .frm .full { grid-column: 1 / -1; }
+  #bkPage .err { color: #b3261e; font-size: 0.87rem; grid-column: 1 / -1; }
+  #bkPage .note {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: var(--s3); font-size: 0.84rem; color: var(--ink-soft);
+  }
+  #bkPage .note svg { color: #17a34a; flex: none; }
+  @media (min-width: 620px) { #bkPage .frm { grid-template-columns: 1fr 1fr; } }
+
+  /* ---------- sticky action bar ---------- */
+  #bkPage .dockbar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 50;
+    background: rgba(241, 240, 236, 0.88);
+    backdrop-filter: saturate(180%) blur(18px);
+    -webkit-backdrop-filter: saturate(180%) blur(18px);
+    border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  #bkPage .dockbar-in {
+    max-width: 720px; margin: 0 auto;
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px var(--gut);
+  }
+  #bkPage .ctx {
+    flex: 1; min-width: 0;
+    font-size: 0.88rem; font-weight: 550; color: var(--ink-mid);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  /* ---------- thank you ---------- */
+  body.done #bkPage .prog, body.done #bkPage .dockbar { display: none; }
+  body.done #bkPage { padding-bottom: var(--s6); }
+  #bkPage .done-pane { text-align: center; }
+  #bkPage .done-pane .summary { text-align: left; margin-top: var(--s4); }
+  #bkPage .done-sub { margin-inline: auto; max-width: 40ch; }
+  #bkPage .done-sub strong { color: var(--ink); font-weight: 600; }
+
+  #bkPage .tick { width: 76px; height: 76px; margin: 0 auto var(--s4); }
+  #bkPage .tick svg { width: 100%; height: 100%; }
+  #bkPage .tick-ring, #bkPage .tick-mark {
+    fill: none; stroke: var(--brand); stroke-width: 2.5;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  #bkPage .tick-ring {
+    stroke-dasharray: 152; stroke-dashoffset: 152;
+    animation: tickRing 0.7s var(--ease-out) forwards;
+  }
+  #bkPage .tick-mark {
+    stroke-width: 3.4;
+    stroke-dasharray: 36; stroke-dashoffset: 36;
+    animation: tickMark 0.4s var(--ease-out) 0.5s forwards;
+  }
+  @keyframes tickRing { to { stroke-dashoffset: 0; } }
+  @keyframes tickMark { to { stroke-dashoffset: 0; } }
+
+  #bkPage .retry {
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    flex-wrap: wrap;
+    margin-top: var(--s3); font-size: 0.86rem; color: var(--ink-soft);
+  }
+  #bkPage .retry button {
+    background: none; border: 0; padding: 0; cursor: pointer;
+    font: inherit; font-weight: 600; color: var(--ink);
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+
+  #bkPage .done-acts { display: grid; gap: 10px; margin-top: var(--s4); }
+  #bkPage .done-acts .btn { width: 100%; }
+  #bkPage .done-foot { margin-top: var(--s3); font-size: 0.88rem; color: var(--ink-soft); }
+  #bkPage .done-foot a { color: var(--ink); font-weight: 550; text-underline-offset: 3px; }
+  @media (min-width: 560px) {
+    #bkPage .done-acts { grid-template-columns: 1fr 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #bkPage .tick-ring, #bkPage .tick-mark { animation: none; stroke-dashoffset: 0; }
+  }
+
+  #bkPage .dockbar.final .ctx { display: none; }
+  #bkPage .dockbar.final .nav-next { flex: 1; }
+  #bkPage .nav-back { padding: 13px; flex: none; }
+  #bkPage .nav-back svg { transform: rotate(180deg); }
+  #bkPage .nav-next { flex: none; }
+  #bkPage .dockbar .btn:disabled { opacity: 0.42; cursor: not-allowed; transform: none; box-shadow: none; }
+</style>

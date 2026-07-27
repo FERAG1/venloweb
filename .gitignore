@@ -1,0 +1,21 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# environment / secrets
+.env
+.env.*
+!.env.example
+
+# editor + OS cruft
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# logs
+npm-debug.log*
+*.log

@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import HomeBody from '../components/HomeBody.astro';
+import shopData from '../data/shop.json';
+import { localizedShop, availableLangs } from '../lib/shop.js';
+import { t } from '../i18n/ui.js';
+
+const lang = 'nl';
+const shop = localizedShop(shopData, lang);
+const langs = availableLangs(shopData);
+---
+
+<Base shop={shop} lang={lang} langs={langs}>
+  <HomeBody shop={shop} lang={lang} langs={langs} T={t(lang)} />
+</Base>

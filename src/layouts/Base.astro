@@ -1,0 +1,322 @@
+---
+import '../styles/theme.css';
+import Icon from '../components/Icon.astro';
+import { t, base } from '../i18n/ui.js';
+const { shop, lang = 'nl', langs = ['nl'] } = Astro.props;
+const T = t(lang);
+const a = shop.address;
+const book = shop.booking || `${base(lang)}/boeken`;
+const bookAttrs = shop.booking ? { target: '_blank', rel: 'noopener' } : {};
+const tel = `tel:${shop.phone.replace(/\s/g, '')}`;
+
+const site = Astro.site?.href.replace(/\/$/, '') ?? '';
+const pageUrl = `${site}${Astro.url.pathname}`;
+// Every language version of this page, for hreflang. The path after the language
+// prefix is the same on both, so we can derive siblings from the current URL.
+const bare = Astro.url.pathname.replace(/^\/de(?=\/|$)/, '') || '/';
+const alternates = langs.map((l) => ({ lang: l, href: `${site}${base(l)}${bare}` }));
+const title = `${shop.name} — ${shop.tagline}`;
+
+// priceRange and opening hours are derived, not hand-maintained — they can't
+// drift out of sync with the price list and hours shown on the page.
+const prices = shop.services.map((s) => Number(s.price));
+const priceRange = `€${Math.min(...prices)}–€${Math.max(...prices)}`;
+
+// Keyed by POSITION, not by day name — hours[] is Monday-first by convention and
+// the names are translated, so DAY['Montag'] would be undefined on /de/.
+// Likewise "closed" is detected by the absence of a clock, not by the word.
+const DAY = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const openingHours = shop.hours
+  .map((h, i) => ({ ...h, dow: DAY[i] }))
+  .filter((h) => /\d{1,2}:\d{2}/.test(h.time))
+  .map((h) => {
+    const [open, close] = h.time.split(/\s*[–-]\s*/);
+    return { '@type': 'OpeningHoursSpecification', dayOfWeek: h.dow, opens: open, closes: close };
+  });
+
+// Root-relative, not bare anchors — this nav also renders on /boeken, where a
+// bare '#prijzen' would resolve to /boeken#prijzen and silently do nothing.
+// The language prefix keeps you inside the version you're reading.
+const B = base(lang);
+const links = [
+  { href: `${B}/#prijzen`, label: T.navPrices, icon: 'tag' },
+  { href: `${B}/boeken`, label: T.navBook, icon: 'calendar' },
+  { href: `${B}/#werk`, label: T.navWork, icon: 'image' },
+  { href: `${B}/#reviews`, label: T.navReviews, icon: 'spark' },
+  { href: `${B}/#bezoek`, label: T.navVisit, icon: 'pin' },
+];
+---
+<!doctype html>
+<html lang={T.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- DEMO ONLY. Remove once signed and moved to the client's own domain. -->
+    <meta name="robots" content="noindex, nofollow" />
+
+    <title>{title}</title>
+    <meta name="description" content={shop.intro} />
+    <meta name="theme-color" content="#f1f0ec" />
+    <link rel="canonical" href={pageUrl} />
+    {alternates.map((alt) => (
+      <link rel="alternate" hreflang={alt.lang} href={alt.href} />
+    ))}
+    {alternates.length > 1 && (
+      <link rel="alternate" hreflang="x-default" href={alternates[0].href} />
+    )}
+
+    <!-- Open Graph: without these, sharing the link in WhatsApp shows a blank
+         box. For a business that lives in WhatsApp, that's the whole preview. -->
+    <meta property="og:type" content="business.business" />
+    <meta property="og:site_name" content={shop.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={shop.intro} />
+    <meta property="og:image" content={shop.hero} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:locale" content={T.locale.replace("-", "_")} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={shop.intro} />
+    <meta name="twitter:image" content={shop.hero} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <script is:inline>document.documentElement.classList.add('js');</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- LocalBusiness: this is what Google reads for the local pack. -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'HairSalon',
+      '@id': `${site}/#business`,
+      name: shop.name,
+      description: shop.intro,
+      url: site || undefined,
+      telephone: shop.phone,
+      image: [shop.hero, shop.storefront].filter(Boolean),
+      priceRange,
+      currenciesAccepted: 'EUR',
+      paymentAccepted: 'Cash, Debit Card',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: a.street,
+        postalCode: a.postcode,
+        addressLocality: a.city,
+        addressCountry: 'NL',
+      },
+      // omitted unless real coordinates are filled in — a guessed lat/lng puts
+      // the shop on the wrong corner in Maps
+      geo: shop.geo?.lat && shop.geo?.lng
+        ? { '@type': 'GeoCoordinates', latitude: shop.geo.lat, longitude: shop.geo.lng }
+        : undefined,
+      hasMap: a.maps,
+      openingHoursSpecification: openingHours,
+      makesOffer: shop.services.map((s) => ({
+        '@type': 'Offer',
+        itemOffered: { '@type': 'Service', name: s.name },
+        price: s.price,
+        priceCurrency: 'EUR',
+      })),
+      aggregateRating: shop.rating?.count ? {
+        '@type': 'AggregateRating',
+        ratingValue: shop.rating.score,
+        reviewCount: shop.rating.count,
+      } : undefined,
+    })} />
+
+    <!-- FAQPage: eligible for the expandable Q&A block in Google results -->
+    {shop.faq?.length && (
+      <script type="application/ld+json" set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: shop.faq.map((f) => ({
+          '@type': 'Question',
+          name: f.q,
+          acceptedAnswer: { '@type': 'Answer', text: f.a },
+        })),
+      })} />
+    )}
+  </head>
+
+  <body>
+    <!-- ============================== NAV ============================== -->
+    <header class="nav" id="nav">
+      <div class="nav-in">
+        <a class="mark" href={`${B}/#top`}>{shop.name}</a>
+
+        <nav class="nav-links">
+          {links.map((l) => (
+            <a href={l.href}>
+              <Icon name={l.icon} size={15} stroke={1.9} />
+              <span>{l.label}</span>
+            </a>
+          ))}
+        </nav>
+
+        <a class="btn btn-sm nav-cta" href={book} {...bookAttrs}>
+          <Icon name="calendar" size={15} stroke={1.9} />
+          {T.navAppt}
+        </a>
+
+        <!-- below 940px the nav pill would otherwise hold only the wordmark -->
+        <a class="btn btn-sm nav-tel" href={tel} aria-label={T.callAria}>
+          <Icon name="phone" size={16} stroke={1.9} />
+        </a>
+      </div>
+    </header>
+
+    <slot />
+
+    <!-- Sticky mobile action bar — this traffic is overwhelmingly thumbs. -->
+    <nav class="dock">
+      <a href={tel}><Icon name="phone" size={17} /><span>{T.dockCall}</span></a>
+      <a href={a.maps} target="_blank" rel="noopener"><Icon name="pin" size={17} /><span>{T.dockRoute}</span></a>
+      <a class="dock-cta" href={book} {...bookAttrs}><Icon name="calendar" size={17} /><span>{T.navAppt}</span></a>
+    </nav>
+
+    <style>
+      /* ---------- nav ---------- */
+      .nav {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 80;
+        padding: 16px var(--gut);
+        transition: padding 0.4s var(--ease-out);
+      }
+      .nav-in {
+        max-width: var(--max);
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 10px 10px 10px 20px;
+        border: 1px solid transparent;
+        border-radius: 100px;
+        transition: background 0.4s var(--ease-out), border-color 0.4s var(--ease-out),
+                    box-shadow 0.4s var(--ease-out), backdrop-filter 0.4s var(--ease-out);
+      }
+
+      /* scrolled: condense into a floating pill */
+      .nav.stuck { padding-top: 10px; }
+      .nav.stuck .nav-in {
+        background: rgba(255, 255, 255, 0.82);
+        backdrop-filter: saturate(180%) blur(18px);
+        -webkit-backdrop-filter: saturate(180%) blur(18px);
+        border-color: var(--line);
+        box-shadow: inset 0 1px 0 #fff, var(--sh-2);
+      }
+
+      .mark {
+        font-weight: 640;
+        letter-spacing: -0.035em;
+        font-size: 1.06rem;
+        color: #fff;
+        text-decoration: none;
+        transition: color 0.4s var(--ease-out);
+      }
+      .nav.stuck .mark { color: var(--ink); }
+
+      .nav-links { display: none; align-items: center; gap: 4px; }
+      .nav-links a {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 14px;
+        border-radius: 100px;
+        color: rgba(255, 255, 255, 0.78);
+        text-decoration: none;
+        font-size: 0.88rem;
+        font-weight: 500;
+        transition: color 0.3s var(--ease-out), background 0.3s var(--ease-out);
+      }
+      .nav-links a:hover { color: #fff; background: rgba(255, 255, 255, 0.12); }
+      .nav-links a svg { opacity: 0.65; transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out); }
+      .nav-links a:hover svg { opacity: 1; transform: translateY(-1px); }
+
+      .nav.stuck .nav-links a { color: var(--ink-mid); }
+      .nav.stuck .nav-links a:hover { color: var(--ink); background: rgba(14, 14, 16, 0.05); }
+
+      .nav-cta { display: none; }
+      .nav-tel { padding: 10px; aspect-ratio: 1; }
+      @media (min-width: 940px) {
+        .nav-links, .nav-cta { display: inline-flex; }
+        .nav-tel { display: none; }
+      }
+
+      /* ---------- mobile dock ---------- */
+      .dock {
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        z-index: 90;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1.4fr;
+        gap: 6px;
+        margin: 10px;
+        margin-bottom: calc(10px + env(safe-area-inset-bottom));
+        padding: 7px;
+        background: rgba(255, 255, 255, 0.84);
+        backdrop-filter: saturate(180%) blur(18px);
+        -webkit-backdrop-filter: saturate(180%) blur(18px);
+        border: 1px solid var(--line);
+        border-radius: 100px;
+        box-shadow: inset 0 1px 0 #fff, var(--sh-3);
+      }
+      .dock a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 13px 4px;
+        border-radius: 100px;
+        color: var(--ink-mid);
+        text-decoration: none;
+        font-size: 0.88rem;
+        font-weight: 550;
+      }
+      .dock a svg { opacity: 0.75; }
+      /* needs `a.dock-cta` — plain `.dock-cta` loses to `.dock a` and the
+         label renders black-on-black */
+      .dock a.dock-cta {
+        background: var(--brand);
+        color: var(--brand-ink);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.24),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.28),
+          0 2px 5px rgba(var(--brand-rgb), 0.3);
+      }
+      .dock a.dock-cta svg { opacity: 0.95; }
+      .dock a.dock-cta:active { box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5); }
+      @media (min-width: 900px) { .dock { display: none; } }
+    </style>
+
+    <script>
+      // stagger + rise reveals
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('in');
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.08, rootMargin: '0px 0px -50px 0px' }
+      );
+      document.querySelectorAll('.rise, .stagger').forEach((el) => io.observe(el));
+
+      // nav condenses once you're past the hero
+      const nav = document.getElementById('nav');
+      const onScroll = () => nav.classList.toggle('stuck', window.scrollY > 80);
+      onScroll();
+      addEventListener('scroll', onScroll, { passive: true });
+    </script>
+  </body>
+</html>

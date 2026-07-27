@@ -1,0 +1,225 @@
+/* ---------------------------------------------------------------
+   Clean, subtle, physical. Depth comes from elevation, inner
+   highlights and real photography — never gradients.
+   --------------------------------------------------------------- */
+
+:root {
+  /* 1120 keeps line lengths readable at the display sizes used here; the
+     gutter grows with the viewport so wide screens get real breathing room
+     instead of content running to the edges. */
+  --max: 1120px;
+  --gut: clamp(20px, 4vw, 44px);
+  /* inset of the full-bleed photo frames (hero, final CTA) */
+  --frame: clamp(10px, 1.3vw, 18px);
+
+  /* page sits darker than cards so every surface visibly lifts */
+  --bg: #f1f0ec;
+  --surface: #ffffff;
+  --surface-2: #f8f7f5;
+  --ink: #0e0e10;
+  --ink-mid: #4e4e56;
+  --ink-soft: #8a8a93;
+  --line: #e5e3de;
+  --hair: rgba(14, 14, 16, 0.08);
+  --gold: #a17c42;
+
+  /* BRAND — one swap here re-skins every primary button on the site.
+     Warm near-black, not pure black: it carries a little brown so it sits
+     with the cream page and the brass accent instead of punching a cold
+     hole through them. Softer than #000 without going grey and weak.
+     Alternates, same physics — swap all three values together:
+       oxblood     #7a2733  ·  122, 39, 51
+       brick/rust  #9c3d22  ·  156, 61, 34
+       espresso    #4a3428  ·  74, 52, 40
+       brass       #a17c42  ·  161, 124, 66                                */
+  --brand: #211e1b;
+  --brand-hi: #302b27;
+  --brand-ink: #ffffff;
+  --brand-rgb: 33, 30, 27; /* tints the button shadows — neutral black
+                              shadows under a coloured button look dirty */
+
+  --r-sm: 10px;
+  --r: 16px;
+  --r-lg: 26px;
+  --r-xl: 34px;
+
+  /* spacing scale — every gap is one of these, nothing arbitrary */
+  --s1: 6px;  --s2: 12px; --s3: 20px; --s4: 32px;
+  --s5: 52px; --s6: 84px; --s7: 132px;
+
+  --sh-1: 0 1px 2px rgba(14, 14, 16, 0.05), 0 2px 6px rgba(14, 14, 16, 0.04);
+  --sh-2: 0 1px 2px rgba(14, 14, 16, 0.05), 0 6px 16px rgba(14, 14, 16, 0.07);
+  --sh-3: 0 2px 6px rgba(14, 14, 16, 0.06), 0 18px 44px rgba(14, 14, 16, 0.12);
+  --sh-4: 0 4px 12px rgba(14, 14, 16, 0.07), 0 32px 80px rgba(14, 14, 16, 0.16);
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: -0.006em;
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 82px;
+  overflow-x: hidden;
+}
+@media (min-width: 900px) { body { padding-bottom: 0; } }
+
+img { display: block; max-width: 100%; height: auto; }
+
+.wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gut); }
+
+/* ------------------------------ type ------------------------------ */
+h1, h2, h3 { font-weight: 600; line-height: 1.02; letter-spacing: -0.04em; }
+h1 { font-size: clamp(3rem, 12.5vw, 6.6rem); font-weight: 640; letter-spacing: -0.05em; }
+h2 { font-size: clamp(2.1rem, 6.6vw, 3.6rem); }
+h3 { font-size: 1.05rem; letter-spacing: -0.022em; }
+
+section { padding: clamp(72px, 12vw, var(--s7)) 0; }
+/* the nav is fixed — without this, anchor jumps land under it */
+section[id], header[id] { scroll-margin-top: 84px; }
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: var(--s3);
+}
+.eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+
+.lede { color: var(--ink-mid); font-size: 1.08rem; max-width: 44ch; margin-top: var(--s3); }
+
+/* ------------------------------ buttons ------------------------------
+   Stripe-style physicality: an inset top highlight sells the curvature,
+   a darker inset bottom grounds it, and three stacked outer shadows do
+   the lifting. Press state actually moves.                              */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 26px;
+  border-radius: 100px;
+  font-size: 0.93rem;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background: var(--brand);
+  color: var(--brand-ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.28),
+    0 1px 1px rgba(var(--brand-rgb), 0.2),
+    0 3px 6px rgba(var(--brand-rgb), 0.22),
+    0 8px 18px rgba(var(--brand-rgb), 0.24);
+  transition: transform 0.18s var(--ease-out), box-shadow 0.18s var(--ease-out), background 0.18s var(--ease-out);
+}
+.btn:hover {
+  background: var(--brand-hi);
+  transform: translateY(-1.5px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.28),
+    0 2px 3px rgba(var(--brand-rgb), 0.22),
+    0 6px 12px rgba(var(--brand-rgb), 0.26),
+    0 14px 28px rgba(var(--brand-rgb), 0.3);
+}
+.btn:active {
+  transform: translateY(0.5px);
+  box-shadow:
+    inset 0 1px 3px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 1px rgba(var(--brand-rgb), 0.2);
+}
+.btn svg { opacity: 0.9; }
+
+/* light variant — same physics, inverted */
+.btn-light {
+  background: #fff;
+  color: var(--ink);
+  border-color: rgba(14, 14, 16, 0.1);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -1px 0 rgba(14, 14, 16, 0.06),
+    0 1px 1px rgba(14, 14, 16, 0.05),
+    0 2px 4px rgba(14, 14, 16, 0.05),
+    0 6px 14px rgba(14, 14, 16, 0.07);
+}
+.btn-light:hover {
+  background: #fff;
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -1px 0 rgba(14, 14, 16, 0.07),
+    0 2px 3px rgba(14, 14, 16, 0.06),
+    0 6px 12px rgba(14, 14, 16, 0.08),
+    0 14px 26px rgba(14, 14, 16, 0.1);
+}
+.btn-light:active {
+  box-shadow: inset 0 2px 4px rgba(14, 14, 16, 0.12), 0 1px 1px rgba(14, 14, 16, 0.05);
+}
+
+.btn-sm { padding: 10px 18px; font-size: 0.86rem; }
+.btn-lg { padding: 17px 32px; font-size: 1rem; }
+
+/* ------------------------------ surfaces ------------------------------ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  box-shadow: inset 0 1px 0 #fff, var(--sh-1);
+}
+
+.media {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r);
+  background: #e9e7e2;
+  box-shadow: var(--sh-2);
+}
+.media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--hair);
+  pointer-events: none;
+}
+.media img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease); }
+.media:hover img { transform: scale(1.04); }
+
+/* ------------------------------ motion ------------------------------
+   Children stagger rather than whole blocks fading in as one slab —
+   that uniform fade is the tell of a template.                          */
+.js .rise { opacity: 0; transform: translateY(22px); transition: opacity 0.75s var(--ease-out), transform 0.75s var(--ease-out); }
+.js .rise.in { opacity: 1; transform: none; }
+.js .stagger > * { opacity: 0; transform: translateY(20px); transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out); }
+.js .stagger.in > * { opacity: 1; transform: none; }
+.js .stagger.in > *:nth-child(1) { transition-delay: 0ms; }
+.js .stagger.in > *:nth-child(2) { transition-delay: 70ms; }
+.js .stagger.in > *:nth-child(3) { transition-delay: 140ms; }
+.js .stagger.in > *:nth-child(4) { transition-delay: 210ms; }
+.js .stagger.in > *:nth-child(5) { transition-delay: 280ms; }
+.js .stagger.in > *:nth-child(6) { transition-delay: 350ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .rise, .js .stagger > * { opacity: 1; transform: none; transition: none; }
+  html { scroll-behavior: auto; }
+  .btn:hover, .btn:active, .media:hover img { transform: none; }
+  .marquee-track { animation: none !important; }
+}

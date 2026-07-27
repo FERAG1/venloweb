@@ -1,0 +1,39 @@
+---
+// Google review furniture: the real 4-colour G, and stars in Google's own
+// gold (#FBBC04) using the Material star shape. Generic ★ glyphs are what
+// make a review block read as 1998.
+const { type = 'g', size = 18, score = 5 } = Astro.props;
+const full = Math.floor(score);
+const half = score - full >= 0.35;
+---
+{type === 'g' && (
+  <svg width={size} height={size} viewBox="0 0 18 18" aria-label="Google" role="img">
+    <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62Z"/>
+    <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.83.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18Z"/>
+    <path fill="#FBBC05" d="M3.97 10.72a5.41 5.41 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33Z"/>
+    <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59C13.46.9 11.43 0 9 0A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58Z"/>
+  </svg>
+)}
+
+{type === 'stars' && (
+  <span class="gstars" role="img" aria-label={`${score} van de 5 sterren`}>
+    {[0, 1, 2, 3, 4].map((i) => (
+      <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
+        <defs>
+          <linearGradient id={`h${i}-${size}`}>
+            <stop offset="50%" stop-color="#FBBC04" />
+            <stop offset="50%" stop-color="#DADCE0" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+          fill={i < full ? '#FBBC04' : i === full && half ? `url(#h${i}-${size})` : '#DADCE0'}
+        />
+      </svg>
+    ))}
+  </span>
+)}
+
+<style>
+  .gstars { display: inline-flex; gap: 1px; line-height: 0; }
+</style>

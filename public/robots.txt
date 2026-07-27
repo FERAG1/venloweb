@@ -1,0 +1,16 @@
+# DEMO MODE — matches the noindex in src/layouts/Base.astro.
+# A spec demo is built on the shop's branding before they've agreed to anything,
+# so it stays out of search entirely.
+User-agent: *
+Disallow: /
+
+# ---------------------------------------------------------------------------
+# ON LAUNCH for a paying client, replace everything above with:
+#
+# User-agent: *
+# Allow: /
+# Sitemap: https://hunwebsite.nl/sitemap-index.xml
+#
+# and remove the noindex meta from src/layouts/Base.astro. Leaving it in means
+# you built them a site Google refuses to rank — the one thing you sold them on.
+# ---------------------------------------------------------------------------

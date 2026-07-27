@@ -1,0 +1,277 @@
+{
+  "slug": "vault13",
+  "name": "Vault13",
+  "tagline": "Barbershop in hartje Venlo",
+  "intro": "Vakwerk, scherpe fades en een scheerbeurt zoals het hoort. Al jaren de vaste stek voor mannen uit Venlo en omstreken.",
+  "address": {
+    "street": "Spoorstraat 38",
+    "postcode": "5911 KJ",
+    "city": "Venlo",
+    "maps": "https://maps.google.com/?q=Vault13+Spoorstraat+38+Venlo"
+  },
+  "phone": "+31 77 000 0000",
+  "whatsapp": "995551258383",
+  "booking": "",
+  "rating": {
+    "score": "4.8",
+    "count": 151
+  },
+  "todayLine": "Vandaag open tot 18:00",
+  "marquee": [
+    {
+      "label": "Fades",
+      "img": "https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=1200&q=80&auto=format&fit=crop"
+    },
+    {
+      "label": "Baard trimmen",
+      "img": "https://images.unsplash.com/photo-1647140655214-e4a2d914971f?w=1200&q=80&auto=format&fit=crop"
+    },
+    {
+      "label": "Scheren met mes",
+      "img": "https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=1200&q=80&auto=format&fit=crop"
+    },
+    {
+      "label": "Klassiek knippen",
+      "img": "https://images.unsplash.com/photo-1536520002442-39764a41e987?w=1200&q=80&auto=format&fit=crop"
+    },
+    {
+      "label": "Kids cuts",
+      "img": "https://images.unsplash.com/photo-1596728325488-58c87691e9af?w=1200&q=80&auto=format&fit=crop"
+    },
+    {
+      "label": "Walk-in welkom",
+      "img": "https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?w=1200&q=80&auto=format&fit=crop"
+    }
+  ],
+  "hours": [
+    {
+      "day": "Maandag",
+      "time": "Gesloten"
+    },
+    {
+      "day": "Dinsdag",
+      "time": "09:00 – 18:00"
+    },
+    {
+      "day": "Woensdag",
+      "time": "09:00 – 18:00"
+    },
+    {
+      "day": "Donderdag",
+      "time": "09:00 – 20:00"
+    },
+    {
+      "day": "Vrijdag",
+      "time": "09:00 – 18:00"
+    },
+    {
+      "day": "Zaterdag",
+      "time": "08:00 – 17:00"
+    },
+    {
+      "day": "Zondag",
+      "time": "Gesloten"
+    }
+  ],
+  "services": [
+    {
+      "name": "Knippen heren",
+      "desc": "Wassen, knippen, stylen",
+      "price": "25",
+      "time": "30 min"
+    },
+    {
+      "name": "Knippen + baard",
+      "desc": "De complete beurt",
+      "price": "35",
+      "time": "45 min"
+    },
+    {
+      "name": "Fade / skin fade",
+      "desc": "Strak opgebouwd, scherpe lijn",
+      "price": "30",
+      "time": "40 min"
+    },
+    {
+      "name": "Baard trimmen",
+      "desc": "Model, lijnen, hot towel",
+      "price": "15",
+      "time": "20 min"
+    },
+    {
+      "name": "Scheren met mes",
+      "desc": "Klassiek, met hete doek",
+      "price": "22",
+      "time": "30 min"
+    },
+    {
+      "name": "Knippen kind t/m 12",
+      "desc": "Rustig en snel",
+      "price": "18",
+      "time": "25 min"
+    }
+  ],
+  "team": [
+    {
+      "name": "Barber 1",
+      "role": "Fades & scheren",
+      "photo": "https://images.unsplash.com/photo-1598524374912-6b0b0bab43dd?w=800&q=80&auto=format&fit=crop"
+    },
+    {
+      "name": "Barber 2",
+      "role": "Klassiek knippen",
+      "photo": "https://images.unsplash.com/photo-1703792684940-a05aa0f1188f?w=800&q=80&auto=format&fit=crop"
+    },
+    {
+      "name": "Barber 3",
+      "role": "Baard specialist",
+      "photo": "https://images.unsplash.com/photo-1512864084360-7c0c4d0a0845?w=800&q=80&auto=format&fit=crop"
+    }
+  ],
+  "hero": "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=1800&q=80&auto=format&fit=crop",
+  "gallery": [
+    "https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1647140655214-e4a2d914971f?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1536520002442-39764a41e987?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1596728325488-58c87691e9af?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=1200&q=80&auto=format&fit=crop"
+  ],
+  "storefront": "https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?w=1200&q=80&auto=format&fit=crop",
+  "ctaImage": "https://images.unsplash.com/photo-1621645582931-d1d3e6564943?w=1800&q=80&auto=format&fit=crop",
+  "why": [
+    {
+      "icon": "clock",
+      "title": "Binnen 24 uur terecht",
+      "text": "Meestal is er morgen al plek. Walk-in mag ook — even bellen en je weet het."
+    },
+    {
+      "icon": "scissors",
+      "title": "Vakmensen, geen haast",
+      "text": "Je krijgt de tijd. We knippen naar je hoofdvorm, niet naar de klok."
+    },
+    {
+      "icon": "tag",
+      "title": "Vaste prijzen",
+      "text": "Wat op de lijst staat, betaal je. Geen verrassingen bij de kassa."
+    }
+  ],
+  "reviews": [
+    {
+      "text": "Beste barbier van Venlo. Altijd strak geknipt en je wordt goed geholpen. Ga hier al jaren naartoe en nog nooit teleurgesteld weggegaan.",
+      "author": "Mark de Wit",
+      "when": "2 weken geleden",
+      "score": 5,
+      "tone": "#1a73e8"
+    },
+    {
+      "text": "Netjes op tijd, goede sfeer en de fade zit perfect. Ze nemen echt de tijd voor je.",
+      "author": "Youssef Bakkali",
+      "when": "1 maand geleden",
+      "score": 5,
+      "tone": "#188038"
+    },
+    {
+      "text": "Vakmensen. Denken met je mee over wat bij je past in plaats van gewoon doen wat je zegt. Aanrader.",
+      "author": "Tom Verhoeven",
+      "when": "1 maand geleden",
+      "score": 5,
+      "tone": "#c5221f"
+    },
+    {
+      "text": "Snel geholpen zonder afspraak, prima prijs en het resultaat mag er zijn. Kom zeker terug.",
+      "author": "Dennis Janssen",
+      "when": "2 maanden geleden",
+      "score": 4,
+      "tone": "#9334e6"
+    }
+  ],
+  "geo": {
+    "lat": "",
+    "lng": ""
+  },
+  "faq": [
+    {
+      "q": "Moet ik een afspraak maken of kan ik binnenlopen?",
+      "a": "Allebei kan. Met een afspraak weet je zeker dat je meteen aan de beurt bent. Loop je binnen, dan helpen we je zodra er een stoel vrij is."
+    },
+    {
+      "q": "Wat kost knippen bij Vault13?",
+      "a": "Knippen heren is €25, knippen met baard €35 en een fade €30. De volledige prijslijst staat op deze pagina. Wat je ziet is wat je betaalt."
+    },
+    {
+      "q": "Hoe lang duurt een knipbeurt?",
+      "a": "Reken op 30 minuten voor knippen, 45 minuten voor knippen met baard. We nemen de tijd, maar je zit niet onnodig lang."
+    },
+    {
+      "q": "Kan ik pinnen?",
+      "a": "Ja, pinnen en contant kan allebei."
+    },
+    {
+      "q": "Knippen jullie ook kinderen?",
+      "a": "Zeker. Kinderen tot en met 12 jaar knippen we voor €18. Rustig en snel, ook als het de eerste keer is."
+    },
+    {
+      "q": "Sprechen Sie Deutsch?",
+      "a": "Ja, wir sprechen Deutsch. Venlo liegt nur 15 Minuten von der Grenze — deutsche Kunden sind jederzeit willkommen."
+    }
+  ],
+
+  "_de_note": "Optional. Delete this whole block and the site is Dutch-only — the language toggle disappears by itself. Arrays match the Dutch ones by position; anything missing falls back to Dutch. Reviews are never translated: they are real customer quotes.",
+  "de": {
+    "tagline": "Barbershop mitten in Venlo",
+    "intro": "Handwerk, saubere Fades und eine Rasur, wie sie sein soll. Seit Jahren die feste Adresse für Männer aus Venlo und Umgebung — 15 Minuten hinter der Grenze.",
+    "todayLine": "Heute geöffnet bis 18:00",
+    "marquee": ["Fades", "Bart trimmen", "Messerrasur", "Klassischer Schnitt", "Kinderschnitte", "Ohne Termin willkommen"],
+    "hours": ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"],
+    "services": [
+      { "name": "Herrenschnitt", "desc": "Waschen, schneiden, stylen" },
+      { "name": "Schnitt + Bart", "desc": "Das komplette Programm" },
+      { "name": "Fade / Skin Fade", "desc": "Sauber aufgebaut, scharfe Linie" },
+      { "name": "Bart trimmen", "desc": "Form, Linien, heißes Tuch" },
+      { "name": "Messerrasur", "desc": "Klassisch, mit heißem Tuch" },
+      { "name": "Kinderschnitt bis 12", "desc": "Ruhig und schnell" }
+    ],
+    "team": ["Fades & Rasur", "Klassische Schnitte", "Bart-Spezialist"],
+    "why": [
+      {
+        "title": "Termin binnen 24 Stunden",
+        "text": "Meistens ist schon morgen etwas frei. Ohne Termin geht auch — ruf kurz an und du weißt Bescheid."
+      },
+      {
+        "title": "Handwerk, keine Hektik",
+        "text": "Du bekommst die Zeit, die es braucht. Wir schneiden nach deiner Kopfform, nicht nach der Uhr."
+      },
+      {
+        "title": "Feste Preise",
+        "text": "Was auf der Liste steht, zahlst du. Keine Überraschungen an der Kasse."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Brauche ich einen Termin oder kann ich einfach vorbeikommen?",
+        "a": "Beides geht. Mit Termin bist du garantiert sofort dran. Ohne Termin helfen wir dir, sobald ein Stuhl frei ist."
+      },
+      {
+        "q": "Was kostet ein Haarschnitt bei Vault13?",
+        "a": "Herrenschnitt 25 €, Schnitt mit Bart 35 €, Fade 30 €. Die komplette Preisliste steht auf dieser Seite. Was du siehst, zahlst du."
+      },
+      {
+        "q": "Wie lange dauert ein Haarschnitt?",
+        "a": "Rechne mit 30 Minuten für den Schnitt und 45 Minuten für Schnitt mit Bart. Wir nehmen uns Zeit, aber du sitzt nicht unnötig lange."
+      },
+      {
+        "q": "Kann ich mit Karte zahlen?",
+        "a": "Ja, Karte und bar sind beide möglich. EC-Karte funktioniert problemlos."
+      },
+      {
+        "q": "Schneidet ihr auch Kinder?",
+        "a": "Auf jeden Fall. Kinder bis einschließlich 12 Jahre schneiden wir für 18 €. Ruhig und schnell, auch beim ersten Mal."
+      },
+      {
+        "q": "Wie weit ist es von der Grenze?",
+        "a": "Von Kaldenkirchen sind es rund 10 Minuten mit dem Auto, von Nettetal etwa 15. Parken ist in der Umgebung gut möglich."
+      }
+    ]
+  }
+}

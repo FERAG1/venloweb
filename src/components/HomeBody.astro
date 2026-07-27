@@ -1,0 +1,845 @@
+---
+import Icon from './Icon.astro';
+import Google from './Google.astro';
+import Flag from './Flag.astro';
+import { base, UI, fmt } from '../i18n/ui.js';
+
+// The homepage body, factored out so /  and /de/ render the exact same markup
+// with a different `shop` + `T`. Nothing here reads shop.json directly — the
+// caller passes an already-localised shop.
+const { shop, lang, T, langs = ['nl'] } = Astro.props;
+
+const a = shop.address;
+// If the shop already runs Salonized/Booksy, send them there instead and the
+// built-in flow just doesn't get linked.
+const book = shop.booking || `${base(lang)}/boeken`;
+// only open a new tab for a real external booking URL — never for the #anchor
+const bookAttrs = shop.booking ? { target: '_blank', rel: 'noopener' } : {};
+const tel = `tel:${shop.phone.replace(/\s/g, '')}`;
+// Deep-link each price row into the wizard with that service already chosen, so
+// browsing → booking doesn't make you pick it twice. Only for the built-in flow;
+// an external booking URL has no idea what ?dienst= means. The slug is always the
+// Dutch one (see lib/shop.js), so it resolves on both language versions.
+const svcHref = (s) => (shop.booking ? book : `${base(lang)}/boeken?dienst=${s.slug}`);
+const marquee = [...shop.marquee, ...shop.marquee];
+const initial = (n) => n.trim()[0].toUpperCase();
+
+// Unsplash resizes on the fly, so srcset costs nothing and stops a phone
+// pulling a 1800px hero. sizes tells the browser which width it actually needs.
+const setAt = (url, widths) =>
+  widths.map((w) => `${url.replace(/w=\d+/, `w=${w}`)} ${w}w`).join(', ');
+---
+
+  <!-- ============================== HERO ============================== -->
+  <header class="hero" id="top">
+    <div class="hero-frame">
+      <img
+        src={shop.hero}
+        srcset={setAt(shop.hero, [640, 960, 1280, 1800])}
+        sizes="100vw"
+        alt={fmt(T.altInterior, { n: shop.name })}
+        fetchpriority="high"
+      />
+      <div class="veil"></div>
+
+      <div class="hero-copy">
+        <div class="hero-inner">
+          <span class="hero-loc"><Icon name="pin" size={13} stroke={2} />{a.street} · {a.city}</span>
+          <h1>{shop.name}</h1>
+          <p>{shop.tagline}</p>
+          <div class="hero-btns">
+            <a class="btn btn-lg btn-light" href={book} {...bookAttrs}>
+              <Icon name="calendar" size={17} />{T.heroBook}
+            </a>
+            <a class="btn btn-lg hero-tel" href={tel}><Icon name="phone" size={17} />{T.heroCallNow}</a>
+          </div>
+          <span class="hero-micro"><Icon name="check" size={13} stroke={2.4} />{T.heroWalkIn}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- overlapping card: the depth cue, and the social proof, above the fold -->
+    <div class="wrap">
+      <div class="hero-card">
+        <div class="hc-rating">
+          <Google type="g" size={22} />
+          <div>
+            <div class="hc-score">
+              <strong>{shop.rating.score}</strong>
+              <Google type="stars" size={15} score={Number(shop.rating.score)} />
+            </div>
+            <span>{shop.rating.count} {T.googleReviewsCount}</span>
+          </div>
+        </div>
+
+        <div class="hc-open">
+          <span class="pulse"></span>
+          <div>
+            <strong>{shop.todayLine}</strong>
+            <span>{T.heroSlotsToday}</span>
+          </div>
+        </div>
+
+        <a class="btn hc-btn" href={book} {...bookAttrs}>
+          {T.ctaBook} <Icon name="arrow" size={16} />
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================== MARQUEE ============================== -->
+  <div class="marquee" id="marquee">
+    <div class="marquee-track" id="mqTrack">
+      {marquee.map((m) => (
+        <span data-img={setAt(m.img, [500])}>{m.label}<i></i></span>
+      ))}
+    </div>
+
+    <!-- cursor-following preview; desktop only, purely decorative -->
+    <div class="peek" id="peek" aria-hidden="true">
+      {/* no src attribute — src="" makes some browsers re-request the page URL
+          and registers as a broken image. JS sets it on first hover. */}
+      <div class="peek-in"><img id="peekImg" alt="" /></div>
+    </div>
+  </div>
+
+  <!-- ============================== WHY ============================== -->
+  <section class="why-sec">
+    <div class="wrap why-grid">
+      <div class="rise why-intro">
+        <p class="eyebrow">{T.eyebrowWhy}</p>
+        <h2>{T.whyHeadA}<br />{T.whyHeadB}</h2>
+        <p class="lede">{shop.intro}</p>
+      </div>
+
+      <div class="why stagger">
+        {shop.why.map((w) => (
+          <div class="why-item">
+            <span class="why-ico"><Icon name={w.icon} size={19} /></span>
+            <div>
+              <h3>{w.title}</h3>
+              <p>{w.text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== SERVICES ============================== -->
+  <section id="prijzen" class="band">
+    <div class="wrap">
+      <div class="head rise">
+        <div>
+          <p class="eyebrow">{T.eyebrowPrices}</p>
+          <h2>{T.pricesTitle}</h2>
+        </div>
+        <a class="btn head-btn" href={book} {...bookAttrs}>
+          {T.ctaBook} <Icon name="arrow" size={16} />
+        </a>
+      </div>
+
+      <div class="svc card stagger">
+        {shop.services.map((s, i) => (
+          <a class="svc-row" href={svcHref(s)} {...bookAttrs}>
+            <span class="svc-n">{String(i + 1).padStart(2, '0')}</span>
+            <span class="svc-main">
+              <strong>{s.name}</strong>
+              <em>{s.desc}</em>
+            </span>
+            <span class="svc-time"><Icon name="clock" size={13} stroke={2} />{s.time}</span>
+            <span class="svc-price">€{s.price}</span>
+            <span class="svc-go"><Icon name="arrow" size={15} stroke={2} /></span>
+          </a>
+        ))}
+      </div>
+      <p class="svc-note"><Icon name="check" size={14} stroke={2.4} />{T.pricesNote}</p>
+    </div>
+  </section>
+
+  <!-- ============================== GALLERY ============================== -->
+  <section id="werk">
+    <div class="wrap">
+      <div class="head rise">
+        <div>
+          <p class="eyebrow">{T.eyebrowWork}</p>
+          <h2>{T.workTitle}</h2>
+        </div>
+      </div>
+      <div class="grid stagger">
+        {shop.gallery.map((src, i) => (
+          <div class={`media cell c${i}`}>
+            <img src={src} srcset={setAt(src, [400, 640, 900, 1200])}
+              sizes="(min-width: 820px) 25vw, 50vw"
+              alt={fmt(T.altCut, { n: shop.name })} loading="lazy" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== GOOGLE REVIEWS ============================== -->
+  <section id="reviews" class="band">
+    <div class="wrap rev-grid">
+      <aside class="rev-side rise">
+        <p class="eyebrow">{T.eyebrowReviews}</p>
+        <h2>{T.reviewsTitleA}<br />{T.reviewsTitleB}</h2>
+
+        <div class="rev-sum card">
+          <div class="rs-top">
+            <Google type="g" size={20} />
+            <span>{T.googleReviews}</span>
+          </div>
+          <div class="rs-score">
+            <strong>{shop.rating.score}</strong>
+            <div>
+              <Google type="stars" size={17} score={Number(shop.rating.score)} />
+              <span>{fmt(T.basedOn, { n: shop.rating.count })}</span>
+            </div>
+          </div>
+          <a class="btn btn-light btn-sm rs-btn" href={a.maps} target="_blank" rel="noopener">
+            Bekijk alle reviews <Icon name="arrow" size={14} />
+          </a>
+        </div>
+      </aside>
+
+      <div class="rev-list stagger">
+        {shop.reviews.map((r) => (
+          <figure class="rev card">
+            <header>
+              <span class="av" style={`background:${r.tone}`}>{initial(r.author)}</span>
+              <div class="av-meta">
+                <strong>{r.author}</strong>
+                <span>{r.when}</span>
+              </div>
+              <Google type="g" size={16} />
+            </header>
+            <Google type="stars" size={15} score={r.score} />
+            <blockquote>{r.text}</blockquote>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== TEAM ============================== -->
+  <section>
+    <div class="wrap">
+      <div class="head rise">
+        <div>
+          <p class="eyebrow">{T.eyebrowTeam}</p>
+          <h2>{T.teamTitle}</h2>
+        </div>
+      </div>
+      <div class="team stagger">
+        {shop.team.map((m) => (
+          <div class="member">
+            <div class="media m-portrait"><img src={m.photo} srcset={setAt(m.photo, [300, 480, 800])}
+                sizes="(min-width: 940px) 25vw, 45vw"
+                alt={m.name} loading="lazy" /></div>
+            <h3>{m.name}</h3>
+            <p>{m.role}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== FAQ ============================== -->
+  <section id="faq">
+    <div class="wrap faq-grid">
+      <div class="rise faq-intro">
+        <p class="eyebrow">{T.eyebrowFaq}</p>
+        <h2>{T.faqHeadA}<br />{T.faqHeadB}</h2>
+        <p class="lede">{T.faqFoot}</p>
+        <a class="btn btn-light" href={tel} style="margin-top:26px">
+          <Icon name="phone" size={16} />{shop.phone}
+        </a>
+      </div>
+
+      <div class="faq stagger">
+        {shop.faq.map((f, i) => (
+          <details class="faq-item" name="faq" open={i === 0}>
+            <summary>
+              <span>{f.q}</span>
+              <span class="faq-ico"><Icon name="arrow" size={16} stroke={2} /></span>
+            </summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== VISIT ============================== -->
+  <section id="bezoek" class="band">
+    <div class="wrap visit">
+      <div class="media visit-photo rise">
+        <img src={shop.storefront} srcset={setAt(shop.storefront, [480, 800, 1200])}
+             sizes="(min-width: 940px) 50vw, 100vw"
+             alt={`${shop.name} in ${a.city}`} loading="lazy" />
+      </div>
+
+      <div class="rise">
+        <p class="eyebrow">{T.eyebrowVisit}</p>
+        <h2>{T.visitHours}</h2>
+        <ul class="hours card">
+          {shop.hours.map((h) => (
+            <li class={h.time === 'Gesloten' ? 'closed' : ''}>
+              <span>{h.day}</span><span>{h.time}</span>
+            </li>
+          ))}
+        </ul>
+        <div class="addr">
+          <Icon name="pin" size={17} />
+          <address>{a.street} · {a.postcode} {a.city}</address>
+        </div>
+        <div class="visit-btns">
+          <a class="btn" href={a.maps} target="_blank" rel="noopener"><Icon name="pin" size={16} />{T.dockRoute}</a>
+          <a class="btn btn-light" href={tel}><Icon name="phone" size={16} />{shop.phone}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== FINAL CTA ============================== -->
+  <section class="cta-sec">
+    <div class="cta">
+      <img src={shop.ctaImage} srcset={setAt(shop.ctaImage, [640, 1100, 1800])}
+           sizes="100vw" alt="" loading="lazy" />
+      <div class="cta-veil"></div>
+      <div class="wrap cta-in rise">
+        <p class="eyebrow cta-eye">{T.eyebrowCta}</p>
+        <h2>{T.ctaTitleA}<br />{T.ctaTitleB}</h2>
+        <p>{T.ctaSub}</p>
+        <div class="cta-btns">
+          <a class="btn btn-lg btn-light" href={book} {...bookAttrs}>
+            <Icon name="calendar" size={17} />{T.ctaBook}
+          </a>
+          <a class="btn btn-lg cta-tel" href={tel}><Icon name="phone" size={17} />{shop.phone}</a>
+        </div>
+        <span class="cta-micro"><Icon name="check" size={13} stroke={2.4} />{a.street} · {a.city}</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap foot">
+      <div class="foot-l">
+        <span class="mark">{shop.name}</span>
+        <span>{a.street}, {a.postcode} {a.city}</span>
+      </div>
+
+      {langs.length > 1 && (
+        <nav class="langs" aria-label="Taal / Sprache">
+          {langs.map((l) => (
+            <a href={`${base(l)}/`} hreflang={l} aria-current={l === lang ? 'true' : undefined}>
+              <Flag code={l} size={15} />
+              <span>{UI[l].langName}</span>
+            </a>
+          ))}
+        </nav>
+      )}
+
+      <span class="foot-r">© {new Date().getFullYear()}</span>
+    </div>
+  </footer>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const marquee = document.getElementById('marquee');
+  const track = document.getElementById('mqTrack');
+  const peek = document.getElementById('peek');
+  const peekImg = document.getElementById('peekImg');
+
+  if (marquee && track && !reduce) {
+    // Take the marquee off the CSS animation and drive it by hand. Changing
+    // animation-duration on hover makes it visibly jump; a rAF loop lets the
+    // speed ease between values instead.
+    track.style.animation = 'none';
+
+    const FAST = 58;   // px per second
+    const SLOW = 9;
+    let speed = FAST, target = FAST;
+    let offset = 0, last = performance.now();
+    let half = track.scrollWidth / 2;   // content is duplicated
+    addEventListener('resize', () => { half = track.scrollWidth / 2; });
+
+    // cursor follow, lerped so the card trails slightly behind the pointer
+    let mx = 0, my = 0, px = 0, py = 0, lastMx = 0;
+
+    const frame = (now) => {
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+
+      speed += (target - speed) * Math.min(dt * 6, 1);
+      offset = (offset + speed * dt) % half;
+      track.style.transform = `translateX(${-offset}px)`;
+
+      px += (mx - px) * Math.min(dt * 12, 1);
+      py += (my - py) * Math.min(dt * 12, 1);
+      peek.style.transform = `translate3d(${px}px, ${py}px, 0)`;
+
+      // tilt with horizontal travel — leans into the direction you're moving
+      const tilt = Math.max(-16, Math.min(16, -6 + (mx - lastMx) * 0.6));
+      peek.style.setProperty('--tilt', `${tilt}deg`);
+      lastMx = mx;
+
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+
+    marquee.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      mx = e.clientX;
+      my = e.clientY;
+      if (!peek.classList.contains('on')) { px = mx; py = my; }
+      // flip above the cursor when the card would fall off the bottom
+      peek.classList.toggle('up', my + 32 + 229 > innerHeight - 12);
+
+      const word = e.target.closest('span[data-img]');
+      marquee.querySelectorAll('span.lit').forEach((s) => s.classList.remove('lit'));
+
+      if (word) {
+        word.classList.add('lit');
+        const src = word.dataset.img;
+        if (peekImg.getAttribute('src') !== src) peekImg.src = src;
+        peek.classList.add('on');
+        marquee.classList.add('peeking');
+        target = SLOW;
+      } else {
+        peek.classList.remove('on');
+        marquee.classList.remove('peeking');
+        target = FAST;
+      }
+    });
+
+    marquee.addEventListener('pointerleave', () => {
+      peek.classList.remove('on');
+      marquee.classList.remove('peeking');
+      marquee.querySelectorAll('span.lit').forEach((s) => s.classList.remove('lit'));
+      target = FAST;
+    });
+  }
+</script>
+
+<style>
+  /* ------------------------------ hero ------------------------------ */
+  .hero-frame {
+    position: relative;
+    height: 92svh;
+    min-height: 580px;
+    margin: var(--frame);
+    margin-bottom: 0;
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    box-shadow: var(--sh-4);
+  }
+  .hero-frame > img {
+    width: 100%; height: 100%; object-fit: cover;
+    animation: heroIn 1.6s var(--ease-out) both;
+  }
+  @keyframes heroIn { from { transform: scale(1.08); } to { transform: scale(1); } }
+  .veil { position: absolute; inset: 0; background: rgba(9, 9, 11, 0.5); }
+
+  .hero-copy {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding-bottom: 96px;
+    color: #fff;
+  }
+  /* Puts the hero copy on the same column as every section below it.
+     Once max-width applies, the frame's own margin cancels out (it's centred),
+     so this matches .wrap exactly. Below that width the frame inset has to be
+     subtracted, or the hero sits --frame further in than the rest of the page. */
+  .hero-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 calc(var(--gut) - var(--frame));
+  }
+  @media (min-width: 1160px) {
+    .hero-inner { padding: 0 var(--gut); }
+  }
+  .hero-loc {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .hero-copy h1 { margin: 18px 0 16px; }
+  .hero-copy > p { font-size: 1.14rem; color: rgba(255, 255, 255, 0.88); max-width: 32ch; }
+  .hero-btns { display: flex; flex-wrap: wrap; gap: 10px; margin: 30px 0 18px; }
+  /* full-width on phones — two content-sized pills stacked read as ragged */
+  .hero-btns .btn { width: 100%; }
+  @media (min-width: 540px) { .hero-btns .btn { width: auto; } }
+  .hero-tel {
+    background: rgba(255, 255, 255, 0.13);
+    border-color: rgba(255, 255, 255, 0.24);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 2px 8px rgba(0, 0, 0, 0.22);
+  }
+  .hero-tel:hover { background: rgba(255, 255, 255, 0.2); }
+  .hero-micro {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 0.84rem; color: rgba(255, 255, 255, 0.72);
+  }
+  .hero-micro svg { color: #6ee7a0; }
+
+  /* overlap card */
+  .hero-card {
+    position: relative; z-index: 5;
+    display: grid; gap: var(--s3);
+    margin-top: -52px;
+    padding: 22px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: inset 0 1px 0 #fff, var(--sh-4);
+  }
+  .hc-rating, .hc-open { display: flex; align-items: center; gap: 13px; }
+  .hc-score { display: flex; align-items: center; gap: 9px; }
+  .hc-score strong { font-size: 1.32rem; font-weight: 650; letter-spacing: -0.03em; }
+  .hc-rating span, .hc-open span:not(.pulse) { display: block; font-size: 0.84rem; color: var(--ink-soft); }
+  /* strong is inline by default — without this the label and sublabel
+     run together on one line */
+  .hc-open strong { display: block; font-size: 0.98rem; font-weight: 600; }
+  .pulse {
+    width: 9px; height: 9px; border-radius: 50%; background: #17a34a;
+    box-shadow: 0 0 0 0 rgba(23, 163, 74, 0.5);
+    animation: pulse 2.4s var(--ease-out) infinite;
+    flex: none;
+  }
+  @keyframes pulse { 70% { box-shadow: 0 0 0 11px rgba(23, 163, 74, 0); } 100% { box-shadow: 0 0 0 0 rgba(23, 163, 74, 0); } }
+  .hc-btn { width: 100%; }
+
+  @media (min-width: 860px) {
+    .hero-frame { margin-bottom: 0; }
+    /* card overlaps by 60px — this keeps the micro-copy clear of it */
+    .hero-copy { padding-bottom: 148px; }
+    .hero-card {
+      grid-template-columns: auto auto 1fr auto;
+      align-items: center;
+      gap: var(--s5);
+      padding: 20px 26px;
+      margin-top: -60px;
+    }
+    .hc-open { border-left: 1px solid var(--line); padding-left: var(--s5); }
+    .hc-btn { width: auto; grid-column: 4; }
+  }
+
+  /* ------------------------------ marquee ------------------------------ */
+  .marquee { overflow: hidden; padding: 30px 0; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  .marquee-track { display: inline-flex; animation: slide 38s linear infinite; will-change: transform; }
+  .marquee-track span {
+    display: inline-flex; align-items: center;
+    font-size: clamp(1.25rem, 3.2vw, 1.9rem);
+    font-weight: 550; letter-spacing: -0.035em; color: var(--ink);
+    transition: opacity 0.35s var(--ease-out);
+  }
+  .marquee-track i {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--gold); margin: 0 28px; flex: none;
+  }
+  @keyframes slide { to { transform: translateX(-50%); } }
+
+  /* hover: everything recedes except the word you're on */
+  @media (hover: hover) {
+    .marquee-track span { cursor: default; }
+    .marquee.peeking .marquee-track span { opacity: 0.32; }
+    .marquee.peeking .marquee-track span.lit { opacity: 1; }
+  }
+
+  /* cursor-following image preview */
+  .peek {
+    position: fixed; top: 0; left: 0;
+    z-index: 70;
+    pointer-events: none;
+    display: none;
+  }
+  @media (hover: hover) { .peek { display: block; } }
+  .peek-in {
+    width: 172px;
+    aspect-ratio: 3 / 4;
+    /* sits below the cursor, not on it — centred would cover the word you're
+       hovering. Flips above when there isn't room (see .peek.up).
+       Percentage margins resolve against width, hence the px top. */
+    margin: var(--peek-y, 32px) 0 0 -50%;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--surface-2);
+    box-shadow: var(--sh-4);
+    opacity: 0;
+    transform: scale(0.82) rotate(var(--tilt, -6deg));
+    transition: opacity 0.3s var(--ease-out), transform 0.45s var(--ease-out);
+  }
+  /* 172px wide at 3:4 → ~229px tall, plus the 32px gap */
+  .peek.up .peek-in { --peek-y: -261px; }
+  .peek.on .peek-in { opacity: 1; transform: scale(1) rotate(var(--tilt, -6deg)); }
+  .peek-in img { width: 100%; height: 100%; object-fit: cover; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .peek { display: none; }
+  }
+
+  /* ------------------------------ why ------------------------------ */
+  .why-grid { display: grid; gap: var(--s5); }
+  .why { display: grid; gap: 4px; }
+  .why-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 22px 0;
+    border-top: 1px solid var(--line);
+  }
+  .why-item:last-child { border-bottom: 1px solid var(--line); }
+  .why-ico {
+    flex: none;
+    width: 40px; height: 40px;
+    display: grid; place-items: center;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: inset 0 1px 0 #fff, var(--sh-1);
+    color: var(--gold);
+  }
+  .why-item h3 { margin-bottom: 3px; }
+  .why-item p { color: var(--ink-mid); font-size: 0.95rem; }
+  @media (min-width: 940px) {
+    .why-grid { grid-template-columns: 5fr 6fr; gap: var(--s6); align-items: start; }
+    .why-intro { position: sticky; top: 110px; }
+  }
+
+  /* ------------------------------ shared ------------------------------ */
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s4); margin-bottom: var(--s5); }
+  .head-btn { display: none; }
+  @media (min-width: 760px) { .head-btn { display: inline-flex; } }
+  .band { background: var(--surface-2); border-block: 1px solid var(--line); }
+
+  /* ------------------------------ services ------------------------------ */
+  .svc { overflow: hidden; padding: 0; }
+  .svc-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 6px 14px;
+    padding: 19px 20px;
+    text-decoration: none; color: inherit;
+    position: relative;
+    transition: background 0.25s var(--ease-out);
+  }
+  .svc-row + .svc-row { border-top: 1px solid var(--line); }
+  .svc-row:hover { background: var(--surface-2); }
+  .svc-n { font-size: 0.7rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .svc-main { display: flex; flex-direction: column; min-width: 0; }
+  .svc-main strong { font-weight: 550; font-size: 1.02rem; }
+  .svc-main em { font-style: normal; font-size: 0.86rem; color: var(--ink-soft); }
+  .svc-time {
+    display: none; align-items: center; gap: 6px;
+    font-size: 0.79rem; color: var(--ink-soft);
+    padding: 5px 11px; border: 1px solid var(--line); border-radius: 100px;
+    background: var(--surface-2);
+  }
+  .svc-price { font-size: 1.16rem; font-weight: 620; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
+  .svc-go { display: none; color: var(--ink-soft); opacity: 0; transform: translateX(-6px); transition: all 0.3s var(--ease-out); }
+  .svc-row:hover .svc-go { opacity: 1; transform: none; }
+  @media (min-width: 720px) {
+    .svc-row { grid-template-columns: auto 1fr auto auto 20px; gap: var(--s4); padding: 22px 28px; }
+    .svc-time, .svc-go { display: inline-flex; }
+  }
+  .svc-note {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: var(--s3); font-size: 0.87rem; color: var(--ink-soft);
+  }
+  .svc-note svg { color: #17a34a; }
+
+  /* ------------------------------ gallery ------------------------------ */
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .cell { aspect-ratio: 3 / 3.8; }
+  .c0, .c5 { grid-column: span 2; aspect-ratio: 16 / 11; }
+  @media (min-width: 820px) {
+    .grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .c0 { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
+    .c3 { grid-column: span 2; aspect-ratio: 16 / 9; }
+    .c5 { grid-column: auto; aspect-ratio: 3 / 3.8; }
+  }
+
+  /* ------------------------------ reviews ------------------------------ */
+  .rev-grid { display: grid; gap: var(--s5); }
+  .rev-side h2 { margin-bottom: var(--s4); }
+  .rev-sum { padding: 22px; border-radius: var(--r); }
+  .rs-top {
+    display: flex; align-items: center; gap: 9px;
+    padding-bottom: 15px; margin-bottom: 15px;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.86rem; font-weight: 550; color: var(--ink-mid);
+  }
+  .rs-score { display: flex; align-items: center; gap: 15px; }
+  .rs-score strong { font-size: 3rem; font-weight: 650; letter-spacing: -0.05em; line-height: 1; }
+  .rs-score span { display: block; margin-top: 5px; font-size: 0.83rem; color: var(--ink-soft); }
+  .rs-btn { width: 100%; margin-top: 18px; }
+
+  .rev-list { display: grid; gap: 12px; }
+  .rev { padding: 20px; border-radius: var(--r); }
+  .rev header { display: flex; align-items: center; gap: 11px; margin-bottom: 11px; }
+  .av {
+    flex: none;
+    width: 38px; height: 38px; border-radius: 50%;
+    display: grid; place-items: center;
+    color: #fff; font-weight: 600; font-size: 0.95rem;
+    box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  .av-meta { flex: 1; min-width: 0; }
+  .av-meta strong { display: block; font-size: 0.93rem; font-weight: 550; }
+  .av-meta span { font-size: 0.79rem; color: var(--ink-soft); }
+  .rev blockquote { margin-top: 10px; font-size: 0.96rem; color: var(--ink-mid); }
+
+  @media (min-width: 940px) {
+    .rev-grid { grid-template-columns: 4fr 7fr; gap: var(--s6); align-items: start; }
+    .rev-side { position: sticky; top: 110px; }
+    .rev-list { grid-template-columns: 1fr 1fr; gap: 14px; }
+  }
+
+  /* ------------------------------ team ------------------------------ */
+  .team { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: var(--s3); }
+  .m-portrait { aspect-ratio: 4 / 5; margin-bottom: 15px; }
+  .member h3 { margin-bottom: 2px; }
+  .member p { color: var(--ink-soft); font-size: 0.9rem; }
+
+  /* ------------------------------ faq ------------------------------ */
+  .faq-grid { display: grid; gap: var(--s5); }
+  @media (min-width: 940px) {
+    .faq-grid { grid-template-columns: 5fr 7fr; gap: var(--s6); align-items: start; }
+    .faq-intro { position: sticky; top: 110px; }
+  }
+  .faq { display: grid; gap: 8px; }
+  .faq-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    box-shadow: inset 0 1px 0 #fff, var(--sh-1);
+    overflow: hidden;
+  }
+  .faq-item summary {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 19px 20px;
+    cursor: pointer;
+    font-weight: 550;
+    list-style: none;
+    transition: background 0.2s var(--ease-out);
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  /* only tint while closed — on an open item the summary would go grey while
+     the answer stayed white, splitting the card into two tones */
+  .faq-item:not([open]) summary:hover { background: var(--surface-2); }
+  .faq-item[open] { box-shadow: inset 0 1px 0 #fff, var(--sh-2); }
+  .faq-ico {
+    flex: none; display: grid; place-items: center;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--surface-2); border: 1px solid var(--line);
+    color: var(--ink-soft);
+    transform: rotate(90deg);
+    transition: transform 0.3s var(--ease-out), background 0.3s var(--ease-out), color 0.3s var(--ease-out);
+  }
+  .faq-item[open] .faq-ico { transform: rotate(-90deg); background: var(--brand); border-color: transparent; color: var(--brand-ink); }
+  .faq-item > p {
+    padding: 0 20px 20px;
+    color: var(--ink-mid);
+    max-width: 60ch;
+  }
+
+  /* ------------------------------ visit ------------------------------ */
+  .visit { display: grid; gap: var(--s5); align-items: center; }
+  .visit-photo { aspect-ratio: 4 / 3.4; }
+  @media (min-width: 940px) { .visit { grid-template-columns: 1fr 1fr; gap: var(--s6); } }
+
+  .hours { list-style: none; margin: var(--s4) 0 var(--s3); padding: 6px 4px; }
+  .hours li { display: flex; justify-content: space-between; padding: 12px 18px; font-size: 0.94rem; }
+  .hours li + li { border-top: 1px solid var(--line); }
+  .hours .closed { color: var(--ink-soft); }
+  .addr { display: flex; gap: 10px; align-items: center; color: var(--ink-mid); }
+  .addr svg { color: var(--gold); flex: none; }
+  address { font-style: normal; line-height: 1.5; }
+  .visit-btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: var(--s3); }
+
+  /* ------------------------------ final cta ------------------------------
+     Rounded photo frame, matching the hero — bookends the page instead of
+     ending on a flat slab.                                                  */
+  .cta-sec { padding: 0 0 14px; }
+  .cta {
+    position: relative;
+    margin: 0 var(--frame);
+    padding: clamp(72px, 13vw, 130px) 0;
+    border-radius: var(--r-xl);
+    overflow: hidden;
+    color: #fff;
+    box-shadow: var(--sh-4);
+  }
+  .cta > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .cta-veil { position: absolute; inset: 0; background: rgba(9, 9, 11, 0.62); }
+  .cta-in { position: relative; z-index: 2; text-align: center; }
+  .cta-eye { color: rgba(255, 255, 255, 0.62); }
+  .cta-eye::before { background: var(--gold); }
+  .cta h2 { margin-bottom: var(--s3); }
+  .cta-in > p { color: rgba(255, 255, 255, 0.74); font-size: 1.06rem; }
+  .cta-btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: var(--s4) 0 var(--s3); }
+  .cta-tel {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.24);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 2px 8px rgba(0, 0, 0, 0.24);
+  }
+  .cta-tel:hover { background: rgba(255, 255, 255, 0.19); }
+  .cta-micro {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 0.85rem; color: rgba(255, 255, 255, 0.68);
+  }
+  .cta-micro svg { color: #6ee7a0; }
+  @media (min-width: 860px) { .cta-sec { padding-bottom: 18px; } }
+
+  /* ------------------------------ footer ------------------------------ */
+  footer { padding: var(--s4) 0; border-top: 1px solid var(--line); }
+  /* Three columns with a 1fr on each side, so the language switch is centred on
+     the page rather than wherever space-between happens to drop it. */
+  .foot {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+    gap: 10px 16px; font-size: 0.84rem; color: var(--ink-soft);
+  }
+  .foot-l { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; min-width: 0; }
+  .foot-r { justify-self: end; white-space: nowrap; }
+  .foot .mark { color: var(--ink); font-weight: 600; letter-spacing: -0.03em; }
+
+  /* Below ~660px the three columns can't hold a line each — stack and centre. */
+  @media (max-width: 660px) {
+    .foot { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 14px; }
+    .foot-l { justify-content: center; }
+    .foot-r { justify-self: center; }
+  }
+
+  /* Language switch lives here rather than in the nav — border traffic is a
+     minority, and a header toggle would clutter the first thing everyone sees. */
+  /* Sits at the right end of the footer rather than floating mid-row. */
+  .langs {
+    display: inline-flex; align-items: center; gap: 2px;
+    padding: 2px;
+    border-radius: 100px;
+    background: rgba(14, 14, 16, 0.04);
+  }
+  .langs a {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 11px 4px 9px; border-radius: 100px;
+    color: var(--ink-soft); text-decoration: none;
+    font-size: 0.78rem; font-weight: 550; letter-spacing: -0.01em;
+    white-space: nowrap;
+    transition: color 0.25s var(--ease-out), background 0.25s var(--ease-out),
+                box-shadow 0.25s var(--ease-out);
+  }
+  /* Flags stay full-colour — dimming them muddies the German tricolour into
+     brown. State is carried by the chip and the label instead. */
+  .langs a :global(.flag) {
+    transition: transform 0.25s var(--ease-out);
+  }
+  .langs a:hover { color: var(--ink); }
+  .langs a:hover :global(.flag) { transform: translateY(-0.5px); }
+  /* Current language reads as a raised white chip, matching the cards elsewhere. */
+  .langs a[aria-current] {
+    color: var(--ink); background: #fff;
+    box-shadow: 0 1px 2px rgba(14, 14, 16, 0.07), 0 0 0 0.5px rgba(14, 14, 16, 0.06);
+  }
+</style>

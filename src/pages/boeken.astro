@@ -1,0 +1,16 @@
+---
+import Bare from '../layouts/Bare.astro';
+import BookBody from '../components/BookBody.astro';
+import shopData from '../data/shop.json';
+import { localizedShop } from '../lib/shop.js';
+import { t, base } from '../i18n/ui.js';
+import { bookingCfg } from '../lib/booking.js';
+
+const lang = 'nl';
+const shop = localizedShop(shopData, lang);
+const T = t(lang);
+---
+
+<Bare shop={shop} lang={lang} title={T.bookTitle}>
+  <BookBody shop={shop} lang={lang} T={T} cfg={bookingCfg(shop, lang)} />
+</Bare>

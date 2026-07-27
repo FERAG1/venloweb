@@ -1,0 +1,74 @@
+---
+import '../styles/theme.css';
+import Icon from '../components/Icon.astro';
+import { t, base } from '../i18n/ui.js';
+const { shop, title, lang = 'nl' } = Astro.props;
+const T = t(lang);
+const tel = `tel:${shop.phone.replace(/\s/g, '')}`;
+---
+<!doctype html>
+<html lang={T.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{title} — {shop.name}</title>
+    <meta name="theme-color" content="#f1f0ec" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+
+  <body class="bare">
+    <header class="top">
+      <a class="top-back" href={`${base(lang)}/`} aria-label={T.backToSite}>
+        <Icon name="arrow" size={17} stroke={2} />
+      </a>
+      <span class="top-name">{shop.name}</span>
+      <a class="top-tel" href={tel} aria-label={T.dockCall}>
+        <Icon name="phone" size={17} stroke={1.9} />
+      </a>
+    </header>
+
+    <slot />
+
+    <style>
+      body.bare { padding-bottom: 0; background: var(--bg); }
+
+      .top {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        display: grid;
+        grid-template-columns: 42px 1fr 42px;
+        align-items: center;
+        gap: 12px;
+        padding: 12px var(--gut);
+        background: rgba(241, 240, 236, 0.86);
+        backdrop-filter: saturate(180%) blur(16px);
+        -webkit-backdrop-filter: saturate(180%) blur(16px);
+        border-bottom: 1px solid var(--line);
+      }
+      .top-name {
+        text-align: center;
+        font-weight: 620;
+        letter-spacing: -0.03em;
+        font-size: 1rem;
+      }
+      .top-back, .top-tel {
+        width: 42px; height: 42px;
+        display: grid; place-items: center;
+        border-radius: 50%;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        box-shadow: inset 0 1px 0 #fff, var(--sh-1);
+        color: var(--ink);
+        transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
+      }
+      .top-back:hover, .top-tel:hover { transform: translateY(-1px); box-shadow: inset 0 1px 0 #fff, var(--sh-2); }
+      /* :global is required — the svg lives inside the Icon component, so a
+         scoped descendant selector never matches it */
+      .top-back :global(svg) { transform: rotate(180deg); }
+    </style>
+  </body>
+</html>

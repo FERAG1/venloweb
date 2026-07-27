@@ -1,0 +1,38 @@
+---
+// Inline SVG rather than the 🇳🇱 / 🇩🇪 emoji on purpose: Windows ships no flag
+// glyphs, so emoji flags degrade to "NL"/"DE" letter boxes in Chrome on Windows.
+// Both flags are plain horizontal tricolours, so this costs a few hundred bytes.
+const { code, size = 15 } = Astro.props;
+
+const FLAGS = {
+  nl: ['#AE1C28', '#FFFFFF', '#21468B'], // official Dutch red is vermilion, not scarlet
+  de: ['#000000', '#DD0000', '#FFCE00'],
+};
+const bands = FLAGS[code] ?? FLAGS.nl;
+---
+
+<svg
+  class="flag"
+  viewBox="0 0 3 2"
+  width={size}
+  height={(size * 2) / 3}
+  aria-hidden="true"
+  focusable="false"
+>
+  {bands.map((c, i) => (
+    <rect x="0" y={(i * 2) / 3} width="3" height={2 / 3} fill={c} />
+  ))}
+</svg>
+
+<style>
+  /* The inset ring keeps the white band from bleeding into a light background
+     and stops the flag looking like a floating colour chip. */
+  .flag {
+    display: block;
+    flex: none;
+    border-radius: 2.5px;
+    box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.22);
+    /* svg clips to its viewport, but be explicit so the corners round cleanly */
+    clip-path: inset(0 round 2.5px);
+  }
+</style>
