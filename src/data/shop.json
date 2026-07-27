@@ -1,13 +1,13 @@
 {
-  "slug": "vault13",
-  "name": "Vault13",
+  "slug": "demo",
+  "name": "Jouw Barbershop",
   "tagline": "Barbershop in hartje Venlo",
   "intro": "Vakwerk, scherpe fades en een scheerbeurt zoals het hoort. Al jaren de vaste stek voor mannen uit Venlo en omstreken.",
   "address": {
-    "street": "Spoorstraat 38",
-    "postcode": "5911 KJ",
+    "street": "Voorbeeldstraat 1",
+    "postcode": "5911 AA",
     "city": "Venlo",
-    "maps": "https://maps.google.com/?q=Vault13+Spoorstraat+38+Venlo"
+    "maps": "https://maps.google.com/?q=Venlo+centrum"
   },
   "phone": "+31 77 000 0000",
   "whatsapp": "995551258383",
@@ -196,7 +196,7 @@
       "a": "Allebei kan. Met een afspraak weet je zeker dat je meteen aan de beurt bent. Loop je binnen, dan helpen we je zodra er een stoel vrij is."
     },
     {
-      "q": "Wat kost knippen bij Vault13?",
+      "q": "Wat kost knippen bij ons?",
       "a": "Knippen heren is €25, knippen met baard €35 en een fade €30. De volledige prijslijst staat op deze pagina. Wat je ziet is wat je betaalt."
     },
     {
@@ -253,7 +253,7 @@
         "a": "Beides geht. Mit Termin bist du garantiert sofort dran. Ohne Termin helfen wir dir, sobald ein Stuhl frei ist."
       },
       {
-        "q": "Was kostet ein Haarschnitt bei Vault13?",
+        "q": "Was kostet ein Haarschnitt bei uns?",
         "a": "Herrenschnitt 25 €, Schnitt mit Bart 35 €, Fade 30 €. Die komplette Preisliste steht auf dieser Seite. Was du siehst, zahlst du."
       },
       {
