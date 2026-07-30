@@ -328,12 +328,12 @@ const setAt = (url, widths) =>
              alt={`${shop.name} in ${a.city}`} loading="lazy" />
       </div>
 
-      <div class="rise">
+      <div class="rise visit-copy">
         <p class="eyebrow">{T.eyebrowVisit}</p>
         <h2>{T.visitHours}</h2>
         <ul class="hours card">
           {shop.hours.map((h) => (
-            <li class={h.time === 'Gesloten' ? 'closed' : ''}>
+            <li class={/\d{1,2}:\d{2}/.test(h.time) ? '' : 'closed'}>
               <span>{h.day}</span><span>{h.time}</span>
             </li>
           ))}
@@ -925,6 +925,16 @@ const setAt = (url, widths) =>
 
   /* ------------------------------ visit ------------------------------ */
   .visit { display: grid; gap: var(--s5); align-items: center; }
+  /* Centred on phones: the column is narrow enough that left-aligned copy over a
+     full-width card reads lopsided. The hours rows keep day-left / time-right —
+     that alignment is what makes them scannable, so it survives the centring. */
+  @media (max-width: 660px) {
+    .visit-copy { text-align: center; }
+    .visit-copy .eyebrow { justify-content: center; }
+    .visit-copy .addr { justify-content: center; }
+    .visit-copy .hours li { text-align: left; }
+    .visit-copy .hours li span:last-child { text-align: right; }
+  }
   .visit-photo { aspect-ratio: 4 / 3.4; }
   @media (min-width: 940px) { .visit { grid-template-columns: 1fr 1fr; gap: var(--s6); } }
 
