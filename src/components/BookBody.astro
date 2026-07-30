@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import WhatsApp from './WhatsApp.astro';
 import { pathFor } from '../lib/shops.js';
 const { shop, lang, T, cfg } = Astro.props;
 const homeHref = `${pathFor(shop.slug, lang)}/`;
@@ -140,9 +141,13 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
           <Icon name="arrow" size={16} stroke={2} />
         </button>
         <span class="ctx" id="bkCtx">{T.ctxPickService}</span>
+        <!-- Both marks ship; .dockbar.final (step 4) swaps the arrow for the
+             WhatsApp glyph and turns the button green, so the final tap is
+             obviously "this leaves the site and opens WhatsApp". -->
         <button class="btn nav-next" id="bkNext" disabled>
+          <WhatsApp size={17} class="ic-wa" />
           <span id="bkNextLbl">{T.next}</span>
-          <Icon name="arrow" size={16} />
+          <Icon name="arrow" size={16} class="ic-arrow" />
         </button>
       </div>
     </div>
@@ -893,6 +898,27 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
 
   #bkPage .dockbar.final .ctx { display: none; }
   #bkPage .dockbar.final .nav-next { flex: 1; }
+
+  /* Icon swap: arrow while stepping, WhatsApp glyph on the final action. */
+  #bkPage .nav-next .ic-wa { display: none; }
+  #bkPage .dockbar.final .nav-next .ic-wa { display: block; }
+  #bkPage .dockbar.final .nav-next .ic-arrow { display: none; }
+
+  /* WhatsApp brand green on the send button. Recognised instantly — people know
+     what green-plus-that-glyph does, which they don't for a black button. Shadow
+     is tinted green too: a neutral black shadow under a coloured button reads dirty
+     (same rule as --brand-rgb in theme.css). */
+  #bkPage .dockbar.final .nav-next {
+    background: #25d366;
+    color: #fff;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.28),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.18),
+      0 2px 6px rgba(37, 211, 102, 0.34),
+      0 8px 20px -6px rgba(37, 211, 102, 0.42);
+  }
+  #bkPage .dockbar.final .nav-next:hover:not(:disabled) { background: #1fbe5b; }
+  #bkPage .dockbar.final .nav-next:active:not(:disabled) { background: #1aa851; }
   #bkPage .nav-back { padding: 13px; flex: none; }
   #bkPage .nav-back svg { transform: rotate(180deg); }
   #bkPage .nav-next { flex: none; }
