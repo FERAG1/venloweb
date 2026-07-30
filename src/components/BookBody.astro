@@ -82,10 +82,6 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
             <input name="tel" type="tel" autocomplete="tel" required placeholder="06 12345678" />
           </label>
           <label class="full">
-            <span>{T.fieldMail} <i>{T.optional}</i></span>
-            <input name="mail" type="email" autocomplete="email" placeholder="jij@email.nl" />
-          </label>
-          <label class="full">
             <span>{T.fieldNote} <i>{T.optional}</i></span>
             <input name="opm" type="text" placeholder={T.notePh} />
           </label>
@@ -397,7 +393,6 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
       naam,
       tel,
     ];
-    if (f.mail.value) lines.push(f.mail.value);
     if (f.opm.value) lines.push('', `_${f.opm.value}_`);
     lines.push('', `_${fmt(T.waSentVia, { shop: cfg.shopName })}_`);
 
