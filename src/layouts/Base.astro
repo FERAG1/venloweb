@@ -181,15 +181,18 @@ const links = [
              quieter control than the booking CTA and shouldn't split it from the
              phone button. */}
         <span class="nav-actions">
-          {/* Single flag: the language you'd switch TO. The footer carries the
-               full toggle showing which language you're on — this is just the
-               shortcut for people who never scroll that far. */}
-          {langs.filter((l) => l !== lang).map((l) => (
-            <a class="nav-lang" href={`${pathFor(shop.slug, l)}/`} hreflang={l}
-               aria-label={UI[l].langName} title={UI[l].langName}>
-              <Flag code={l} size={18} />
+          {/* Shows the language you're CURRENTLY on, and clicking switches. With
+               only two languages that's unambiguous, and it means the header and
+               the footer toggle always agree — showing the German flag on a Dutch
+               page read as a mistake. The label says where the click goes. */}
+          {langs.length > 1 && (
+            <a class="nav-lang" hreflang={langs.find((l) => l !== lang)}
+               href={`${pathFor(shop.slug, langs.find((l) => l !== lang))}/`}
+               aria-label={UI[langs.find((l) => l !== lang)].langSuggestCta}
+               title={UI[langs.find((l) => l !== lang)].langSuggestCta}>
+              <Flag code={lang} size={18} />
             </a>
-          ))}
+          )}
 
           <a class="btn btn-sm nav-cta" href={book} {...bookAttrs}>
             <Icon name="calendar" size={15} stroke={1.9} />
