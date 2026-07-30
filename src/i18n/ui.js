@@ -37,6 +37,10 @@ export const UI = {
     openNowUntil: 'Nu open tot {t}',
     opensTodayAt: 'Vandaag open vanaf {t}',
     closedToday: 'Vandaag gesloten',
+    // Dutch lowercases weekdays mid-sentence; German capitalises every noun.
+    // This lives here rather than in the status script because it is a fact
+    // about the language, not about opening hours.
+    lowercaseDays: true,
     opensAgain: 'Weer open op {d}',
     googleReviewsCount: 'Google reviews',
     altInterior: 'Interieur van {n}',
@@ -169,6 +173,7 @@ export const UI = {
     openNowUntil: 'Jetzt offen bis {t}',
     opensTodayAt: 'Heute offen ab {t}',
     closedToday: 'Heute geschlossen',
+    lowercaseDays: false,
     opensAgain: 'Wieder offen am {d}',
     googleReviewsCount: 'Google Bewertungen',
     altInterior: 'Innenraum von {n}',

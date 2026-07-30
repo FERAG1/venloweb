@@ -440,6 +440,7 @@ const setAt = (url, widths) =>
   t: {
     openNowUntil: T.openNowUntil, opensTodayAt: T.opensTodayAt,
     closedToday: T.closedToday, opensAgain: T.opensAgain,
+    lowercaseDays: T.lowercaseDays,
   },
 })} />
 
@@ -477,7 +478,11 @@ const setAt = (url, widths) =>
           const j = (idx + i) % 7;
           if (parse(d.hours[j])) { next = d.days[j]; break; }
         }
-        text = next ? fmt(d.t.opensAgain, { d: next.toLowerCase() }) : d.t.closedToday;
+        // Was unconditionally .toLowerCase() — right for Dutch ("weer open op
+        // vrijdag"), wrong for German, which capitalises weekdays: it printed
+        // "Wieder offen am freitag".
+        const day = next && (d.t.lowercaseDays ? next.toLowerCase() : next);
+        text = next ? fmt(d.t.opensAgain, { d: day }) : d.t.closedToday;
       }
       el.textContent = text;
       box.classList.toggle('shut', !open);

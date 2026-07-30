@@ -25,3 +25,18 @@ Whoever printed their signage made one. Most owners have it in WhatsApp.
 - Rendered at 34px tall in the nav (28px on small phones), 26px on the booking bar.
   Width is unconstrained, so wide wordmarks and square badges both work.
 - A photo of a sticker is not usable — it carries background, glare and skew.
+
+## Crop the transparent padding before committing
+
+Exported logos usually sit inside a lot of empty canvas. Musti's arrived 260×260
+with only 140×195 of actual ink — 65px of dead space on the left, 55px on the
+right. CSS sizes the *file*, not the artwork, so at `height: 42px` the visible
+mark was 32px and looked shrunken and off-centre. Cropping it to the ink fixed
+both without touching a single line of CSS.
+
+Check before adding a logo — if the ink doesn't fill ~90% of the canvas, crop it:
+
+    sips -c <height> <width> --cropOffset <top> <left> in.png --out out.png
+
+Aim for a few px of even margin. Reach for CSS only once the file is tight;
+otherwise you're scaling padding and the nav grows for nothing.
