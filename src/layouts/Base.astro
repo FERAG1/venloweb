@@ -155,7 +155,7 @@ const links = [
 
   <body>
     <!-- ============================== NAV ============================== -->
-    <header class={`nav${tel ? "" : " no-tel"}`} id="nav">
+    <header class={`nav${tel ? "" : " no-tel"}${langs.length > 1 ? " has-lang" : ""}`} id="nav">
       <div class="nav-in">
         <!-- Badge AND wordmark, not badge instead of it. These logos are detailed
              emblems with the shop name set inside them, which is illegible at nav
@@ -182,6 +182,17 @@ const links = [
         </a>
 
         <!-- below 940px the nav pill would otherwise hold only the wordmark -->
+        {/* One flag, showing the language you'd switch TO — not a pair of toggles.
+             A flag is what a German visitor scans the header for, so it does the
+             job the dismissed banner was doing, without interrupting anyone or
+             redirecting crawlers away from either version. */}
+        {langs.filter((l) => l !== lang).map((l) => (
+          <a class="nav-lang" href={`${pathFor(shop.slug, l)}/`} hreflang={l}
+             aria-label={UI[l].langSuggestCta} title={UI[l].langName}>
+            <Flag code={l} size={18} />
+          </a>
+        ))}
+
         {tel && (
           <a class="btn btn-sm nav-tel" href={tel} aria-label={T.callAria}>
             <Icon name="phone" size={16} stroke={1.9} />
@@ -189,27 +200,6 @@ const links = [
         )}
       </div>
     </header>
-
-    {/* Shown only to a German-speaking browser on the Dutch page of a shop that
-         actually has German copy. Deliberately a SUGGESTION, never a redirect:
-         auto-redirecting on browser language breaks shared links, hijacks people
-         who deliberately chose Dutch, and hides the other version from Google.
-         Copy is in German because the reader is — that's the whole point. */}
-    {lang === 'nl' && langs.includes('de') && (
-      <div class="langbar" id="langbar" hidden data-href={deHref}>
-        <span class="langbar-in">
-          <Flag code="de" size={16} />
-          <span class="langbar-txt">{UI.de.langSuggest}</span>
-          <a class="langbar-go" href={deHref}>{UI.de.langSuggestCta}</a>
-          <button type="button" class="langbar-x" id="langbarX" aria-label={UI.de.langSuggestClose}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
-          </button>
-        </span>
-      </div>
-    )}
 
     <slot />
 
@@ -221,59 +211,23 @@ const links = [
     </nav>
 
     <style>
-      /* ---------- language suggestion ---------- */
-      .langbar {
-        position: fixed; top: 118px; left: 0; right: 0; z-index: 78;
-        display: flex; justify-content: center;
-        padding: 0 var(--gut);
-        pointer-events: none;
-        opacity: 0; transform: translateY(-8px);
-        transition: opacity 0.45s var(--ease-out), transform 0.45s var(--ease-out);
-      }
-      .langbar.in { opacity: 1; transform: none; }
-      .langbar[hidden] { display: none; }
-      .langbar-in {
-        pointer-events: auto;
-        display: inline-flex; align-items: center; gap: 12px;
-        max-width: 100%;
-        padding: 9px 9px 9px 15px;
-        border-radius: 100px;
-        background: rgba(255, 255, 255, 0.96);
-        backdrop-filter: saturate(180%) blur(18px);
-        -webkit-backdrop-filter: saturate(180%) blur(18px);
-        border: 1px solid var(--line);
-        box-shadow: inset 0 1px 0 #fff, var(--sh-3);
-        font-size: 0.86rem;
-      }
-      .langbar-txt {
-        color: var(--ink-mid); white-space: nowrap;
-        overflow: hidden; text-overflow: ellipsis;
-      }
-      .langbar-go {
-        flex: none;
-        padding: 7px 14px; border-radius: 100px;
-        background: var(--brand); color: var(--brand-ink);
-        text-decoration: none; font-weight: 550; white-space: nowrap;
-        transition: background 0.2s var(--ease-out);
-      }
-      .langbar-go:hover { background: var(--brand-hi); }
-      .langbar-x {
+      /* ---------- language flag ---------- */
+      .nav-lang {
         flex: none; display: grid; place-items: center;
-        width: 30px; height: 30px; border: 0; border-radius: 50%;
-        background: transparent; color: var(--ink-soft); cursor: pointer;
-        transition: background 0.2s var(--ease-out), color 0.2s var(--ease-out);
+        width: 38px; height: 38px; border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        background: rgba(255, 255, 255, 0.1);
+        transition: background 0.3s var(--ease-out), border-color 0.3s var(--ease-out),
+                    transform 0.2s var(--ease-out);
       }
-      .langbar-x:hover { background: rgba(14, 14, 16, 0.06); color: var(--ink); }
-
-      /* On a phone the sentence is the first thing to go — the flag plus a
-         German call-to-action already says everything it needs to. */
-      @media (max-width: 560px) {
-        .langbar { top: 104px; }
-        .langbar-txt { display: none; }
+      .nav-lang:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
+      /* once the pill condenses it sits on white, so invert the framing */
+      .nav.stuck .nav-lang {
+        border-color: var(--line);
+        background: var(--surface);
+        box-shadow: inset 0 1px 0 #fff, var(--sh-1);
       }
-      @media (prefers-reduced-motion: reduce) {
-        .langbar { transition: none; }
-      }
+      .nav.stuck .nav-lang:hover { box-shadow: inset 0 1px 0 #fff, var(--sh-2); }
 
       /* ---------- nav ---------- */
       .nav {
@@ -352,9 +306,11 @@ const links = [
       .nav.stuck .nav-links a:hover { color: var(--ink); background: rgba(14, 14, 16, 0.05); }
 
       .nav-cta { display: none; }
-      /* no phone number -> no .nav-tel, so the pill needs another action on
-         mobile or it is just a wordmark in a big empty capsule. */
-      .nav.no-tel .nav-cta { display: inline-flex; }
+      /* No phone means no .nav-tel, so the pill needs another action on mobile or
+         it's just a wordmark in an empty capsule. A language flag counts as that
+         action — forcing the CTA in as well crowded the pill and truncated the
+         shop name. */
+      .nav.no-tel:not(.has-lang) .nav-cta { display: inline-flex; }
       .nav-tel { padding: 10px; aspect-ratio: 1; }
       @media (min-width: 940px) {
         .nav-links, .nav-cta { display: inline-flex; }
@@ -431,32 +387,5 @@ const links = [
       addEventListener('scroll', onScroll, { passive: true });
     </script>
 
-    <script is:inline>
-      /* Language suggestion. Three rules:
-         1. only for a German-speaking browser
-         2. never redirect — offer, and let them choose
-         3. once dismissed, stay dismissed (per shop) */
-      (() => {
-        const bar = document.getElementById('langbar');
-        if (!bar) return;
-        const KEY = 'vw:lang-dismissed:' + location.pathname.split('/')[1];
-        // Wire dismiss FIRST, unconditionally. Attaching it inside the
-        // should-we-show branch meant the button was dead whenever the bar was
-        // shown by any other route, and made the path untestable.
-        document.getElementById('langbarX').addEventListener('click', () => {
-          bar.classList.remove('in');
-          try { localStorage.setItem(KEY, '1'); } catch {}
-          setTimeout(() => { bar.hidden = true; }, 300);
-        });
-
-        let dismissed = false;
-        try { dismissed = localStorage.getItem(KEY) === '1'; } catch {}
-        const speaksGerman = (navigator.languages || [navigator.language || ''])
-          .some((l) => String(l).toLowerCase().startsWith('de'));
-        if (dismissed || !speaksGerman) return;
-        bar.hidden = false;
-        requestAnimationFrame(() => bar.classList.add('in'));
-      })();
-    </script>
   </body>
 </html>
