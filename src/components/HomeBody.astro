@@ -760,37 +760,41 @@ const setAt = (url, widths) =>
   .svc-note svg { color: #17a34a; }
 
   /* ------------------------------ gallery ------------------------------ */
-  /* The old layout was hand-placed per cell and didn't tile: the 2x2 feature plus
-     four singles left columns 3-4 of the last row permanently empty. This pattern
-     is built to close instead — spans chosen so each block of six fills exactly
-     three rows of four (4 + 1 + 1 + 2 + 2 + 2 = 12), and it repeats every six
-     photos. grid-auto-flow: dense backfills anything left when a shop supplies a
-     count that isn't a multiple of six.
-     Row height is fixed rather than per-cell aspect ratios, so every row lines up
-     no matter how the photos are cropped. */
+  /* A gallery, not a grid of cards. Three things separate the two:
+     — the tiles share one tight gap so they read as a single sheet
+     — no per-tile drop shadow (that's what made six floating cards); the inset
+       hairline from .media still holds each edge
+     — real size contrast: a tall portrait feature, two small, a square block,
+       two cinematic strips, instead of six near-equal boxes
+     Spans are chosen so a block of six closes exactly: 6 + 1 + 1 + 4 + 2 + 2 = 16
+     cells = four rows of four, repeating every six photos. */
   .grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: clamp(112px, 30vw, 190px);
+    grid-auto-rows: clamp(96px, 26vw, 150px);
     grid-auto-flow: dense;
-    gap: 10px;
+    gap: 8px;
   }
-  /* mobile: wide, pair, pair, wide — 2 + 1+1 + 1+1 + 2 = four full rows */
-  .cell:nth-child(6n + 1),
+  .grid .media { box-shadow: none; border-radius: var(--r-sm); }
+  .grid .media img { transition: transform 1.2s var(--ease); }
+  .grid .media:hover img { transform: scale(1.05); }
+
+  /* mobile: feature spans 2 wide and 2 tall, then pairs, then a wide closer */
+  .cell:nth-child(6n + 1) { grid-column: span 2; grid-row: span 2; }
   .cell:nth-child(6n) { grid-column: span 2; }
 
   @media (min-width: 820px) {
     .grid {
       grid-template-columns: repeat(4, 1fr);
-      grid-auto-rows: clamp(130px, 14vw, 200px);
-      gap: 14px;
+      grid-auto-rows: clamp(104px, 11vw, 150px);
+      gap: 10px;
     }
-    .cell:nth-child(6n + 1) { grid-column: span 2; grid-row: span 2; }
-    .cell:nth-child(6n + 4),
+    .cell:nth-child(6n + 1) { grid-column: span 2; grid-row: span 3; }
+    .cell:nth-child(6n + 2),
+    .cell:nth-child(6n + 3) { grid-column: span 1; grid-row: span 1; }
+    .cell:nth-child(6n + 4) { grid-column: span 2; grid-row: span 2; }
     .cell:nth-child(6n + 5),
     .cell:nth-child(6n) { grid-column: span 2; grid-row: span 1; }
-    .cell:nth-child(6n + 2),
-    .cell:nth-child(6n + 3) { grid-column: span 1; }
   }
 
   /* ------------------------------ reviews ------------------------------ */

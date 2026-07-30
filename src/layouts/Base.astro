@@ -223,7 +223,10 @@ const links = [
       /* scrolled: condense into a floating pill */
       .nav.stuck { padding-top: 10px; }
       .nav.stuck .nav-in {
-        background: rgba(255, 255, 255, 0.82);
+        /* 0.82 let the big display headings ghost straight through the pill —
+           frosted glass reads elegant over photography and messy over 5rem type,
+           and it's worse when someone pinch-zooms. Denser glass, same blur. */
+        background: rgba(255, 255, 255, 0.94);
         backdrop-filter: saturate(180%) blur(18px);
         -webkit-backdrop-filter: saturate(180%) blur(18px);
         border-color: var(--line);
