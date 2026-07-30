@@ -295,11 +295,20 @@ const links = [
          the same baseline. The nav sits over a dark hero before it sticks, so a
          dark-on-transparent logo needs `logoOnDark` too — otherwise it vanishes. */
       .mark { display: inline-flex; align-items: center; gap: 9px; min-width: 0; }
-      .mark img { height: 42px; width: auto; display: block; flex: none; }
+      /* 42px is the size inside the white pill, where the logo is boxed in and
+         needs the presence. Over the hero there is no pill to hold it, the
+         wordmark next to it is white on a dark photo, and the same 42px reads
+         oversized — so the unstuck state runs smaller and grows as it sticks. */
+      .mark img {
+        height: 36px; width: auto; display: block; flex: none;
+        transition: height 0.4s var(--ease-out);
+      }
+      .nav.stuck .mark img { height: 42px; }
       .mark span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       @media (max-width: 520px) {
         .mark { gap: 7px; }
-        .mark img { height: 34px; }
+        .mark img { height: 30px; }
+        .nav.stuck .mark img { height: 34px; }
       }
 
       .nav-links { display: none; align-items: center; gap: 4px; }
