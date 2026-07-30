@@ -207,7 +207,14 @@
       "a": "Ja, wir sprechen Deutsch. Venlo liegt nur 15 Minuten von der Grenze — deutsche Kunden sind jederzeit willkommen."
     }
   ],
-  "_todo": "ECHT: naam, adres, telefoon, rating, reviews. ONTBREEKT: openingstijden (nu de generieke week — NAKIJKEN), geo lat/lng. PLACEHOLDER: prijzen, diensten, team, foto's, intro.",
+  "_todo": "KLEUREN ZIJN VOORLOPIG (forest) — foto van hun pui/logo maken en aanpassen. ECHT: naam, adres, telefoon, rating, reviews. ONTBREEKT: openingstijden (nu de generieke week — NAKIJKEN), geo lat/lng. PLACEHOLDER: prijzen, diensten, team, foto's, intro.",
   "_de": "Geen Duitse versie. Wil de zaak die (add-on): kopieer het \"de\"-blok uit shops/demo.json, vertaal alles, en /de/ verschijnt automatisch. Zonder dit blok wordt er geen Duitse pagina gebouwd.",
-  "_pluscode": "9576+GR Venlo"
+  "_pluscode": "9576+GR Venlo",
+  "brand": {
+    "base": "#23402F",
+    "hi": "#2E533D",
+    "ink": "#ffffff",
+    "accent": "#BF9440",
+    "_note": "forest — provisional"
+  }
 }

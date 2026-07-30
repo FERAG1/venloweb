@@ -1,14 +1,14 @@
 {
   "slug": "musti-kapsalon",
   "name": "Musti Kapsalon",
-  "logo": "",
+  "logo": "/logo/musti-kapsalon.png",
   "tagline": "Kapsalon in Venlo",
   "intro": "Vakwerk, scherpe fades en een scheerbeurt zoals het hoort. Al jaren de vaste stek voor mannen uit Venlo en omstreken.",
   "address": {
     "street": "",
     "postcode": "5911 ER",
     "city": "Venlo",
-    "maps": "https://maps.google.com/?q=Musti+Kapsalon+Venlo"
+    "maps": ""
   },
   "phone": "+31 6 15280278",
   "whatsapp": "995551258383",
@@ -184,7 +184,7 @@
       "a": "Ja, wir sprechen Deutsch. Venlo liegt nur 15 Minuten von der Grenze — deutsche Kunden sind jederzeit willkommen."
     }
   ],
-  "_todo": "ECHT van het bord: naam, telefoon, openingstijden, ALLE PRIJZEN, postcode, huisstijl-kleuren. ONTBREEKT: straat + huisnummer, Google rating + reviews. CHECKEN BIJ MUSTI: duur per behandeling (staat niet op het bord, bepaalt de lengte van een tijdslot). Instagram: musti.kapsalon  E-mail: musti23@live.nl. PLACEHOLDER: intro, why, faq, team, fotos.",
+  "_todo": "GEEN Google Bedrijfsprofiel — staat niet op Maps. Daarom: geen rating, geen reviews, geen Route-knop (maps leeg gelaten i.p.v. naar een dood zoekresultaat). DIT IS DE GROOTSTE KANS: profiel aanmaken = hij wordt vindbaar op \"kapper venlo\". NOG NODIG: straat + huisnummer (dan kan Route weer aan), duur per behandeling. ECHT van het bord: prijzen, openingstijden, telefoon, kleuren, logo.",
   "_de": "Geen Duitse versie. Wil de zaak die (add-on): kopieer het \"de\"-blok uit shops/demo.json, vertaal alles, en /de/ verschijnt automatisch. Zonder dit blok wordt er geen Duitse pagina gebouwd.",
   "rating": {
     "score": "",
@@ -194,6 +194,7 @@
     "base": "#96173F",
     "hi": "#A62949",
     "ink": "#ffffff",
-    "accent": "#C96410"
+    "accent": "#C96410",
+    "_note": "maroon — REAL — from his sign + logo"
   }
 }

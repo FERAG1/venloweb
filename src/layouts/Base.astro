@@ -155,10 +155,14 @@ const links = [
     <!-- ============================== NAV ============================== -->
     <header class={`nav${tel ? "" : " no-tel"}`} id="nav">
       <div class="nav-in">
+        <!-- Badge AND wordmark, not badge instead of it. These logos are detailed
+             emblems with the shop name set inside them, which is illegible at nav
+             size — on its own it reads as a smudge and the nav names nothing. The
+             badge carries recognition, the type carries the name. alt="" because
+             the name is already right there as text. -->
         <a class="mark" href={`${B}/#top`}>
-          {shop.logo
-            ? <img src={shop.logo} alt={shop.name} height="34" />
-            : shop.name}
+          {shop.logo && <img src={shop.logo} alt="" height="36" />}
+          <span>{shop.name}</span>
         </a>
 
         <nav class="nav-links">
@@ -239,8 +243,13 @@ const links = [
          capped rather than width, so a wide wordmark and a square badge both sit on
          the same baseline. The nav sits over a dark hero before it sticks, so a
          dark-on-transparent logo needs `logoOnDark` too — otherwise it vanishes. */
-      .mark img { height: 34px; width: auto; display: block; }
-      @media (max-width: 520px) { .mark img { height: 28px; } }
+      .mark { display: inline-flex; align-items: center; gap: 9px; min-width: 0; }
+      .mark img { height: 36px; width: auto; display: block; flex: none; }
+      .mark span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      @media (max-width: 520px) {
+        .mark { gap: 7px; }
+        .mark img { height: 30px; }
+      }
 
       .nav-links { display: none; align-items: center; gap: 4px; }
       .nav-links a {

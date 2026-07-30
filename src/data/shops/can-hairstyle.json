@@ -219,6 +219,13 @@
       "a": "Ja, wir sprechen Deutsch. Venlo liegt nur 15 Minuten von der Grenze — deutsche Kunden sind jederzeit willkommen."
     }
   ],
-  "_todo": "ECHT: naam, adres, telefoon, rating. PLACEHOLDER: prijzen, diensten, team, foto's, intro, why, faq — navragen/vervangen. Openingstijden komen uit een directory: NAKIJKEN op Maps. reviews[] pas vullen met echte Google reviews.",
-  "_de": "Geen Duitse versie. Wil de zaak die (add-on): kopieer het \"de\"-blok uit shops/demo.json, vertaal alles, en /de/ verschijnt automatisch. Zonder dit blok wordt er geen Duitse pagina gebouwd."
+  "_todo": "KLEUREN ZIJN VOORLOPIG (oxblood) — foto van hun pui/logo maken en aanpassen. ECHT: naam, adres, telefoon, rating. PLACEHOLDER: prijzen, diensten, team, foto's, intro, why, faq — navragen/vervangen. Openingstijden komen uit een directory: NAKIJKEN op Maps. reviews[] pas vullen met echte Google reviews.",
+  "_de": "Geen Duitse versie. Wil de zaak die (add-on): kopieer het \"de\"-blok uit shops/demo.json, vertaal alles, en /de/ verschijnt automatisch. Zonder dit blok wordt er geen Duitse pagina gebouwd.",
+  "brand": {
+    "base": "#7A2733",
+    "hi": "#8F2F3D",
+    "ink": "#ffffff",
+    "accent": "#B8823C",
+    "_note": "oxblood — provisional"
+  }
 }
