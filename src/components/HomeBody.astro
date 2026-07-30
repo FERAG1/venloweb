@@ -2,7 +2,8 @@
 import Icon from './Icon.astro';
 import Google from './Google.astro';
 import Flag from './Flag.astro';
-import { base, UI, fmt } from '../i18n/ui.js';
+import { UI, fmt } from '../i18n/ui.js';
+import { pathFor } from '../lib/shops.js';
 
 // The homepage body, factored out so /  and /de/ render the exact same markup
 // with a different `shop` + `T`. Nothing here reads shop.json directly — the
@@ -12,7 +13,8 @@ const { shop, lang, T, langs = ['nl'] } = Astro.props;
 const a = shop.address;
 // If the shop already runs Salonized/Booksy, send them there instead and the
 // built-in flow just doesn't get linked.
-const book = shop.booking || `${base(lang)}/boeken`;
+const B = pathFor(shop.slug, lang);
+const book = shop.booking || `${B}/boeken`;
 // only open a new tab for a real external booking URL — never for the #anchor
 const bookAttrs = shop.booking ? { target: '_blank', rel: 'noopener' } : {};
 const tel = `tel:${shop.phone.replace(/\s/g, '')}`;
@@ -20,7 +22,7 @@ const tel = `tel:${shop.phone.replace(/\s/g, '')}`;
 // browsing → booking doesn't make you pick it twice. Only for the built-in flow;
 // an external booking URL has no idea what ?dienst= means. The slug is always the
 // Dutch one (see lib/shop.js), so it resolves on both language versions.
-const svcHref = (s) => (shop.booking ? book : `${base(lang)}/boeken?dienst=${s.slug}`);
+const svcHref = (s) => (shop.booking ? book : `${B}/boeken?dienst=${s.slug}`);
 const marquee = [...shop.marquee, ...shop.marquee];
 const initial = (n) => n.trim()[0].toUpperCase();
 
@@ -178,7 +180,11 @@ const setAt = (url, widths) =>
     </div>
   </section>
 
-  <!-- ============================== GOOGLE REVIEWS ============================== -->
+  <!-- ============================== GOOGLE REVIEWS ==============================
+       Only rendered when there are real reviews to show. A new shop starts with
+       reviews: [] and the whole section disappears — never invent testimonials
+       to fill it. -->
+  {shop.reviews?.length > 0 && (
   <section id="reviews" class="band">
     <div class="wrap rev-grid">
       <aside class="rev-side rise">
@@ -214,13 +220,16 @@ const setAt = (url, widths) =>
               </div>
               <Google type="g" size={16} />
             </header>
-            <Google type="stars" size={15} score={r.score} />
+            {/* No score = we never verified the star count. Omit the row rather
+                than render a default, which would silently invent a rating. */}
+            {r.score != null && <Google type="stars" size={15} score={r.score} />}
             <blockquote>{r.text}</blockquote>
           </figure>
         ))}
       </div>
     </div>
   </section>
+  )}
 
   <!-- ============================== TEAM ============================== -->
   <section>
@@ -333,7 +342,7 @@ const setAt = (url, widths) =>
       {langs.length > 1 && (
         <nav class="langs" aria-label="Taal / Sprache">
           {langs.map((l) => (
-            <a href={`${base(l)}/`} hreflang={l} aria-current={l === lang ? 'true' : undefined}>
+            <a href={`${pathFor(shop.slug, l)}/`} hreflang={l} aria-current={l === lang ? 'true' : undefined}>
               <Flag code={l} size={15} />
               <span>{UI[l].langName}</span>
             </a>

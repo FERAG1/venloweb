@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import HomeBody from '../../components/HomeBody.astro';
+import { allShops, shopBySlug } from '../../lib/shops.js';
+import { localizedShop, availableLangs } from '../../lib/shop.js';
+import { t } from '../../i18n/ui.js';
+
+// One page per file in src/data/shops/. Dutch lives at the shop root.
+export function getStaticPaths() {
+  return allShops.map(({ slug }) => ({ params: { shop: slug } }));
+}
+
+const lang = 'nl';
+const raw = shopBySlug(Astro.params.shop);
+const shop = localizedShop(raw, lang);
+const langs = availableLangs(raw);
+---
+
+<Base shop={shop} lang={lang} langs={langs}>
+  <HomeBody shop={shop} lang={lang} langs={langs} T={t(lang)} />
+</Base>

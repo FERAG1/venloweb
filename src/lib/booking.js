@@ -1,4 +1,5 @@
-import { t, base } from '../i18n/ui.js';
+import { t } from '../i18n/ui.js';
+import { pathFor } from './shops.js';
 
 // Everything the booking wizard's client script needs, serialised into the page
 // as JSON. It has no access to Astro's frontmatter, so the whole UI dictionary
@@ -15,6 +16,6 @@ export const bookingCfg = (shop, lang) => ({
   address: `${shop.address.street}, ${shop.address.postcode} ${shop.address.city}`,
   maps: shop.address.maps,
   locale: t(lang).locale,
-  base: base(lang),
+  base: pathFor(shop.slug, lang),
   t: t(lang),
 });

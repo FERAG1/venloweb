@@ -1,8 +1,8 @@
 ---
 import Icon from './Icon.astro';
-import { base } from '../i18n/ui.js';
+import { pathFor } from '../lib/shops.js';
 const { shop, lang, T, cfg } = Astro.props;
-const homeHref = `${base(lang)}/`;
+const homeHref = `${pathFor(shop.slug, lang)}/`;
 ---
 
   <main id="bkPage">

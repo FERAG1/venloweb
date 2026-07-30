@@ -1,0 +1,27 @@
+---
+import Base from '../../../layouts/Base.astro';
+import HomeBody from '../../../components/HomeBody.astro';
+import { allShops, shopBySlug } from '../../../lib/shops.js';
+import { localizedShop, availableLangs } from '../../../lib/shop.js';
+import { t } from '../../../i18n/ui.js';
+
+// Cross-product of shops × their translated languages. A shop with no `de`
+// block contributes nothing, so it gets no German page at all rather than an
+// orphan duplicate under lang="de".
+export function getStaticPaths() {
+  return allShops.flatMap(({ slug, data }) =>
+    availableLangs(data)
+      .filter((l) => l !== 'nl')
+      .map((l) => ({ params: { shop: slug, lang: l } })),
+  );
+}
+
+const { shop: shopSlug, lang } = Astro.params;
+const raw = shopBySlug(shopSlug);
+const shop = localizedShop(raw, lang);
+const langs = availableLangs(raw);
+---
+
+<Base shop={shop} lang={lang} langs={langs}>
+  <HomeBody shop={shop} lang={lang} langs={langs} T={t(lang)} />
+</Base>

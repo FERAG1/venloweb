@@ -1,0 +1,24 @@
+---
+import Bare from '../../../layouts/Bare.astro';
+import BookBody from '../../../components/BookBody.astro';
+import { allShops, shopBySlug } from '../../../lib/shops.js';
+import { localizedShop, availableLangs } from '../../../lib/shop.js';
+import { t } from '../../../i18n/ui.js';
+import { bookingCfg } from '../../../lib/booking.js';
+
+export function getStaticPaths() {
+  return allShops.flatMap(({ slug, data }) =>
+    availableLangs(data)
+      .filter((l) => l !== 'nl')
+      .map((l) => ({ params: { shop: slug, lang: l } })),
+  );
+}
+
+const { shop: shopSlug, lang } = Astro.params;
+const shop = localizedShop(shopBySlug(shopSlug), lang);
+const T = t(lang);
+---
+
+<Bare shop={shop} lang={lang} title={T.bookTitle}>
+  <BookBody shop={shop} lang={lang} T={T} cfg={bookingCfg(shop, lang)} />
+</Bare>

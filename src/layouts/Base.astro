@@ -1,11 +1,14 @@
 ---
 import '../styles/theme.css';
 import Icon from '../components/Icon.astro';
-import { t, base } from '../i18n/ui.js';
+import { t } from '../i18n/ui.js';
+import { pathFor } from '../lib/shops.js';
 const { shop, lang = 'nl', langs = ['nl'] } = Astro.props;
+// URL prefix for THIS shop + language; every internal link hangs off it.
+const B = pathFor(shop.slug, lang);
 const T = t(lang);
 const a = shop.address;
-const book = shop.booking || `${base(lang)}/boeken`;
+const book = shop.booking || `${B}/boeken`;
 const bookAttrs = shop.booking ? { target: '_blank', rel: 'noopener' } : {};
 const tel = `tel:${shop.phone.replace(/\s/g, '')}`;
 
@@ -13,8 +16,9 @@ const site = Astro.site?.href.replace(/\/$/, '') ?? '';
 const pageUrl = `${site}${Astro.url.pathname}`;
 // Every language version of this page, for hreflang. The path after the language
 // prefix is the same on both, so we can derive siblings from the current URL.
-const bare = Astro.url.pathname.replace(/^\/de(?=\/|$)/, '') || '/';
-const alternates = langs.map((l) => ({ lang: l, href: `${site}${base(l)}${bare}` }));
+// Same page in every language: strip the shop+lang prefix, keep the tail.
+const tail = Astro.url.pathname.replace(new RegExp(`^${B}`), '') || '/';
+const alternates = langs.map((l) => ({ lang: l, href: `${site}${pathFor(shop.slug, l)}${tail === '/' ? '/' : tail}` }));
 const title = `${shop.name} — ${shop.tagline}`;
 
 // priceRange and opening hours are derived, not hand-maintained — they can't
@@ -37,12 +41,13 @@ const openingHours = shop.hours
 // Root-relative, not bare anchors — this nav also renders on /boeken, where a
 // bare '#prijzen' would resolve to /boeken#prijzen and silently do nothing.
 // The language prefix keeps you inside the version you're reading.
-const B = base(lang);
+// #reviews is dropped when the shop has none — the section isn't rendered, so
+// linking to it would be a dead anchor.
 const links = [
   { href: `${B}/#prijzen`, label: T.navPrices, icon: 'tag' },
   { href: `${B}/boeken`, label: T.navBook, icon: 'calendar' },
   { href: `${B}/#werk`, label: T.navWork, icon: 'image' },
-  { href: `${B}/#reviews`, label: T.navReviews, icon: 'spark' },
+  ...(shop.reviews?.length ? [{ href: `${B}/#reviews`, label: T.navReviews, icon: 'spark' }] : []),
   { href: `${B}/#bezoek`, label: T.navVisit, icon: 'pin' },
 ];
 ---

@@ -1,7 +1,8 @@
 ---
 import '../styles/theme.css';
 import Icon from '../components/Icon.astro';
-import { t, base } from '../i18n/ui.js';
+import { t } from '../i18n/ui.js';
+import { pathFor } from '../lib/shops.js';
 const { shop, title, lang = 'nl' } = Astro.props;
 const T = t(lang);
 const tel = `tel:${shop.phone.replace(/\s/g, '')}`;
@@ -21,7 +22,7 @@ const tel = `tel:${shop.phone.replace(/\s/g, '')}`;
 
   <body class="bare">
     <header class="top">
-      <a class="top-back" href={`${base(lang)}/`} aria-label={T.backToSite}>
+      <a class="top-back" href={`${pathFor(shop.slug, lang)}/`} aria-label={T.backToSite}>
         <Icon name="arrow" size={17} stroke={2} />
       </a>
       <span class="top-name">{shop.name}</span>

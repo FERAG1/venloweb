@@ -1,0 +1,223 @@
+{
+  "slug": "can-hairstyle",
+  "name": "C.a.n. Hairstyle",
+  "tagline": "TODO korte tagline, bv. \"Barbershop in hartje Venlo\"",
+  "intro": "TODO 2 zinnen. Wat maken ze goed, voor wie.",
+  "address": {
+    "street": "TODO straat + nummer",
+    "postcode": "TODO 1234 AB",
+    "city": "Venlo",
+    "maps": "https://maps.app.goo.gl/Lthk48Bt2ssrzd9AA"
+  },
+  "phone": "+31 77 000 0000",
+  "whatsapp": "TODO 31612345678 (cijfers, landcode, geen + of spaties)",
+  "booking": "",
+  "rating": {
+    "score": "4.5",
+    "count": 148
+  },
+  "todayLine": "TODO bv. \"Vandaag open tot 18:00\"",
+  "marquee": [
+    {
+      "label": "Fades",
+      "img": "https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=1200&q=80&auto=format&fit=crop"
+    },
+    {
+      "label": "Baard trimmen",
+      "img": "https://images.unsplash.com/photo-1647140655214-e4a2d914971f?w=1200&q=80&auto=format&fit=crop"
+    },
+    {
+      "label": "Scheren met mes",
+      "img": "https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=1200&q=80&auto=format&fit=crop"
+    },
+    {
+      "label": "Klassiek knippen",
+      "img": "https://images.unsplash.com/photo-1536520002442-39764a41e987?w=1200&q=80&auto=format&fit=crop"
+    },
+    {
+      "label": "Kids cuts",
+      "img": "https://images.unsplash.com/photo-1596728325488-58c87691e9af?w=1200&q=80&auto=format&fit=crop"
+    },
+    {
+      "label": "Walk-in welkom",
+      "img": "https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?w=1200&q=80&auto=format&fit=crop"
+    }
+  ],
+  "hours": [
+    {
+      "day": "Maandag",
+      "time": "Gesloten"
+    },
+    {
+      "day": "Dinsdag",
+      "time": "09:00 – 18:00"
+    },
+    {
+      "day": "Woensdag",
+      "time": "09:00 – 18:00"
+    },
+    {
+      "day": "Donderdag",
+      "time": "09:00 – 20:00"
+    },
+    {
+      "day": "Vrijdag",
+      "time": "09:00 – 18:00"
+    },
+    {
+      "day": "Zaterdag",
+      "time": "08:00 – 17:00"
+    },
+    {
+      "day": "Zondag",
+      "time": "Gesloten"
+    }
+  ],
+  "services": [
+    {
+      "name": "Knippen heren",
+      "desc": "Wassen, knippen, stylen",
+      "price": "25",
+      "time": "30 min"
+    },
+    {
+      "name": "Knippen + baard",
+      "desc": "De complete beurt",
+      "price": "35",
+      "time": "45 min"
+    },
+    {
+      "name": "Fade / skin fade",
+      "desc": "Strak opgebouwd, scherpe lijn",
+      "price": "30",
+      "time": "40 min"
+    },
+    {
+      "name": "Baard trimmen",
+      "desc": "Model, lijnen, hot towel",
+      "price": "15",
+      "time": "20 min"
+    },
+    {
+      "name": "Scheren met mes",
+      "desc": "Klassiek, met hete doek",
+      "price": "22",
+      "time": "30 min"
+    },
+    {
+      "name": "Knippen kind t/m 12",
+      "desc": "Rustig en snel",
+      "price": "18",
+      "time": "25 min"
+    }
+  ],
+  "team": [
+    {
+      "name": "Barber 1",
+      "role": "Fades & scheren",
+      "photo": "https://images.unsplash.com/photo-1598524374912-6b0b0bab43dd?w=800&q=80&auto=format&fit=crop"
+    },
+    {
+      "name": "Barber 2",
+      "role": "Klassiek knippen",
+      "photo": "https://images.unsplash.com/photo-1703792684940-a05aa0f1188f?w=800&q=80&auto=format&fit=crop"
+    },
+    {
+      "name": "Barber 3",
+      "role": "Baard specialist",
+      "photo": "https://images.unsplash.com/photo-1512864084360-7c0c4d0a0845?w=800&q=80&auto=format&fit=crop"
+    }
+  ],
+  "hero": "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=1800&q=80&auto=format&fit=crop",
+  "gallery": [
+    "https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1647140655214-e4a2d914971f?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1536520002442-39764a41e987?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1596728325488-58c87691e9af?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=1200&q=80&auto=format&fit=crop"
+  ],
+  "storefront": "https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?w=1200&q=80&auto=format&fit=crop",
+  "ctaImage": "https://images.unsplash.com/photo-1621645582931-d1d3e6564943?w=1800&q=80&auto=format&fit=crop",
+  "why": [
+    {
+      "icon": "clock",
+      "title": "Binnen 24 uur terecht",
+      "text": "Meestal is er morgen al plek. Walk-in mag ook — even bellen en je weet het."
+    },
+    {
+      "icon": "scissors",
+      "title": "Vakmensen, geen haast",
+      "text": "Je krijgt de tijd. We knippen naar je hoofdvorm, niet naar de klok."
+    },
+    {
+      "icon": "tag",
+      "title": "Vaste prijzen",
+      "text": "Wat op de lijst staat, betaal je. Geen verrassingen bij de kassa."
+    }
+  ],
+  "reviews": [
+    {
+      "text": "All barbers are cutting hair in detail. They take their time and the results are always great. It's a bit more expensive compared to other barbers in town, but the overall its worth it.",
+      "author": "Kyriakos JQ",
+      "when": "3 jaar geleden",
+      "tone": "#1a73e8"
+    },
+    {
+      "text": "Best hairdresser in Venlo! I go there for more than 3 years and I'm always satisfied with their services and good manner!",
+      "author": "Giuseppe C",
+      "when": "1 jaar geleden",
+      "tone": "#188038"
+    },
+    {
+      "text": "Really good cut. Wonderful service. Was in Holland for a day and got my hair cut here. Planning on coming back just to get my hair cut here. Very recommendable.",
+      "author": "A Rn",
+      "when": "5 jaar geleden",
+      "tone": "#c5221f"
+    },
+    {
+      "text": "Amazing staff and Great quality hair cuts also much cheaper than most others.. recommended!",
+      "author": "Jason Keaveney",
+      "when": "3 jaar geleden",
+      "tone": "#9334e6"
+    },
+    {
+      "text": "Very friendly Personal and great work. Always will come back.",
+      "author": "Cryptoblock",
+      "when": "2 jaar geleden",
+      "tone": "#0b8043"
+    }
+  ],
+  "geo": {
+    "lat": "51.3732111",
+    "lng": "6.1734789"
+  },
+  "faq": [
+    {
+      "q": "Moet ik een afspraak maken of kan ik binnenlopen?",
+      "a": "Allebei kan. Met een afspraak weet je zeker dat je meteen aan de beurt bent. Loop je binnen, dan helpen we je zodra er een stoel vrij is."
+    },
+    {
+      "q": "Wat kost knippen bij ons?",
+      "a": "Knippen heren is €25, knippen met baard €35 en een fade €30. De volledige prijslijst staat op deze pagina. Wat je ziet is wat je betaalt."
+    },
+    {
+      "q": "Hoe lang duurt een knipbeurt?",
+      "a": "Reken op 30 minuten voor knippen, 45 minuten voor knippen met baard. We nemen de tijd, maar je zit niet onnodig lang."
+    },
+    {
+      "q": "Kan ik pinnen?",
+      "a": "Ja, pinnen en contant kan allebei."
+    },
+    {
+      "q": "Knippen jullie ook kinderen?",
+      "a": "Zeker. Kinderen tot en met 12 jaar knippen we voor €18. Rustig en snel, ook als het de eerste keer is."
+    },
+    {
+      "q": "Sprechen Sie Deutsch?",
+      "a": "Ja, wir sprechen Deutsch. Venlo liegt nur 15 Minuten von der Grenze — deutsche Kunden sind jederzeit willkommen."
+    }
+  ],
+  "_todo": "Nog van Maps overnemen: straat + postcode, telefoon, openingstijden. Prijzen/diensten navragen bij de zaak. Reviews zijn ECHT (4.5 / 148). Sterren per review ontbreken nog — vul \"score\" (1-5) per review aan als je die op Maps ziet; zonder score wordt de sterrenrij weggelaten in plaats van verzonnen.",
+  "_de": "Geen Duitse versie. Wil de zaak die (add-on): kopieer het \"de\"-blok uit shops/demo.json, vertaal alles, en /de/ verschijnt automatisch. Zonder dit blok wordt er geen Duitse pagina gebouwd."
+}
