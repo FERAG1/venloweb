@@ -387,6 +387,20 @@ const setAt = (url, widths) =>
         {tel && (
           <a class="ft-line ft-link" href={tel}><Icon name="phone" size={14} stroke={2} />{shop.phone}</a>
         )}
+        {/* Segmented toggle, not a bare link: it shows which language you're on
+             AND what you can switch to, so it can't be misread the way a lone
+             "Deutsch" link was. The nav flag stays a shortcut for the same thing. */}
+        {langs.length > 1 && (
+          <nav class="langs" aria-label="Taal / Sprache">
+            {langs.map((l) => (
+              <a href={`${pathFor(shop.slug, l)}/`} hreflang={l}
+                 aria-current={l === lang ? 'true' : undefined}>
+                <Flag code={l} size={15} />
+                <span>{UI[l].langName}</span>
+              </a>
+            ))}
+          </nav>
+        )}
       </div>
 
       <nav class="ft-col" aria-label={T.navPrices}>
@@ -1011,6 +1025,30 @@ const setAt = (url, widths) =>
   }
   .ft-line svg { flex: none; color: var(--gold); }
   a.ft-link { text-decoration: none; transition: color 0.25s var(--ease-out); }
+
+  /* Segmented language toggle, sitting with the contact details. Flags stay
+     full-colour — dimming them muddies the German tricolour into brown — so the
+     current language is carried by the raised white chip instead. */
+  .langs {
+    display: inline-flex; align-items: center; gap: 2px;
+    margin-top: var(--s3); padding: 2px;
+    border-radius: 100px; background: rgba(14, 14, 16, 0.05);
+  }
+  .langs a {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px 5px 9px; border-radius: 100px;
+    color: var(--ink-soft); text-decoration: none;
+    font-size: 0.8rem; font-weight: 550; letter-spacing: -0.01em; white-space: nowrap;
+    transition: color 0.25s var(--ease-out), background 0.25s var(--ease-out),
+                box-shadow 0.25s var(--ease-out);
+  }
+  .langs a :global(.flag) { flex: none; transition: transform 0.25s var(--ease-out); }
+  .langs a:hover { color: var(--ink); }
+  .langs a:hover :global(.flag) { transform: translateY(-0.5px); }
+  .langs a[aria-current] {
+    color: var(--ink); background: #fff;
+    box-shadow: 0 1px 2px rgba(62, 48, 34, 0.07), 0 0 0 0.5px rgba(62, 48, 34, 0.06);
+  }
   a.ft-link:hover { color: var(--ink); }
 
   .ft-col h3 {

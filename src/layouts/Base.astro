@@ -181,14 +181,22 @@ const links = [
              quieter control than the booking CTA and shouldn't split it from the
              phone button. */}
         <span class="nav-actions">
-          {/* One flag, showing the language you'd switch TO — not a pair of
-               toggles. A flag is what a German visitor scans the header for. */}
-          {langs.filter((l) => l !== lang).map((l) => (
-            <a class="nav-lang" href={`${pathFor(shop.slug, l)}/`} hreflang={l}
-               aria-label={UI[l].langSuggestCta} title={UI[l].langName}>
-              <Flag code={l} size={18} />
-            </a>
-          ))}
+          {/* Same segmented toggle as the footer, flags only. It has to be the
+               SAME convention as the footer control, not a "switch to" shortcut:
+               one showing 🇩🇪 while the other highlighted Nederlands read as a
+               contradiction on every page. Showing state in both places is the
+               only arrangement where they can't disagree. */}
+          {langs.length > 1 && (
+            <nav class="nav-langs" aria-label="Taal / Sprache">
+              {langs.map((l) => (
+                <a href={`${pathFor(shop.slug, l)}/`} hreflang={l} title={UI[l].langName}
+                   aria-label={UI[l].langName}
+                   aria-current={l === lang ? 'true' : undefined}>
+                  <Flag code={l} size={17} />
+                </a>
+              ))}
+            </nav>
+          )}
 
           <a class="btn btn-sm nav-cta" href={book} {...bookAttrs}>
             <Icon name="calendar" size={15} stroke={1.9} />
@@ -219,23 +227,28 @@ const links = [
          still pushes the group away from the wordmark. */
       .nav-actions { display: flex; align-items: center; gap: 8px; flex: none; }
 
-      /* ---------- language flag ---------- */
-      .nav-lang {
-        flex: none; display: grid; place-items: center;
-        width: 38px; height: 38px; border-radius: 50%;
-        border: 1px solid rgba(255, 255, 255, 0.22);
-        background: rgba(255, 255, 255, 0.1);
-        transition: background 0.3s var(--ease-out), border-color 0.3s var(--ease-out),
-                    transform 0.2s var(--ease-out);
+      /* ---------- language toggle ---------- */
+      .nav-langs {
+        display: inline-flex; align-items: center; gap: 2px;
+        flex: none; padding: 3px; border-radius: 100px;
+        background: rgba(255, 255, 255, 0.14);
       }
-      .nav-lang:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
-      /* once the pill condenses it sits on white, so invert the framing */
-      .nav.stuck .nav-lang {
-        border-color: var(--line);
-        background: var(--surface);
-        box-shadow: inset 0 1px 0 #fff, var(--sh-1);
+      .nav-langs a {
+        display: grid; place-items: center;
+        padding: 5px 8px; border-radius: 100px; line-height: 0;
+        opacity: 0.55;
+        transition: opacity 0.25s var(--ease-out), background 0.25s var(--ease-out);
       }
-      .nav.stuck .nav-lang:hover { box-shadow: inset 0 1px 0 #fff, var(--sh-2); }
+      .nav-langs a:hover { opacity: 1; }
+      /* The chip marks the current language. Flags themselves stay full-colour on
+         the active one — dimming a tricolour turns it brown. */
+      .nav-langs a[aria-current] { opacity: 1; background: rgba(255, 255, 255, 0.24); }
+
+      .nav.stuck .nav-langs { background: rgba(14, 14, 16, 0.05); }
+      .nav.stuck .nav-langs a[aria-current] {
+        background: #fff;
+        box-shadow: 0 1px 2px rgba(62, 48, 34, 0.08), 0 0 0 0.5px rgba(62, 48, 34, 0.06);
+      }
 
       /* ---------- nav ---------- */
       .nav {
