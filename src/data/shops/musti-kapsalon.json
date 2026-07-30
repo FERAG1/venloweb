@@ -191,10 +191,10 @@
     "count": 0
   },
   "brand": {
-    "base": "#AE5B20",
-    "hi": "#A6551D",
+    "base": "#A96420",
+    "hi": "#9E5C1C",
     "ink": "#ffffff",
     "accent": "#A2561B",
-    "_note": "copper from the M, deepened so white clears AA: base 4.86:1, hover 5.33:1"
+    "_note": "golden copper from the M; most golden step that clears AA with white (4.64:1)"
   }
 }

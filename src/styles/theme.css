@@ -47,10 +47,28 @@
   --s1: 6px;  --s2: 12px; --s3: 20px; --s4: 32px;
   --s5: 52px; --s6: 84px; --s7: 132px;
 
-  --sh-1: 0 1px 2px rgba(14, 14, 16, 0.05), 0 2px 6px rgba(14, 14, 16, 0.04);
-  --sh-2: 0 1px 2px rgba(14, 14, 16, 0.05), 0 6px 16px rgba(14, 14, 16, 0.07);
-  --sh-3: 0 2px 6px rgba(14, 14, 16, 0.06), 0 18px 44px rgba(14, 14, 16, 0.12);
-  --sh-4: 0 4px 12px rgba(14, 14, 16, 0.07), 0 32px 80px rgba(14, 14, 16, 0.16);
+  /* Warm-tinted, not neutral: a cool near-black shadow on a warm cream page reads
+     grey and slightly dirty. Tinting toward the paper (62,48,34) keeps it looking
+     like a shadow rather than a grey halo.
+     Every wide layer carries a NEGATIVE spread so the blur is pulled in under the
+     element instead of bleeding out around it — that inward pull is what makes an
+     edge read crisp. Three layers on the heavier steps: tight contact, mid falloff,
+     wide ambient. */
+  --sh-1:
+    0 1px 1px rgba(62, 48, 34, 0.045),
+    0 2px 5px -1px rgba(62, 48, 34, 0.05);
+  --sh-2:
+    0 1px 1px rgba(62, 48, 34, 0.05),
+    0 4px 8px -2px rgba(62, 48, 34, 0.06),
+    0 10px 22px -8px rgba(62, 48, 34, 0.07);
+  --sh-3:
+    0 1px 2px rgba(62, 48, 34, 0.05),
+    0 6px 14px -4px rgba(62, 48, 34, 0.08),
+    0 22px 48px -16px rgba(62, 48, 34, 0.14);
+  --sh-4:
+    0 2px 4px rgba(62, 48, 34, 0.06),
+    0 14px 30px -10px rgba(62, 48, 34, 0.10),
+    0 40px 84px -28px rgba(62, 48, 34, 0.18);
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
