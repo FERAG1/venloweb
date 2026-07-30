@@ -10,7 +10,7 @@ export const bookingCfg = (shop, lang) => ({
   shopName: shop.name,
   slug: shop.slug,
   services: shop.services,
-  team: shop.team.map((m) => ({ name: m.name, role: m.role, photo: m.photo || '' })),
+  team: shop.team.map((m) => ({ name: m.name, slug: m.slug, role: m.role, photo: m.photo || '' })),
   hours: shop.hours,
   phone: shop.phone,
   address: `${shop.address.street}, ${shop.address.postcode} ${shop.address.city}`,

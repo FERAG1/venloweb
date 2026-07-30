@@ -524,7 +524,20 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
     }
   }
 
-  const wanted = new URLSearchParams(location.search).get('dienst');
+  // Mark a barber chosen without going through the click handler.
+  function selectBarber(i) {
+    if (i < 0 || !cfg.team[i]) return;
+    state.barberT = cfg.team[i];
+    state.barber = cfg.team[i].name;
+    const btn = $('bkTeam').querySelector(`.opt[data-i="${i}"]`);
+    if (btn) {
+      $('bkTeam').querySelectorAll('.opt').forEach((o) => o.classList.remove('sel'));
+      btn.classList.add('sel');
+    }
+  }
+
+  const params = new URLSearchParams(location.search);
+  const wanted = params.get('dienst');
   const deepIdx = wanted ? cfg.services.findIndex((s) => s.slug === wanted) : -1;
   const last = readLast();
 
@@ -538,16 +551,7 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
     $('bkAgain').hidden = false;
     $('bkAgain').addEventListener('click', () => {
       selectService(last.i);
-      if (last.barber) {
-        state.barber = last.barber;
-        state.barberT = cfg.team.find((t) => t.name === last.barber) || null;
-        const bi = cfg.team.findIndex((t) => t.name === last.barber);
-        const bbtn = $('bkTeam').querySelector(`.opt[data-i="${bi}"]`);
-        if (bbtn) {
-          $('bkTeam').querySelectorAll('.opt').forEach((o) => o.classList.remove('sel'));
-          bbtn.classList.add('sel');
-        }
-      }
+      if (last.barber) selectBarber(cfg.team.findIndex((t) => t.name === last.barber));
       // Skip to the date step when we know both, otherwise just the barber step.
       state.step = last.barber ? 3 : 2;
       if (state.step === 3) renderSlots();

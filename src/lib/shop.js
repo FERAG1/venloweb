@@ -61,7 +61,8 @@ export function localizedShop(shop, lang = 'nl') {
       desc: pick(s.desc, d?.services?.[i]?.desc),
     })),
 
-    team: shop.team.map((t, i) => ({ ...t, role: pick(t.role, d?.team?.[i]) })),
+    // slug from the name so /boeken?barber=… survives translation, same rule as services
+    team: shop.team.map((t, i) => ({ ...t, slug: slugify(t.name), role: pick(t.role, d?.team?.[i]) })),
 
     why: shop.why.map((w, i) => ({
       ...w,

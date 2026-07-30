@@ -271,12 +271,18 @@ const setAt = (url, widths) =>
           <h2>{T.teamTitle}</h2>
         </div>
       </div>
+      <!-- Deliberately NOT clickable. These were briefly booking entry points, but
+           a portrait that launches a wizard sets a different expectation from
+           "here's who works here" — people tapped it expecting a profile. The
+           booking flow has its own barber step; this section just introduces them. -->
       <div class="team stagger">
         {shop.team.map((m) => (
           <div class="member">
-            <div class="media m-portrait"><img src={m.photo} srcset={setAt(m.photo, [300, 480, 800])}
+            <div class="media m-portrait">
+              <img src={m.photo} srcset={setAt(m.photo, [300, 480, 800])}
                 sizes="(min-width: 940px) 25vw, 45vw"
-                alt={m.name} loading="lazy" /></div>
+                alt={m.name} loading="lazy" />
+            </div>
             <h3>{m.name}</h3>
             <p>{m.role}</p>
           </div>
@@ -293,7 +299,7 @@ const setAt = (url, widths) =>
         <h2>{T.faqHeadA}<br />{T.faqHeadB}</h2>
         <p class="lede">{T.faqFoot}</p>
         {tel && (
-          <a class="btn btn-light" href={tel} style="margin-top:26px">
+          <a class="btn btn-light faq-tel" href={tel}>
             <Icon name="phone" size={16} />{shop.phone}
           </a>
         )}
@@ -930,6 +936,17 @@ const setAt = (url, widths) =>
   .addr svg { color: var(--gold); flex: none; }
   address { font-style: normal; line-height: 1.5; }
   .visit-btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: var(--s3); }
+  .faq-tel { margin-top: 26px; }
+
+  /* Below 540px every call/route/book button goes full width. A pill sized to its
+     label is a small target on a phone, and these are the actions the whole page
+     exists for — a thumb shouldn't have to aim. */
+  @media (max-width: 539px) {
+    .visit-btns .btn,
+    .cta-btns .btn,
+    .faq-tel { width: 100%; }
+    .cta-btns { flex-direction: column; align-items: stretch; }
+  }
 
   /* ------------------------------ final cta ------------------------------
      Rounded photo frame, matching the hero — bookends the page instead of
