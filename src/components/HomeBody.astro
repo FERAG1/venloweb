@@ -17,7 +17,10 @@ const B = pathFor(shop.slug, lang);
 const book = shop.booking || `${B}/boeken`;
 // only open a new tab for a real external booking URL — never for the #anchor
 const bookAttrs = shop.booking ? { target: '_blank', rel: 'noopener' } : {};
-const tel = `tel:${shop.phone.replace(/\s/g, '')}`;
+// null when we haven't verified the number — every call button then hides itself.
+const tel = shop.phone ? `tel:${shop.phone.replace(/\s/g, '')}` : null;
+const addrLine = [a.street, a.postcode && a.city ? `${a.postcode} ${a.city}` : a.city].filter(Boolean).join(' · ');
+const shortAddr = [a.street, a.city].filter(Boolean).join(' · ');
 // Deep-link each price row into the wizard with that service already chosen, so
 // browsing → booking doesn't make you pick it twice. Only for the built-in flow;
 // an external booking URL has no idea what ?dienst= means. The slug is always the
@@ -46,7 +49,7 @@ const setAt = (url, widths) =>
 
       <div class="hero-copy">
         <div class="hero-inner">
-          <span class="hero-loc"><Icon name="pin" size={13} stroke={2} />{a.street} · {a.city}</span>
+          {shortAddr && <span class="hero-loc"><Icon name="pin" size={13} stroke={2} />{shortAddr}</span>}
           <h1>{shop.name}</h1>
           <p>{shop.tagline}</p>
           <div class="hero-btns">
@@ -63,16 +66,18 @@ const setAt = (url, widths) =>
     <!-- overlapping card: the depth cue, and the social proof, above the fold -->
     <div class="wrap">
       <div class="hero-card">
-        <div class="hc-rating">
-          <Google type="g" size={22} />
-          <div>
-            <div class="hc-score">
-              <strong>{shop.rating.score}</strong>
-              <Google type="stars" size={15} score={Number(shop.rating.score)} />
+        {shop.rating && (
+          <div class="hc-rating">
+            <Google type="g" size={22} />
+            <div>
+              <div class="hc-score">
+                <strong>{shop.rating.score}</strong>
+                <Google type="stars" size={15} score={Number(shop.rating.score)} />
+              </div>
+              <span>{shop.rating.count} {T.googleReviewsCount}</span>
             </div>
-            <span>{shop.rating.count} {T.googleReviewsCount}</span>
           </div>
-        </div>
+        )}
 
         <div class="hc-open">
           <span class="pulse"></span>
@@ -197,13 +202,13 @@ const setAt = (url, widths) =>
             <span>{T.googleReviews}</span>
           </div>
           <div class="rs-score">
-            <strong>{shop.rating.score}</strong>
+            <strong>{shop.rating?.score}</strong>
             <div>
-              <Google type="stars" size={17} score={Number(shop.rating.score)} />
-              <span>{fmt(T.basedOn, { n: shop.rating.count })}</span>
+              <Google type="stars" size={17} score={Number(shop.rating?.score ?? 0)} />
+              <span>{fmt(T.basedOn, { n: shop.rating?.count ?? 0 })}</span>
             </div>
           </div>
-          <a class="btn btn-light btn-sm rs-btn" href={a.maps} target="_blank" rel="noopener">
+          <a class="btn btn-light btn-sm rs-btn" href={a.maps || "#"} target="_blank" rel="noopener">
             Bekijk alle reviews <Icon name="arrow" size={14} />
           </a>
         </div>
@@ -261,9 +266,11 @@ const setAt = (url, widths) =>
         <p class="eyebrow">{T.eyebrowFaq}</p>
         <h2>{T.faqHeadA}<br />{T.faqHeadB}</h2>
         <p class="lede">{T.faqFoot}</p>
-        <a class="btn btn-light" href={tel} style="margin-top:26px">
-          <Icon name="phone" size={16} />{shop.phone}
-        </a>
+        {tel && (
+          <a class="btn btn-light" href={tel} style="margin-top:26px">
+            <Icon name="phone" size={16} />{shop.phone}
+          </a>
+        )}
       </div>
 
       <div class="faq stagger">
@@ -299,13 +306,15 @@ const setAt = (url, widths) =>
             </li>
           ))}
         </ul>
-        <div class="addr">
-          <Icon name="pin" size={17} />
-          <address>{a.street} · {a.postcode} {a.city}</address>
-        </div>
+        {addrLine && (
+          <div class="addr">
+            <Icon name="pin" size={17} />
+            <address>{addrLine}</address>
+          </div>
+        )}
         <div class="visit-btns">
-          <a class="btn" href={a.maps} target="_blank" rel="noopener"><Icon name="pin" size={16} />{T.dockRoute}</a>
-          <a class="btn btn-light" href={tel}><Icon name="phone" size={16} />{shop.phone}</a>
+          {a.maps && <a class="btn" href={a.maps} target="_blank" rel="noopener"><Icon name="pin" size={16} />{T.dockRoute}</a>}
+          {tel && <a class="btn btn-light" href={tel}><Icon name="phone" size={16} />{shop.phone}</a>}
         </div>
       </div>
     </div>
@@ -325,9 +334,9 @@ const setAt = (url, widths) =>
           <a class="btn btn-lg btn-light" href={book} {...bookAttrs}>
             <Icon name="calendar" size={17} />{T.ctaBook}
           </a>
-          <a class="btn btn-lg cta-tel" href={tel}><Icon name="phone" size={17} />{shop.phone}</a>
+          {tel && <a class="btn btn-lg cta-tel" href={tel}><Icon name="phone" size={17} />{shop.phone}</a>}
         </div>
-        <span class="cta-micro"><Icon name="check" size={13} stroke={2.4} />{a.street} · {a.city}</span>
+        {shortAddr && <span class="cta-micro"><Icon name="check" size={13} stroke={2.4} />{shortAddr}</span>}
       </div>
     </div>
   </section>
@@ -336,7 +345,7 @@ const setAt = (url, widths) =>
     <div class="wrap foot">
       <div class="foot-l">
         <span class="mark">{shop.name}</span>
-        <span>{a.street}, {a.postcode} {a.city}</span>
+        {addrLine && <span>{addrLine}</span>}
       </div>
 
       {langs.length > 1 && (

@@ -128,7 +128,7 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
 
         <p class="done-foot">
           <a href={homeHref}>{T.backToSite}</a> · {T.ratherCall}
-          <a href={`tel:${shop.phone.replace(/\s/g, '')}`}>{shop.phone}</a>
+          {shop.phone && <a href={`tel:${shop.phone.replace(/\s/g, '')}`}>{shop.phone}</a>}
         </p>
       </section>
     </div>

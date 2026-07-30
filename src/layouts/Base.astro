@@ -10,7 +10,7 @@ const T = t(lang);
 const a = shop.address;
 const book = shop.booking || `${B}/boeken`;
 const bookAttrs = shop.booking ? { target: '_blank', rel: 'noopener' } : {};
-const tel = `tel:${shop.phone.replace(/\s/g, '')}`;
+const tel = shop.phone ? `tel:${shop.phone.replace(/\s/g, '')}` : null;
 
 const site = Astro.site?.href.replace(/\/$/, '') ?? '';
 const pageUrl = `${site}${Astro.url.pathname}`;
@@ -104,15 +104,15 @@ const links = [
       name: shop.name,
       description: shop.intro,
       url: site || undefined,
-      telephone: shop.phone,
+      telephone: shop.phone || undefined,
       image: [shop.hero, shop.storefront].filter(Boolean),
       priceRange,
       currenciesAccepted: 'EUR',
       paymentAccepted: 'Cash, Debit Card',
       address: {
         '@type': 'PostalAddress',
-        streetAddress: a.street,
-        postalCode: a.postcode,
+        streetAddress: a.street || undefined,
+        postalCode: a.postcode || undefined,
         addressLocality: a.city,
         addressCountry: 'NL',
       },
@@ -121,7 +121,7 @@ const links = [
       geo: shop.geo?.lat && shop.geo?.lng
         ? { '@type': 'GeoCoordinates', latitude: shop.geo.lat, longitude: shop.geo.lng }
         : undefined,
-      hasMap: a.maps,
+      hasMap: a.maps || undefined,
       openingHoursSpecification: openingHours,
       makesOffer: shop.services.map((s) => ({
         '@type': 'Offer',
@@ -171,9 +171,11 @@ const links = [
         </a>
 
         <!-- below 940px the nav pill would otherwise hold only the wordmark -->
-        <a class="btn btn-sm nav-tel" href={tel} aria-label={T.callAria}>
-          <Icon name="phone" size={16} stroke={1.9} />
-        </a>
+        {tel && (
+          <a class="btn btn-sm nav-tel" href={tel} aria-label={T.callAria}>
+            <Icon name="phone" size={16} stroke={1.9} />
+          </a>
+        )}
       </div>
     </header>
 
@@ -181,8 +183,8 @@ const links = [
 
     <!-- Sticky mobile action bar — this traffic is overwhelmingly thumbs. -->
     <nav class="dock">
-      <a href={tel}><Icon name="phone" size={17} /><span>{T.dockCall}</span></a>
-      <a href={a.maps} target="_blank" rel="noopener"><Icon name="pin" size={17} /><span>{T.dockRoute}</span></a>
+      {tel && <a href={tel}><Icon name="phone" size={17} /><span>{T.dockCall}</span></a>}
+      {a.maps && <a href={a.maps} target="_blank" rel="noopener"><Icon name="pin" size={17} /><span>{T.dockRoute}</span></a>}
       <a class="dock-cta" href={book} {...bookAttrs}><Icon name="calendar" size={17} /><span>{T.navAppt}</span></a>
     </nav>
 

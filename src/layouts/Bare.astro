@@ -5,7 +5,7 @@ import { t } from '../i18n/ui.js';
 import { pathFor } from '../lib/shops.js';
 const { shop, title, lang = 'nl' } = Astro.props;
 const T = t(lang);
-const tel = `tel:${shop.phone.replace(/\s/g, '')}`;
+const tel = shop.phone ? `tel:${shop.phone.replace(/\s/g, '')}` : null;
 ---
 <!doctype html>
 <html lang={T.htmlLang}>

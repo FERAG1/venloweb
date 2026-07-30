@@ -1,22 +1,22 @@
 {
-  "slug": "can-hairstyle",
-  "name": "C.a.n. Hairstyle",
-  "tagline": "Kapsalon in Venlo",
+  "slug": "barbershop-gokhan",
+  "name": "Barber Shop Gökhan",
+  "tagline": "Barbershop in Venlo",
   "intro": "Vakwerk, scherpe fades en een scheerbeurt zoals het hoort. Al jaren de vaste stek voor mannen uit Venlo en omstreken.",
   "address": {
-    "street": "Parkstraat 36",
-    "postcode": "5911 EM",
+    "street": "Dautzenbergstraat 73",
+    "postcode": "5921 BV",
     "city": "Venlo",
-    "maps": "https://maps.app.goo.gl/Lthk48Bt2ssrzd9AA"
+    "maps": "https://maps.google.com/?q=Barber+Shop+Gökhan+Venlo"
   },
-  "phone": "+31 77 374 3694",
+  "phone": "+31 6 84524556",
   "whatsapp": "995551258383",
   "booking": "",
   "rating": {
-    "score": "4.5",
-    "count": 148
+    "score": "4.9",
+    "count": 107
   },
-  "todayLine": "Vandaag open tot 18:00",
+  "todayLine": "",
   "marquee": [
     {
       "label": "Fades",
@@ -46,7 +46,7 @@
   "hours": [
     {
       "day": "Maandag",
-      "time": "12:00 – 18:00"
+      "time": "Gesloten"
     },
     {
       "day": "Dinsdag",
@@ -62,15 +62,15 @@
     },
     {
       "day": "Vrijdag",
-      "time": "09:00 – 19:00"
-    },
-    {
-      "day": "Zaterdag",
       "time": "09:00 – 18:00"
     },
     {
+      "day": "Zaterdag",
+      "time": "08:00 – 17:00"
+    },
+    {
       "day": "Zondag",
-      "time": "12:00 – 18:00"
+      "time": "Gesloten"
     }
   ],
   "services": [
@@ -156,41 +156,10 @@
       "text": "Wat op de lijst staat, betaal je. Geen verrassingen bij de kassa."
     }
   ],
-  "reviews": [
-    {
-      "text": "All barbers are cutting hair in detail. They take their time and the results are always great. It's a bit more expensive compared to other barbers in town, but the overall its worth it.",
-      "author": "Kyriakos JQ",
-      "when": "3 jaar geleden",
-      "tone": "#1a73e8"
-    },
-    {
-      "text": "Best hairdresser in Venlo! I go there for more than 3 years and I'm always satisfied with their services and good manner!",
-      "author": "Giuseppe C",
-      "when": "1 jaar geleden",
-      "tone": "#188038"
-    },
-    {
-      "text": "Really good cut. Wonderful service. Was in Holland for a day and got my hair cut here. Planning on coming back just to get my hair cut here. Very recommendable.",
-      "author": "A Rn",
-      "when": "5 jaar geleden",
-      "tone": "#c5221f"
-    },
-    {
-      "text": "Amazing staff and Great quality hair cuts also much cheaper than most others.. recommended!",
-      "author": "Jason Keaveney",
-      "when": "3 jaar geleden",
-      "tone": "#9334e6"
-    },
-    {
-      "text": "Very friendly Personal and great work. Always will come back.",
-      "author": "Cryptoblock",
-      "when": "2 jaar geleden",
-      "tone": "#0b8043"
-    }
-  ],
+  "reviews": [],
   "geo": {
-    "lat": "51.3732111",
-    "lng": "6.1734789"
+    "lat": "",
+    "lng": ""
   },
   "faq": [
     {

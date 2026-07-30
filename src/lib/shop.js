@@ -12,6 +12,17 @@ import { t } from '../i18n/ui.js';
 //
 // Anything missing from `de` falls back to Dutch, so a half-finished translation
 // degrades into a mixed page rather than blank fields.
+// An unverified field. Blank, "TODO…" and the template's dummy phone all count as
+// unknown, so a freshly scaffolded shop and a half-filled one behave identically:
+// the UI hides that block instead of printing a placeholder at a shop owner.
+// Never render a fake phone number — someone will tap it.
+const known = (v) => {
+  const s = typeof v === 'string' ? v.trim() : v;
+  if (s == null || s === '') return null;
+  if (typeof s === 'string' && (/^TODO/i.test(s) || s === '+31 77 000 0000')) return null;
+  return s;
+};
+
 export function localizedShop(shop, lang = 'nl') {
   const d = (lang !== 'nl' && shop[lang]) || null;
   const pick = (nl, tr) => (tr == null || tr === '' ? nl : tr);
@@ -21,6 +32,17 @@ export function localizedShop(shop, lang = 'nl') {
 
   return {
     ...shop,
+    // null rather than a placeholder string — callers test truthiness and hide.
+    phone: known(shop.phone),
+    address: {
+      ...shop.address,
+      street: known(shop.address?.street),
+      postcode: known(shop.address?.postcode),
+      city: known(shop.address?.city),
+      maps: known(shop.address?.maps),
+    },
+    rating: known(shop.rating?.score) && shop.rating?.count ? shop.rating : null,
+
     tagline: pick(shop.tagline, d?.tagline),
     intro: pick(shop.intro, d?.intro),
     todayLine: pick(shop.todayLine, d?.todayLine),
