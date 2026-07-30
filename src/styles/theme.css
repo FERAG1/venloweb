@@ -57,7 +57,44 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  /* iOS paints a grey box over anything tapped; the buttons already have real
+     :active states, so the flash just looks like a rendering glitch. */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Tapping quickly — which is exactly what happens demoing the booking wizard —
+   gets read as double-tap-to-zoom, and the page lurches. `touch-action:
+   manipulation` removes double-tap zoom AND the 300ms tap delay while leaving
+   PINCH-zoom intact.
+   Deliberately not using `user-scalable=no` / `maximum-scale=1` in the viewport
+   meta: that kills pinch-zoom too, which fails WCAG 1.4.4, and iOS Safari has
+   ignored it since iOS 10 anyway. */
+a,
+button,
+label,
+summary,
+input,
+select,
+textarea,
+[role='button'] {
+  touch-action: manipulation;
+}
+
+/* Double-tapping a control shouldn't leave its label highlighted mid-demo.
+   Text content stays selectable — only the chrome opts out. */
+button,
+.btn,
+.opt,
+.day,
+.slot,
+.dock a,
+.nav-links a {
+  -webkit-user-select: none;
+  user-select: none;
+}
 
 body {
   background: var(--bg);
