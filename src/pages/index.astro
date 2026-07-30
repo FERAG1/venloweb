@@ -1,24 +1,10 @@
 ---
 import '../styles/theme.css';
-import Icon from '../components/Icon.astro';
-import Flag from '../components/Flag.astro';
-import { allShops, pathFor } from '../lib/shops.js';
-import { availableLangs } from '../lib/shop.js';
 
-// INTERNAL launcher. This lists every demo we've built, so it must never be the
-// page an owner looks at — Ali should not scroll past nine of his competitors.
-// Show owners the direct /<slug> link. noindex + robots Disallow keep it out of
-// search; the only thing keeping it away from clients is you not opening it.
-const shops = allShops.map(({ slug, data }) => ({
-  slug,
-  name: data.name,
-  city: data.address?.city ?? '',
-  street: data.address?.street ?? '',
-  langs: availableLangs(data),
-  photo: data.storefront || data.hero || '',
-  // the template ships +31 77 000 0000; a real shop won't have it
-  live: !String(data.phone || '').includes('000 0000'),
-}));
+// Deliberately blank-ish. The demo launcher used to live here, which meant any
+// owner who trimmed a link back to the bare domain landed on a list of his
+// competitors. Now the root says nothing: no shop names, no links, no nav.
+// The launcher moved to an unguessable path — see src/pages/kiosk-*/index.astro.
 ---
 
 <!doctype html>
@@ -27,7 +13,7 @@ const shops = allShops.map(({ slug, data }) => ({
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>Demo's — Venloweb</title>
+    <title>Venloweb</title>
     <meta name="theme-color" content="#f1f0ec" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -35,95 +21,21 @@ const shops = allShops.map(({ slug, data }) => ({
   </head>
 
   <body>
-    <main class="wrap lp">
-      <header class="lp-head">
-        <p class="eyebrow">Venloweb</p>
-        <h1>Demo's</h1>
-        <p class="lede">
-          Kies een zaak om de site te openen. {shops.length} {shops.length === 1 ? 'demo' : "demo's"} klaar.
-        </p>
-        <p class="lp-warn">
-          <Icon name="spark" size={15} stroke={2} />
-          Interne pagina — laat deze lijst niet aan een eigenaar zien, hij staat vol concurrenten.
-        </p>
-      </header>
-
-      <ul class="lp-grid">
-        {shops.map((s) => (
-          <li class="lp-card card">
-            <a class="lp-main" href={`${pathFor(s.slug)}/`}>
-              {s.photo && <span class="lp-thumb media"><img src={s.photo} alt="" loading="lazy" /></span>}
-              <span class="lp-txt">
-                <strong>{s.name}</strong>
-                <em>{[s.street, s.city].filter(Boolean).join(' · ') || '—'}</em>
-              </span>
-              <span class="lp-go"><Icon name="arrow" size={16} stroke={2} /></span>
-            </a>
-
-            <div class="lp-foot">
-              <span class="lp-slug">/{s.slug}</span>
-              {!s.live && <span class="lp-todo">placeholder data</span>}
-              <span class="lp-langs">
-                {s.langs.map((l) => (
-                  <a href={`${pathFor(s.slug, l)}/`} title={l.toUpperCase()}>
-                    <Flag code={l} size={15} />
-                  </a>
-                ))}
-              </span>
-            </div>
-          </li>
-        ))}
-      </ul>
+    <main class="holding">
+      <p class="eyebrow">Venloweb</p>
+      <h1>Websites voor<br />lokale zaken.</h1>
+      <p class="lede">Venlo &amp; omstreken.</p>
     </main>
 
     <style>
       body { background: var(--bg); color: var(--ink); }
-      .lp { padding: clamp(48px, 9vw, 104px) var(--gut); }
-      .lp-head { margin-bottom: var(--s5); }
-      .lp-head h1 { font-size: clamp(2.6rem, 8vw, 4.4rem); }
-      .lp-warn {
-        display: inline-flex; align-items: center; gap: 8px;
-        margin-top: var(--s3); padding: 9px 15px 9px 12px;
-        border-radius: 100px; background: rgba(161, 124, 66, 0.1);
-        color: #6f5124; font-size: 0.85rem; font-weight: 550;
+      .holding {
+        min-height: 100svh;
+        display: flex; flex-direction: column; justify-content: center;
+        max-width: var(--max); margin: 0 auto; padding: 0 var(--gut);
       }
-      .lp-warn svg { flex: none; }
-
-      .lp-grid {
-        list-style: none; display: grid; gap: var(--s3);
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      }
-      .lp-card { overflow: hidden; }
-      .lp-main {
-        display: flex; align-items: center; gap: 14px;
-        padding: 14px; text-decoration: none; color: inherit;
-        transition: background 0.2s var(--ease-out);
-      }
-      .lp-main:hover { background: var(--surface-2); }
-      .lp-thumb { width: 58px; height: 58px; flex: none; border-radius: var(--r-sm); overflow: hidden; }
-      .lp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-      .lp-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
-      .lp-txt strong { font-weight: 600; letter-spacing: -0.02em; }
-      .lp-txt em {
-        font-style: normal; font-size: 0.85rem; color: var(--ink-soft);
-        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-      }
-      .lp-go { flex: none; color: var(--ink-soft); }
-      .lp-main:hover .lp-go { color: var(--ink); }
-
-      .lp-foot {
-        display: flex; align-items: center; gap: 10px;
-        padding: 10px 14px; border-top: 1px solid var(--line);
-        background: var(--surface-2); font-size: 0.78rem; color: var(--ink-soft);
-      }
-      .lp-slug { font-variant-numeric: tabular-nums; }
-      .lp-langs { display: flex; gap: 5px; margin-left: auto; }
-      .lp-langs a { display: block; line-height: 0; opacity: 0.75; transition: opacity 0.2s var(--ease-out); }
-      .lp-langs a:hover { opacity: 1; }
-      .lp-todo {
-        padding: 2px 8px; border-radius: 100px;
-        background: rgba(161, 124, 66, 0.14); color: #6f5124; font-weight: 550;
-      }
+      .holding h1 { font-size: clamp(2.6rem, 9vw, 5rem); }
+      .holding .lede { margin-top: var(--s3); }
     </style>
   </body>
 </html>
