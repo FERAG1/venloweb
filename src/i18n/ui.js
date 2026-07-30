@@ -11,6 +11,9 @@ export const UI = {
     htmlLang: 'nl',
     locale: 'nl-NL',
     langName: 'Nederlands',
+    langSuggest: 'Deze site is er ook in het Nederlands',
+    langSuggestCta: 'Bekijk in het Nederlands',
+    langSuggestClose: 'Sluiten',
 
     // ---- nav + dock ----
     // shop.json stores "Gesloten" as the closed-day marker; swapped at merge time
@@ -143,6 +146,9 @@ export const UI = {
     htmlLang: 'de',
     locale: 'de-DE',
     langName: 'Deutsch',
+    langSuggest: 'Diese Seite gibt es auf Deutsch',
+    langSuggestCta: 'Auf Deutsch ansehen',
+    langSuggestClose: 'Schließen',
 
     closed: 'Geschlossen',
 
