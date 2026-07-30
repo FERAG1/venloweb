@@ -79,10 +79,14 @@ const setAt = (url, widths) =>
           </div>
         )}
 
-        <div class="hc-open">
+        <!-- Status is computed in the browser, not baked in: this is a static
+             site, so a hardcoded "Vandaag open tot 18:00" is wrong tomorrow and a
+             lie on days they're closed. shop.todayLine is left blank on purpose and only used for exceptional
+             notices like a holiday closure. -->
+        <div class="hc-open" id="hcOpen">
           <span class="pulse"></span>
           <div>
-            <strong>{shop.todayLine}</strong>
+            <strong id="hcToday">{shop.todayLine}</strong>
             <span>{T.heroSlotsToday}</span>
           </div>
         </div>
@@ -365,7 +369,57 @@ const setAt = (url, widths) =>
     </div>
   </footer>
 
+<script type="application/json" id="hoursData" set:html={JSON.stringify({
+  hours: shop.hours.map((h) => h.time),
+  days: shop.hours.map((h) => h.day),
+  override: shop.todayLine || null,
+  t: {
+    openNowUntil: T.openNowUntil, opensTodayAt: T.opensTodayAt,
+    closedToday: T.closedToday, opensAgain: T.opensAgain,
+  },
+})} />
+
 <script>
+  /* ---------- live open/closed status ---------- */
+  {
+    const el = document.getElementById('hcToday');
+    const box = document.getElementById('hcOpen');
+    const raw = document.getElementById('hoursData');
+    if (el && raw) {
+      const d = JSON.parse(raw.textContent);
+      const fmt = (str, v = {}) => String(str).replace(/\{(\w+)\}/g, (m, k) => v[k] ?? '');
+      const parse = (t) => {
+        const m = String(t).match(/(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})/);
+        return m ? [+m[1] * 60 + +m[2], +m[3] * 60 + +m[4]] : null;
+      };
+      const now = new Date();
+      // hours[] is Monday-first; getDay() is Sunday-first
+      const idx = (now.getDay() + 6) % 7;
+      const mins = now.getHours() * 60 + now.getMinutes();
+      const hm = (m) => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+      const today = parse(d.hours[idx]);
+      let text, open = false;
+
+      if (d.override) {
+        text = d.override; open = true;            // hand-written line wins
+      } else if (today && mins < today[1]) {
+        open = mins >= today[0];
+        text = open ? fmt(d.t.openNowUntil, { t: hm(today[1]) })
+                    : fmt(d.t.opensTodayAt, { t: hm(today[0]) });
+      } else {
+        // closed today, or already shut — point at the next open day
+        let next = null;
+        for (let i = 1; i <= 7; i++) {
+          const j = (idx + i) % 7;
+          if (parse(d.hours[j])) { next = d.days[j]; break; }
+        }
+        text = next ? fmt(d.t.opensAgain, { d: next.toLowerCase() }) : d.t.closedToday;
+      }
+      el.textContent = text;
+      box.classList.toggle('shut', !open);
+    }
+  }
+
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const marquee = document.getElementById('marquee');
   const track = document.getElementById('mqTrack');
@@ -516,6 +570,8 @@ const setAt = (url, widths) =>
     box-shadow: inset 0 1px 0 #fff, var(--sh-4);
   }
   .hc-rating, .hc-open { display: flex; align-items: center; gap: 13px; }
+  /* green dot means open — don't pulse at someone on a Sunday night */
+  .hc-open.shut .pulse { background: var(--ink-soft); animation: none; box-shadow: none; }
   .hc-score { display: flex; align-items: center; gap: 9px; }
   .hc-score strong { font-size: 1.32rem; font-weight: 650; letter-spacing: -0.03em; }
   .hc-rating span, .hc-open span:not(.pulse) { display: block; font-size: 0.84rem; color: var(--ink-soft); }

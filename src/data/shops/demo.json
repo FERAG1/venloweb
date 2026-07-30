@@ -16,7 +16,7 @@
     "score": "4.8",
     "count": 151
   },
-  "todayLine": "Vandaag open tot 18:00",
+  "todayLine": "",
   "marquee": [
     {
       "label": "Fades",
@@ -46,7 +46,7 @@
   "hours": [
     {
       "day": "Maandag",
-      "time": "Gesloten"
+      "time": "09:00 – 18:00"
     },
     {
       "day": "Dinsdag",
@@ -66,11 +66,11 @@
     },
     {
       "day": "Zaterdag",
-      "time": "08:00 – 17:00"
+      "time": "09:00 – 17:00"
     },
     {
       "day": "Zondag",
-      "time": "Gesloten"
+      "time": "12:00 – 17:00"
     }
   ],
   "services": [
@@ -216,23 +216,59 @@
       "a": "Ja, wir sprechen Deutsch. Venlo liegt nur 15 Minuten von der Grenze — deutsche Kunden sind jederzeit willkommen."
     }
   ],
-
   "_de_note": "Optional. Delete this whole block and the site is Dutch-only — the language toggle disappears by itself. Arrays match the Dutch ones by position; anything missing falls back to Dutch. Reviews are never translated: they are real customer quotes.",
   "de": {
     "tagline": "Barbershop mitten in Venlo",
     "intro": "Handwerk, saubere Fades und eine Rasur, wie sie sein soll. Seit Jahren die feste Adresse für Männer aus Venlo und Umgebung — 15 Minuten hinter der Grenze.",
     "todayLine": "Heute geöffnet bis 18:00",
-    "marquee": ["Fades", "Bart trimmen", "Messerrasur", "Klassischer Schnitt", "Kinderschnitte", "Ohne Termin willkommen"],
-    "hours": ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"],
-    "services": [
-      { "name": "Herrenschnitt", "desc": "Waschen, schneiden, stylen" },
-      { "name": "Schnitt + Bart", "desc": "Das komplette Programm" },
-      { "name": "Fade / Skin Fade", "desc": "Sauber aufgebaut, scharfe Linie" },
-      { "name": "Bart trimmen", "desc": "Form, Linien, heißes Tuch" },
-      { "name": "Messerrasur", "desc": "Klassisch, mit heißem Tuch" },
-      { "name": "Kinderschnitt bis 12", "desc": "Ruhig und schnell" }
+    "marquee": [
+      "Fades",
+      "Bart trimmen",
+      "Messerrasur",
+      "Klassischer Schnitt",
+      "Kinderschnitte",
+      "Ohne Termin willkommen"
     ],
-    "team": ["Fades & Rasur", "Klassische Schnitte", "Bart-Spezialist"],
+    "hours": [
+      "Montag",
+      "Dienstag",
+      "Mittwoch",
+      "Donnerstag",
+      "Freitag",
+      "Samstag",
+      "Sonntag"
+    ],
+    "services": [
+      {
+        "name": "Herrenschnitt",
+        "desc": "Waschen, schneiden, stylen"
+      },
+      {
+        "name": "Schnitt + Bart",
+        "desc": "Das komplette Programm"
+      },
+      {
+        "name": "Fade / Skin Fade",
+        "desc": "Sauber aufgebaut, scharfe Linie"
+      },
+      {
+        "name": "Bart trimmen",
+        "desc": "Form, Linien, heißes Tuch"
+      },
+      {
+        "name": "Messerrasur",
+        "desc": "Klassisch, mit heißem Tuch"
+      },
+      {
+        "name": "Kinderschnitt bis 12",
+        "desc": "Ruhig und schnell"
+      }
+    ],
+    "team": [
+      "Fades & Rasur",
+      "Klassische Schnitte",
+      "Bart-Spezialist"
+    ],
     "why": [
       {
         "title": "Termin binnen 24 Stunden",

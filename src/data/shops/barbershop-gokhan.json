@@ -46,7 +46,7 @@
   "hours": [
     {
       "day": "Maandag",
-      "time": "Gesloten"
+      "time": "09:00 – 18:00"
     },
     {
       "day": "Dinsdag",
@@ -66,11 +66,11 @@
     },
     {
       "day": "Zaterdag",
-      "time": "08:00 – 17:00"
+      "time": "09:00 – 17:00"
     },
     {
       "day": "Zondag",
-      "time": "Gesloten"
+      "time": "12:00 – 17:00"
     }
   ],
   "services": [
