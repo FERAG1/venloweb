@@ -760,14 +760,37 @@ const setAt = (url, widths) =>
   .svc-note svg { color: #17a34a; }
 
   /* ------------------------------ gallery ------------------------------ */
-  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .cell { aspect-ratio: 3 / 3.8; }
-  .c0, .c5 { grid-column: span 2; aspect-ratio: 16 / 11; }
+  /* The old layout was hand-placed per cell and didn't tile: the 2x2 feature plus
+     four singles left columns 3-4 of the last row permanently empty. This pattern
+     is built to close instead — spans chosen so each block of six fills exactly
+     three rows of four (4 + 1 + 1 + 2 + 2 + 2 = 12), and it repeats every six
+     photos. grid-auto-flow: dense backfills anything left when a shop supplies a
+     count that isn't a multiple of six.
+     Row height is fixed rather than per-cell aspect ratios, so every row lines up
+     no matter how the photos are cropped. */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: clamp(112px, 30vw, 190px);
+    grid-auto-flow: dense;
+    gap: 10px;
+  }
+  /* mobile: wide, pair, pair, wide — 2 + 1+1 + 1+1 + 2 = four full rows */
+  .cell:nth-child(6n + 1),
+  .cell:nth-child(6n) { grid-column: span 2; }
+
   @media (min-width: 820px) {
-    .grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
-    .c0 { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
-    .c3 { grid-column: span 2; aspect-ratio: 16 / 9; }
-    .c5 { grid-column: auto; aspect-ratio: 3 / 3.8; }
+    .grid {
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: clamp(130px, 14vw, 200px);
+      gap: 14px;
+    }
+    .cell:nth-child(6n + 1) { grid-column: span 2; grid-row: span 2; }
+    .cell:nth-child(6n + 4),
+    .cell:nth-child(6n + 5),
+    .cell:nth-child(6n) { grid-column: span 2; grid-row: span 1; }
+    .cell:nth-child(6n + 2),
+    .cell:nth-child(6n + 3) { grid-column: span 1; }
   }
 
   /* ------------------------------ reviews ------------------------------ */
