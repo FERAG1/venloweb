@@ -174,26 +174,30 @@ section[id], header[id] { scroll-margin-top: 84px; }
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.16);
   background: var(--brand);
   color: var(--brand-ink);
+  /* Was three outer layers at .20/.22/.24 with no spread — stacked opacity plus a
+     .3 border made every button look like it was hovering an inch off the page.
+     Lighter, and the wide layers pull inward so the shadow sits under the button
+     rather than glowing around it. Same rule as the page shadow tokens. */
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.28),
-    0 1px 1px rgba(var(--brand-rgb), 0.2),
-    0 3px 6px rgba(var(--brand-rgb), 0.22),
-    0 8px 18px rgba(var(--brand-rgb), 0.24);
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 1px 1px rgba(var(--brand-rgb), 0.14),
+    0 2px 4px -1px rgba(var(--brand-rgb), 0.14),
+    0 6px 14px -4px rgba(var(--brand-rgb), 0.16);
   transition: transform 0.18s var(--ease-out), box-shadow 0.18s var(--ease-out), background 0.18s var(--ease-out);
 }
 .btn:hover {
   background: var(--brand-hi);
   transform: translateY(-1.5px);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.26),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.28),
-    0 2px 3px rgba(var(--brand-rgb), 0.22),
-    0 6px 12px rgba(var(--brand-rgb), 0.26),
-    0 14px 28px rgba(var(--brand-rgb), 0.3);
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 1px 2px rgba(var(--brand-rgb), 0.15),
+    0 4px 8px -2px rgba(var(--brand-rgb), 0.17),
+    0 10px 22px -8px rgba(var(--brand-rgb), 0.2);
 }
 .btn:active {
   transform: translateY(0.5px);
@@ -211,10 +215,10 @@ section[id], header[id] { scroll-margin-top: 84px; }
   border-color: rgba(14, 14, 16, 0.1);
   box-shadow:
     inset 0 1px 0 #fff,
-    inset 0 -1px 0 rgba(14, 14, 16, 0.06),
-    0 1px 1px rgba(14, 14, 16, 0.05),
-    0 2px 4px rgba(14, 14, 16, 0.05),
-    0 6px 14px rgba(14, 14, 16, 0.07);
+    inset 0 -1px 0 rgba(14, 14, 16, 0.05),
+    0 1px 1px rgba(62, 48, 34, 0.05),
+    0 2px 4px -1px rgba(62, 48, 34, 0.05),
+    0 5px 12px -4px rgba(62, 48, 34, 0.07);
 }
 .btn-light:hover {
   background: #fff;
