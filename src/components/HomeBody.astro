@@ -375,8 +375,8 @@ const setAt = (url, widths) =>
       <div class="ft-col ft-hours">
         <h3>{T.visitHours}</h3>
         <ul>
-          {shop.hours.map((h) => (
-            <li><span>{h.day}</span><b>{h.time}</b></li>
+          {shop.hours.map((h, i) => (
+            <li data-d={i}><span>{h.day}</span><b>{h.time}</b></li>
           ))}
         </ul>
       </div>
@@ -447,6 +447,8 @@ const setAt = (url, widths) =>
       }
       el.textContent = text;
       box.classList.toggle('shut', !open);
+      // highlight today in the footer hours — the reason anyone scrolls down
+      document.querySelector(`.ft-hours li[data-d="${idx}"]`)?.classList.add('is-today');
     }
   }
 
@@ -944,32 +946,38 @@ const setAt = (url, widths) =>
   }
   .ft-col > a:hover { color: var(--ink); }
 
+  /* No rules between rows — a ruled grid is what made this read like a 2004
+     table. Alignment does the work instead, and today is picked out so the row
+     people actually want is the one they see first. */
   .ft-hours ul { list-style: none; }
   .ft-hours li {
-    display: flex; justify-content: space-between; gap: var(--s3);
-    padding: 4px 0; font-size: 0.88rem; color: var(--ink-soft);
-    border-bottom: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: baseline; gap: var(--s3);
+    padding: 6px 10px; margin: 0 -10px; border-radius: 8px;
+    font-size: 0.88rem; color: var(--ink-soft);
   }
-  .ft-hours li:last-child { border-bottom: 0; }
-  .ft-hours b { color: var(--ink-mid); font-weight: 550; font-variant-numeric: tabular-nums; }
+  .ft-hours b { font-weight: 550; font-variant-numeric: tabular-nums; }
+  .ft-hours li.is-today {
+    background: rgba(14, 14, 16, 0.045);
+    color: var(--ink); font-weight: 600;
+  }
+  .ft-hours li.is-today b { color: var(--ink); }
 
   /* Thin legal strip, visually separate from the content above it. */
   .ft-bar { border-top: 1px solid var(--line); }
+  /* Centred: with only a copyright and a language pill, pushing them to opposite
+     ends of a 1120px page just left a hole between them. */
   .ft-bar-in {
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: var(--s2);
+    display: flex; align-items: center; justify-content: center;
+    flex-wrap: wrap; gap: var(--s2) var(--s4);
     padding-top: var(--s3); padding-bottom: var(--s3);
-    font-size: 0.82rem; color: var(--ink-soft);
+    font-size: 0.82rem; color: var(--ink-soft); text-align: center;
   }
 
   @media (max-width: 860px) {
     .ft-in { grid-template-columns: 1fr 1fr; }
     .ft-brand { grid-column: 1 / -1; }
   }
-  @media (max-width: 560px) {
-    .ft-in { grid-template-columns: 1fr; }
-    .ft-bar-in { justify-content: center; text-align: center; }
-  }
+  @media (max-width: 560px) { .ft-in { grid-template-columns: 1fr; } }
 
   /* Language switch lives here rather than in the nav — border traffic is a
      minority, and a header toggle would clutter the first thing everyone sees. */

@@ -191,10 +191,10 @@
     "count": 0
   },
   "brand": {
-    "base": "#0C1A20",
-    "hi": "#16272E",
+    "base": "#AE5B20",
+    "hi": "#A6551D",
     "ink": "#ffffff",
-    "accent": "#D37535",
-    "_note": "sampled from his logo — copper on near-black. 17.73:1 with white."
+    "accent": "#A2561B",
+    "_note": "copper from the M, deepened so white clears AA: base 4.86:1, hover 5.33:1"
   }
 }

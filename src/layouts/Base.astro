@@ -161,7 +161,7 @@ const links = [
              badge carries recognition, the type carries the name. alt="" because
              the name is already right there as text. -->
         <a class="mark" href={`${B}/#top`}>
-          {shop.logo && <img src={shop.logo} alt="" height="36" />}
+          {shop.logo && <img src={shop.logo} alt="" height="42" />}
           <span>{shop.name}</span>
         </a>
 
@@ -233,7 +233,7 @@ const links = [
       .mark {
         font-weight: 640;
         letter-spacing: -0.035em;
-        font-size: 1.06rem;
+        font-size: 0.98rem;
         color: #fff;
         text-decoration: none;
         transition: color 0.4s var(--ease-out);
@@ -244,11 +244,11 @@ const links = [
          the same baseline. The nav sits over a dark hero before it sticks, so a
          dark-on-transparent logo needs `logoOnDark` too — otherwise it vanishes. */
       .mark { display: inline-flex; align-items: center; gap: 9px; min-width: 0; }
-      .mark img { height: 36px; width: auto; display: block; flex: none; }
+      .mark img { height: 42px; width: auto; display: block; flex: none; }
       .mark span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       @media (max-width: 520px) {
         .mark { gap: 7px; }
-        .mark img { height: 30px; }
+        .mark img { height: 34px; }
       }
 
       .nav-links { display: none; align-items: center; gap: 4px; }
