@@ -18,4 +18,19 @@ export default defineConfig({
   // Demos are unlisted — never index a spec site built on someone else's branding.
   site,
   build: { inlineStylesheets: 'always' },
+
+  vite: {
+    build: {
+      // Hand-written vendor prefixes were actively harmful here. Writing
+      //   backdrop-filter: X; -webkit-backdrop-filter: X;
+      // gave esbuild two identical values for what it treats as one property,
+      // and it collapsed them down to the -webkit- form alone — which Chrome
+      // does not support. Result: the frosted nav had NO blur in Chrome, only
+      // a flat white bar, on every page.
+      // Naming the targets makes esbuild derive the prefixes itself, so source
+      // stays unprefixed and both forms ship. safari14 is what pulls the
+      // -webkit- copy in for older iPhones.
+      cssTarget: ['chrome90', 'safari14', 'firefox90', 'edge90'],
+    },
+  },
 });
