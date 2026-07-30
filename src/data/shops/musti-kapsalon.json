@@ -165,11 +165,11 @@
     },
     {
       "q": "Wat kost knippen bij ons?",
-      "a": "Knippen heren is €25, knippen met baard €35 en een fade €30. De volledige prijslijst staat op deze pagina. Wat je ziet is wat je betaalt."
+      "a": "Knippen is €20, knippen + wassen €25 en knippen + scheren €30. De volledige prijslijst staat op deze pagina. Wat je ziet is wat je betaalt."
     },
     {
       "q": "Hoe lang duurt een knipbeurt?",
-      "a": "Reken op 30 minuten voor knippen, 45 minuten voor knippen met baard. We nemen de tijd, maar je zit niet onnodig lang."
+      "a": "Reken op 30 min voor knippen en 45 min voor knippen met scheren. We nemen de tijd, maar je zit niet onnodig lang."
     },
     {
       "q": "Kan ik pinnen?",
@@ -177,7 +177,7 @@
     },
     {
       "q": "Knippen jullie ook kinderen?",
-      "a": "Zeker. Kinderen tot en met 12 jaar knippen we voor €18. Rustig en snel, ook als het de eerste keer is."
+      "a": "Zeker. Kinderen knippen we voor €15. Rustig en snel, ook als het de eerste keer is."
     },
     {
       "q": "Sprechen Sie Deutsch?",
@@ -185,7 +185,7 @@
     }
   ],
   "_todo": "GEEN Google Bedrijfsprofiel — staat niet op Maps. Daarom: geen rating, geen reviews, geen Route-knop (maps leeg gelaten i.p.v. naar een dood zoekresultaat). DIT IS DE GROOTSTE KANS: profiel aanmaken = hij wordt vindbaar op \"kapper venlo\". NOG NODIG: straat + huisnummer (dan kan Route weer aan), duur per behandeling. ECHT van het bord: prijzen, openingstijden, telefoon, kleuren, logo.",
-  "_de": "Geen Duitse versie. Wil de zaak die (add-on): kopieer het \"de\"-blok uit shops/demo.json, vertaal alles, en /de/ verschijnt automatisch. Zonder dit blok wordt er geen Duitse pagina gebouwd.",
+  "_de": "Deutsche Version aktiv — /musti-kapsalon/de/. Preise im FAQ werden aus services[] generiert, also nie doppelt pflegen: Preis dort ändern, FAQ folgt.",
   "rating": {
     "score": "",
     "count": 0
@@ -196,5 +196,97 @@
     "ink": "#ffffff",
     "accent": "#A2561B",
     "_note": "warm espresso — not black, not blue-black. copper from the logo is the accent."
+  },
+  "de": {
+    "tagline": "Friseursalon in Venlo",
+    "intro": "Handwerk, saubere Fades und eine Rasur, wie sie sein soll. Seit Jahren die feste Adresse für Männer aus Venlo und Umgebung — nur 15 Minuten hinter der Grenze.",
+    "marquee": [
+      "Fades",
+      "Bart trimmen",
+      "Messerrasur",
+      "Klassischer Schnitt",
+      "Kinderschnitte",
+      "Ohne Termin willkommen"
+    ],
+    "hours": [
+      "Montag",
+      "Dienstag",
+      "Mittwoch",
+      "Donnerstag",
+      "Freitag",
+      "Samstag",
+      "Sonntag"
+    ],
+    "services": [
+      {
+        "name": "Herrenschnitt",
+        "desc": "Waschen, schneiden, stylen"
+      },
+      {
+        "name": "Schnitt + Waschen",
+        "desc": "Das komplette Programm"
+      },
+      {
+        "name": "Schnitt + Rasur",
+        "desc": "Schneiden und rasieren"
+      },
+      {
+        "name": "Rasur",
+        "desc": "Klassische Rasur"
+      },
+      {
+        "name": "Haare waschen + föhnen",
+        "desc": "Waschen und föhnen"
+      },
+      {
+        "name": "Kinderschnitt",
+        "desc": "Ruhig und schnell"
+      }
+    ],
+    "team": [
+      "Fades & Rasur",
+      "Klassische Schnitte",
+      "Bart-Spezialist"
+    ],
+    "why": [
+      {
+        "title": "Termin binnen 24 Stunden",
+        "text": "Meistens ist schon morgen etwas frei. Ohne Termin geht auch — ruf kurz an und du weißt Bescheid."
+      },
+      {
+        "title": "Handwerk, keine Hektik",
+        "text": "Du bekommst die Zeit, die es braucht. Wir schneiden nach deiner Kopfform, nicht nach der Uhr."
+      },
+      {
+        "title": "Feste Preise",
+        "text": "Was auf der Liste steht, zahlst du. Keine Überraschungen an der Kasse."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Brauche ich einen Termin oder kann ich einfach vorbeikommen?",
+        "a": "Beides geht. Mit Termin bist du garantiert sofort dran. Ohne Termin helfen wir dir, sobald ein Stuhl frei ist."
+      },
+      {
+        "q": "Was kostet ein Haarschnitt?",
+        "a": "Herrenschnitt 20 €, Schnitt + Waschen 25 € und Schnitt + Rasur 30 €. Die komplette Preisliste steht auf dieser Seite. Was du siehst, zahlst du."
+      },
+      {
+        "q": "Wie lange dauert ein Haarschnitt?",
+        "a": "Rechne mit 30 Minuten für den Schnitt und 45 Minuten für Schnitt mit Rasur. Wir nehmen uns Zeit, aber du sitzt nicht unnötig lange."
+      },
+      {
+        "q": "Kann ich mit Karte zahlen?",
+        "a": "Bar und mit Karte geht beides."
+      },
+      {
+        "q": "Schneidet ihr auch Kinder?",
+        "a": "Klar. Kinderschnitt kostet 15 €. Ruhig und schnell, auch beim ersten Mal."
+      },
+      {
+        "q": "Wie weit ist Venlo von der Grenze?",
+        "a": "Etwa 15 Minuten von Kaldenkirchen und rund 30 Minuten von Mönchengladbach. Viele unserer Kunden kommen aus Deutschland."
+      }
+    ]
   }
 }
