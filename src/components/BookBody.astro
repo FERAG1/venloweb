@@ -904,21 +904,24 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
   #bkPage .dockbar.final .nav-next .ic-wa { display: block; }
   #bkPage .dockbar.final .nav-next .ic-arrow { display: none; }
 
-  /* WhatsApp brand green on the send button. Recognised instantly — people know
-     what green-plus-that-glyph does, which they don't for a black button. Shadow
-     is tinted green too: a neutral black shadow under a coloured button reads dirty
-     (same rule as --brand-rgb in theme.css). */
+  /* Green send button, but NOT WhatsApp's #25d366 logo green: white text on that
+     measures 1.98:1, far under the 4.5:1 WCAG AA floor, and it reads washed out.
+     These are measured — base 5.28:1, hover 4.77:1, active 6.90:1 — and the deeper
+     green also sits with the warm cream palette instead of glowing against it.
+     Recognition comes from the glyph plus "green", not from the exact hex.
+     Shadow is tinted green: a neutral black shadow under a coloured button reads
+     dirty (same rule as --brand-rgb in theme.css). */
   #bkPage .dockbar.final .nav-next {
-    background: #25d366;
+    background: #0a7c42;
     color: #fff;
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.28),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.18),
-      0 2px 6px rgba(37, 211, 102, 0.34),
-      0 8px 20px -6px rgba(37, 211, 102, 0.42);
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.24),
+      0 2px 6px rgba(10, 124, 66, 0.32),
+      0 8px 20px -6px rgba(10, 124, 66, 0.44);
   }
-  #bkPage .dockbar.final .nav-next:hover:not(:disabled) { background: #1fbe5b; }
-  #bkPage .dockbar.final .nav-next:active:not(:disabled) { background: #1aa851; }
+  #bkPage .dockbar.final .nav-next:hover:not(:disabled) { background: #0b8446; }
+  #bkPage .dockbar.final .nav-next:active:not(:disabled) { background: #086836; }
   #bkPage .nav-back { padding: 13px; flex: none; }
   #bkPage .nav-back svg { transform: rotate(180deg); }
   #bkPage .nav-next { flex: none; }
