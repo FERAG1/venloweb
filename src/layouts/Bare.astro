@@ -2,13 +2,14 @@
 import '../styles/theme.css';
 import Icon from '../components/Icon.astro';
 import { t } from '../i18n/ui.js';
+import { brandVars } from '../lib/brand.js';
 import { pathFor } from '../lib/shops.js';
 const { shop, title, lang = 'nl' } = Astro.props;
 const T = t(lang);
 const tel = shop.phone ? `tel:${shop.phone.replace(/\s/g, '')}` : null;
 ---
 <!doctype html>
-<html lang={T.htmlLang}>
+<html lang={T.htmlLang} style={brandVars(shop) || undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
