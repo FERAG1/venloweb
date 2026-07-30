@@ -191,10 +191,10 @@
     "count": 0
   },
   "brand": {
-    "base": "#96173F",
-    "hi": "#A62949",
+    "base": "#0C1A20",
+    "hi": "#16272E",
     "ink": "#ffffff",
-    "accent": "#C96410",
-    "_note": "maroon — REAL — from his sign + logo"
+    "accent": "#D37535",
+    "_note": "sampled from his logo — copper on near-black. 17.73:1 with white."
   }
 }
