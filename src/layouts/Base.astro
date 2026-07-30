@@ -176,28 +176,32 @@ const links = [
           ))}
         </nav>
 
-        <a class="btn btn-sm nav-cta" href={book} {...bookAttrs}>
-          <Icon name="calendar" size={15} stroke={1.9} />
-          {T.navAppt}
-        </a>
+        {/* Grouped so space-between pushes the whole cluster right rather than
+             spreading the actions apart from each other. Flag sits first — it's a
+             quieter control than the booking CTA and shouldn't split it from the
+             phone button. */}
+        <span class="nav-actions">
+          {/* One flag, showing the language you'd switch TO — not a pair of
+               toggles. A flag is what a German visitor scans the header for. */}
+          {langs.filter((l) => l !== lang).map((l) => (
+            <a class="nav-lang" href={`${pathFor(shop.slug, l)}/`} hreflang={l}
+               aria-label={UI[l].langSuggestCta} title={UI[l].langName}>
+              <Flag code={l} size={18} />
+            </a>
+          ))}
 
-        <!-- below 940px the nav pill would otherwise hold only the wordmark -->
-        {/* One flag, showing the language you'd switch TO — not a pair of toggles.
-             A flag is what a German visitor scans the header for, so it does the
-             job the dismissed banner was doing, without interrupting anyone or
-             redirecting crawlers away from either version. */}
-        {langs.filter((l) => l !== lang).map((l) => (
-          <a class="nav-lang" href={`${pathFor(shop.slug, l)}/`} hreflang={l}
-             aria-label={UI[l].langSuggestCta} title={UI[l].langName}>
-            <Flag code={l} size={18} />
+          <a class="btn btn-sm nav-cta" href={book} {...bookAttrs}>
+            <Icon name="calendar" size={15} stroke={1.9} />
+            {T.navAppt}
           </a>
-        ))}
 
-        {tel && (
-          <a class="btn btn-sm nav-tel" href={tel} aria-label={T.callAria}>
-            <Icon name="phone" size={16} stroke={1.9} />
-          </a>
-        )}
+          {/* below 940px the pill would otherwise hold only the wordmark */}
+          {tel && (
+            <a class="btn btn-sm nav-tel" href={tel} aria-label={T.callAria}>
+              <Icon name="phone" size={16} stroke={1.9} />
+            </a>
+          )}
+        </span>
       </div>
     </header>
 
@@ -211,6 +215,10 @@ const links = [
     </nav>
 
     <style>
+      /* Right-hand cluster: tight gap between the actions, while space-between
+         still pushes the group away from the wordmark. */
+      .nav-actions { display: flex; align-items: center; gap: 8px; flex: none; }
+
       /* ---------- language flag ---------- */
       .nav-lang {
         flex: none; display: grid; place-items: center;
