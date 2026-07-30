@@ -397,12 +397,31 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
     lines.push('', `_${fmt(T.waSentVia, { shop: cfg.shopName })}_`);
 
     waUrl = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(lines.join('\n'))}`;
-    window.open(waUrl, '_blank');
+    // Paint the confirmation BEFORE handing off, so the page they come back to is
+    // already on the thank-you screen rather than mid-form.
     thanks(naam);
+    openWhatsApp();
   }
 
   /* ---------- thank you ---------- */
   let waUrl = '';
+
+  // On a phone, window.open(url, '_blank') strands the customer: the wa.me link is
+  // swallowed by the WhatsApp app so the new tab never renders, and when they switch
+  // back to the browser that blank tab is what they see — the booking page is left
+  // on the previous one. Navigating the CURRENT tab means the app takes over and the
+  // page they return to is this one. Desktop keeps the new tab, where wa.me's web
+  // page is a useful fallback and the thank-you screen stays put behind it.
+  const isTouch = matchMedia('(pointer: coarse)').matches;
+  function openWhatsApp() {
+    if (!waUrl) return;
+    if (isTouch) {
+      // let the thank-you screen paint first; a plain navigation is never popup-blocked
+      setTimeout(() => { location.href = waUrl; }, 60);
+    } else {
+      window.open(waUrl, '_blank', 'noopener');
+    }
+  }
 
   function thanks(naam) {
     const first = naam.split(' ')[0];
@@ -449,7 +468,7 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
     scrollTo({ top: 0 });
   }
 
-  $('bkRetry').addEventListener('click', () => waUrl && window.open(waUrl, '_blank'));
+  $('bkRetry').addEventListener('click', openWhatsApp);
 
   // WhatsApp takes focus immediately, so this screen is really the RETURN
   // state — most people first see it when they switch back to the browser.
