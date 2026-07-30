@@ -155,7 +155,11 @@ const links = [
     <!-- ============================== NAV ============================== -->
     <header class={`nav${tel ? "" : " no-tel"}`} id="nav">
       <div class="nav-in">
-        <a class="mark" href={`${B}/#top`}>{shop.name}</a>
+        <a class="mark" href={`${B}/#top`}>
+          {shop.logo
+            ? <img src={shop.logo} alt={shop.name} height="34" />
+            : shop.name}
+        </a>
 
         <nav class="nav-links">
           {links.map((l) => (
@@ -231,6 +235,12 @@ const links = [
         transition: color 0.4s var(--ease-out);
       }
       .nav.stuck .mark { color: var(--ink); }
+      /* A logo replaces the wordmark when the shop has supplied a file. Height is
+         capped rather than width, so a wide wordmark and a square badge both sit on
+         the same baseline. The nav sits over a dark hero before it sticks, so a
+         dark-on-transparent logo needs `logoOnDark` too — otherwise it vanishes. */
+      .mark img { height: 34px; width: auto; display: block; }
+      @media (max-width: 520px) { .mark img { height: 28px; } }
 
       .nav-links { display: none; align-items: center; gap: 4px; }
       .nav-links a {

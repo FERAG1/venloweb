@@ -26,7 +26,9 @@ const tel = shop.phone ? `tel:${shop.phone.replace(/\s/g, '')}` : null;
       <a class="top-back" href={`${pathFor(shop.slug, lang)}/`} aria-label={T.backToSite}>
         <Icon name="arrow" size={17} stroke={2} />
       </a>
-      <span class="top-name">{shop.name}</span>
+      <span class="top-name">
+        {shop.logo ? <img src={shop.logo} alt={shop.name} height="26" /> : shop.name}
+      </span>
       <a class="top-tel" href={tel} aria-label={T.dockCall}>
         <Icon name="phone" size={17} stroke={1.9} />
       </a>
@@ -51,6 +53,7 @@ const tel = shop.phone ? `tel:${shop.phone.replace(/\s/g, '')}` : null;
         -webkit-backdrop-filter: saturate(180%) blur(16px);
         border-bottom: 1px solid var(--line);
       }
+      .top-name img { height: 26px; width: auto; display: block; margin: 0 auto; }
       .top-name {
         text-align: center;
         font-weight: 620;
