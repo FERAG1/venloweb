@@ -4,12 +4,12 @@
   "tagline": "Kapsalon in Venlo",
   "intro": "Vakwerk, scherpe fades en een scheerbeurt zoals het hoort. Al jaren de vaste stek voor mannen uit Venlo en omstreken.",
   "address": {
-    "street": "",
-    "postcode": "",
+    "street": "Grote Kerkstraat 16",
+    "postcode": "5911 CH",
     "city": "Venlo",
-    "maps": "https://maps.google.com/?q=Kapsalon+Elegance+by+Mo+Venlo"
+    "maps": "https://maps.google.com/?q=Grote+Kerkstraat+16,+5911+CH+Venlo"
   },
-  "phone": "",
+  "phone": "+31 6 85332244",
   "whatsapp": "995551258383",
   "booking": "",
   "rating": {
@@ -209,6 +209,7 @@
       "a": "Ja, wir sprechen Deutsch. Venlo liegt nur 15 Minuten von der Grenze — deutsche Kunden sind jederzeit willkommen."
     }
   ],
-  "_todo": "ECHT: naam, rating 5.0/30, reviews. ONTBREEKT NOG: adres, telefoon, openingstijden (staat niet in de directories — van Maps of de zaak zelf halen; nu verborgen op de site). PLACEHOLDER: prijzen, diensten, team, foto's, intro.",
-  "_de": "Geen Duitse versie. Wil de zaak die (add-on): kopieer het \"de\"-blok uit shops/demo.json, vertaal alles, en /de/ verschijnt automatisch. Zonder dit blok wordt er geen Duitse pagina gebouwd."
+  "_todo": "ECHT: naam, adres, telefoon, rating, reviews. ONTBREEKT: openingstijden (nu de generieke week — NAKIJKEN), geo lat/lng. PLACEHOLDER: prijzen, diensten, team, foto's, intro.",
+  "_de": "Geen Duitse versie. Wil de zaak die (add-on): kopieer het \"de\"-blok uit shops/demo.json, vertaal alles, en /de/ verschijnt automatisch. Zonder dit blok wordt er geen Duitse pagina gebouwd.",
+  "_pluscode": "95CC+39 Venlo"
 }

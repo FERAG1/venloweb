@@ -4,12 +4,12 @@
   "tagline": "Kapsalon in Venlo",
   "intro": "Vakwerk, scherpe fades en een scheerbeurt zoals het hoort. Al jaren de vaste stek voor mannen uit Venlo en omstreken.",
   "address": {
-    "street": "",
-    "postcode": "",
+    "street": "Tegelseweg 66-A",
+    "postcode": "5912 BJ",
     "city": "Venlo",
-    "maps": "https://maps.google.com/?q=Kapsalon+Moreno+Venlo"
+    "maps": "https://maps.google.com/?q=Tegelseweg+66-A,+5912+BJ+Venlo"
   },
-  "phone": "",
+  "phone": "+31 6 14100800",
   "whatsapp": "995551258383",
   "booking": "",
   "rating": {
@@ -206,6 +206,7 @@
       "a": "Ja, wir sprechen Deutsch. Venlo liegt nur 15 Minuten von der Grenze — deutsche Kunden sind jederzeit willkommen."
     }
   ],
-  "_todo": "ECHT: naam, rating 4.6/29, reviews. ONTBREEKT NOG: adres, telefoon, openingstijden (niet in de directories — van Maps of de zaak halen; nu verborgen). PLACEHOLDER: prijzen, diensten, team, foto's, intro. Eigenaar/barber heet Mohamed volgens een review — check voor het teamblok.",
-  "_de": "Geen Duitse versie. Wil de zaak die (add-on): kopieer het \"de\"-blok uit shops/demo.json, vertaal alles, en /de/ verschijnt automatisch. Zonder dit blok wordt er geen Duitse pagina gebouwd."
+  "_todo": "ECHT: naam, adres, telefoon, rating, reviews. ONTBREEKT: openingstijden (nu de generieke week — NAKIJKEN), geo lat/lng. PLACEHOLDER: prijzen, diensten, team, foto's, intro.",
+  "_de": "Geen Duitse versie. Wil de zaak die (add-on): kopieer het \"de\"-blok uit shops/demo.json, vertaal alles, en /de/ verschijnt automatisch. Zonder dit blok wordt er geen Duitse pagina gebouwd.",
+  "_pluscode": "9576+GR Venlo"
 }
