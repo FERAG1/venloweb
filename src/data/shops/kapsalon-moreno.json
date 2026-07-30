@@ -156,7 +156,26 @@
       "text": "Wat op de lijst staat, betaal je. Geen verrassingen bij de kassa."
     }
   ],
-  "reviews": [],
+  "reviews": [
+    {
+      "text": "Maestro Mohamed is the best barber in the world ...i dont live in venlo anymore i'm back to Poland and im so happy of that But moreno Barbers i miss so much is the only thing what i miss from …",
+      "author": "Carlos Tevez",
+      "when": "10 maanden geleden",
+      "tone": "#9334e6"
+    },
+    {
+      "text": "Beard looks perfect, nice atmosphere. The best Barber 💪",
+      "author": "Adam Sandacz",
+      "when": "2 jaar geleden",
+      "tone": "#00695c"
+    },
+    {
+      "text": "Perfect! 💯",
+      "author": "A MG",
+      "when": "8 maanden geleden",
+      "tone": "#8d6e63"
+    }
+  ],
   "geo": {
     "lat": "",
     "lng": ""
@@ -187,6 +206,6 @@
       "a": "Ja, wir sprechen Deutsch. Venlo liegt nur 15 Minuten von der Grenze — deutsche Kunden sind jederzeit willkommen."
     }
   ],
-  "_todo": "ECHT: naam, adres, telefoon, rating. PLACEHOLDER: prijzen, diensten, team, foto's, intro, why, faq — navragen/vervangen. Openingstijden komen uit een directory: NAKIJKEN op Maps. reviews[] pas vullen met echte Google reviews.",
+  "_todo": "ECHT: naam, rating 4.6/29, reviews. ONTBREEKT NOG: adres, telefoon, openingstijden (niet in de directories — van Maps of de zaak halen; nu verborgen). PLACEHOLDER: prijzen, diensten, team, foto's, intro. Eigenaar/barber heet Mohamed volgens een review — check voor het teamblok.",
   "_de": "Geen Duitse versie. Wil de zaak die (add-on): kopieer het \"de\"-blok uit shops/demo.json, vertaal alles, en /de/ verschijnt automatisch. Zonder dit blok wordt er geen Duitse pagina gebouwd."
 }

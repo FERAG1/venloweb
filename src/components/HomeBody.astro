@@ -56,7 +56,7 @@ const setAt = (url, widths) =>
             <a class="btn btn-lg btn-light" href={book} {...bookAttrs}>
               <Icon name="calendar" size={17} />{T.heroBook}
             </a>
-            <a class="btn btn-lg hero-tel" href={tel}><Icon name="phone" size={17} />{T.heroCallNow}</a>
+            {tel && <a class="btn btn-lg hero-tel" href={tel}><Icon name="phone" size={17} />{T.heroCallNow}</a>}
           </div>
           <span class="hero-micro"><Icon name="check" size={13} stroke={2.4} />{T.heroWalkIn}</span>
         </div>
@@ -703,9 +703,11 @@ const setAt = (url, widths) =>
     color: #fff; font-weight: 600; font-size: 0.95rem;
     box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
-  .av-meta { flex: 1; min-width: 0; }
-  .av-meta strong { display: block; font-size: 0.93rem; font-weight: 550; }
-  .av-meta span { font-size: 0.79rem; color: var(--ink-soft); }
+  /* Name + date are one unit, so they get their own tight leading — body's
+     line-height: 1.6 is for prose and leaves a hole between two stacked labels. */
+  .av-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+  .av-meta strong { font-size: 0.93rem; font-weight: 550; line-height: 1.25; }
+  .av-meta span { font-size: 0.79rem; color: var(--ink-soft); line-height: 1.25; }
   .rev blockquote { margin-top: 10px; font-size: 0.96rem; color: var(--ink-mid); }
 
   @media (min-width: 940px) {

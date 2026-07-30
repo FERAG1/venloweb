@@ -156,7 +156,29 @@
       "text": "Wat op de lijst staat, betaal je. Geen verrassingen bij de kassa."
     }
   ],
-  "reviews": [],
+  "reviews": [
+    {
+      "text": "First time visiting this barber salon and I had a great experience. Mo runs the place professionally, the barber listened carefully to what I wanted, and the haircut came out clean and sharp. Friendly atmosphere and good attention to detail. I'll definitely be coming back",
+      "author": "Sam",
+      "when": "6 maanden geleden",
+      "score": 5,
+      "tone": "#188038"
+    },
+    {
+      "text": "Small up and coming barber shop. Owner is professional, friendly and fun to talk to. Haircut is good with an attention to detail.",
+      "author": "Timo Mattern",
+      "when": "4 maanden geleden",
+      "score": 5,
+      "tone": "#1a73e8"
+    },
+    {
+      "text": "Had an amazing experience here. My look is ready for tinder!",
+      "author": "Milow Thijsen",
+      "when": "6 maanden geleden",
+      "score": 5,
+      "tone": "#9334e6"
+    }
+  ],
   "geo": {
     "lat": "",
     "lng": ""
@@ -187,6 +209,6 @@
       "a": "Ja, wir sprechen Deutsch. Venlo liegt nur 15 Minuten von der Grenze — deutsche Kunden sind jederzeit willkommen."
     }
   ],
-  "_todo": "ECHT: naam, adres, telefoon, rating. PLACEHOLDER: prijzen, diensten, team, foto's, intro, why, faq — navragen/vervangen. Openingstijden komen uit een directory: NAKIJKEN op Maps. reviews[] pas vullen met echte Google reviews.",
+  "_todo": "ECHT: naam, rating 5.0/30, reviews. ONTBREEKT NOG: adres, telefoon, openingstijden (staat niet in de directories — van Maps of de zaak zelf halen; nu verborgen op de site). PLACEHOLDER: prijzen, diensten, team, foto's, intro.",
   "_de": "Geen Duitse versie. Wil de zaak die (add-on): kopieer het \"de\"-blok uit shops/demo.json, vertaal alles, en /de/ verschijnt automatisch. Zonder dit blok wordt er geen Duitse pagina gebouwd."
 }
