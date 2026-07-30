@@ -227,7 +227,9 @@ const setAt = (url, widths) =>
             </header>
             {/* No score = we never verified the star count. Omit the row rather
                 than render a default, which would silently invent a rating. */}
-            {r.score != null && <Google type="stars" size={15} score={r.score} />}
+            {r.score != null && (
+              <div class="rev-stars"><Google type="stars" size={17} score={r.score} /></div>
+            )}
             <blockquote>{r.text}</blockquote>
           </figure>
         ))}
@@ -695,7 +697,11 @@ const setAt = (url, widths) =>
 
   .rev-list { display: grid; gap: 12px; }
   .rev { padding: 20px; border-radius: var(--r); }
-  .rev header { display: flex; align-items: center; gap: 11px; margin-bottom: 11px; }
+  .rev header { display: flex; align-items: center; gap: 11px; margin-bottom: 10px; }
+  /* Stars sat inline, so the card's line-height padded them unevenly above and
+     below. A block row with its own margin gives a predictable rhythm:
+     header -> 10px -> stars -> 10px -> quote. */
+  .rev-stars { display: flex; margin-bottom: 10px; }
   .av {
     flex: none;
     width: 38px; height: 38px; border-radius: 50%;
@@ -708,7 +714,7 @@ const setAt = (url, widths) =>
   .av-meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
   .av-meta strong { font-size: 0.93rem; font-weight: 550; line-height: 1.25; }
   .av-meta span { font-size: 0.79rem; color: var(--ink-soft); line-height: 1.25; }
-  .rev blockquote { margin-top: 10px; font-size: 0.96rem; color: var(--ink-mid); }
+  .rev blockquote { margin: 0; font-size: 0.96rem; color: var(--ink-mid); }
 
   @media (min-width: 940px) {
     .rev-grid { grid-template-columns: 4fr 7fr; gap: var(--s6); align-items: start; }

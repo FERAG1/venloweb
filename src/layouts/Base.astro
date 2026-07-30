@@ -152,7 +152,7 @@ const links = [
 
   <body>
     <!-- ============================== NAV ============================== -->
-    <header class="nav" id="nav">
+    <header class={`nav${tel ? "" : " no-tel"}`} id="nav">
       <div class="nav-in">
         <a class="mark" href={`${B}/#top`}>{shop.name}</a>
 
@@ -252,6 +252,9 @@ const links = [
       .nav.stuck .nav-links a:hover { color: var(--ink); background: rgba(14, 14, 16, 0.05); }
 
       .nav-cta { display: none; }
+      /* no phone number -> no .nav-tel, so the pill needs another action on
+         mobile or it is just a wordmark in a big empty capsule. */
+      .nav.no-tel .nav-cta { display: inline-flex; }
       .nav-tel { padding: 10px; aspect-ratio: 1; }
       @media (min-width: 940px) {
         .nav-links, .nav-cta { display: inline-flex; }
@@ -263,8 +266,7 @@ const links = [
         position: fixed;
         bottom: 0; left: 0; right: 0;
         z-index: 90;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1.4fr;
+        display: flex;
         gap: 6px;
         margin: 10px;
         margin-bottom: calc(10px + env(safe-area-inset-bottom));
@@ -277,6 +279,8 @@ const links = [
         box-shadow: inset 0 1px 0 #fff, var(--sh-3);
       }
       .dock a {
+        flex: 1 1 0;
+        min-width: 0;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -292,6 +296,7 @@ const links = [
       /* needs `a.dock-cta` — plain `.dock-cta` loses to `.dock a` and the
          label renders black-on-black */
       .dock a.dock-cta {
+        flex: 1.4 1 0;
         background: var(--brand);
         color: var(--brand-ink);
         box-shadow:
