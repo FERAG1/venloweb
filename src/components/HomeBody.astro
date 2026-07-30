@@ -177,14 +177,34 @@ const setAt = (url, widths) =>
           <h2>{T.workTitle}</h2>
         </div>
       </div>
-      <div class="grid stagger">
-        {shop.gallery.map((src, i) => (
-          <div class={`media cell c${i}`}>
-            <img src={src} srcset={setAt(src, [400, 640, 900, 1200])}
-              sizes="(min-width: 820px) 25vw, 50vw"
-              alt={fmt(T.altCut, { n: shop.name })} loading="lazy" />
-          </div>
-        ))}
+    </div>
+
+    <!-- Two rows drifting opposite ways. Each track holds the photo set TWICE and
+         animates to -50%, which lands exactly one set along — so the loop is
+         seamless with no jump. Spacing is margin-right rather than flex gap:
+         with gap, half the track isn't exactly one set and the seam stutters.
+         Only six photos per shop, so looping is also what makes a small set feel
+         like a real gallery. -->
+    <div class="gal" id="gal">
+      <div class="gal-row">
+        <div class="gal-track">
+          {[...shop.gallery, ...shop.gallery].map((src, i) => (
+            <div class="media gal-item" aria-hidden={i >= shop.gallery.length ? 'true' : undefined}>
+              <img src={src} srcset={setAt(src, [400, 640, 900])} sizes="34vw"
+                alt={fmt(T.altCut, { n: shop.name })} loading="lazy" />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div class="gal-row gal-row-b">
+        <div class="gal-track">
+          {[...[...shop.gallery].reverse(), ...[...shop.gallery].reverse()].map((src, i) => (
+            <div class="media gal-item" aria-hidden={i >= shop.gallery.length ? 'true' : undefined}>
+              <img src={src} srcset={setAt(src, [400, 640, 900])} sizes="34vw"
+                alt={fmt(T.altCut, { n: shop.name })} loading="lazy" />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </section>
@@ -760,41 +780,51 @@ const setAt = (url, widths) =>
   .svc-note svg { color: #17a34a; }
 
   /* ------------------------------ gallery ------------------------------ */
-  /* A gallery, not a grid of cards. Three things separate the two:
-     — the tiles share one tight gap so they read as a single sheet
-     — no per-tile drop shadow (that's what made six floating cards); the inset
-       hairline from .media still holds each edge
-     — real size contrast: a tall portrait feature, two small, a square block,
-       two cinematic strips, instead of six near-equal boxes
-     Spans are chosen so a block of six closes exactly: 6 + 1 + 1 + 4 + 2 + 2 = 16
-     cells = four rows of four, repeating every six photos. */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: clamp(96px, 26vw, 150px);
-    grid-auto-flow: dense;
-    gap: 8px;
+  /* ------------------------------ gallery ------------------------------
+     Full-bleed so the rows run off both edges — a marquee that stops at the
+     container reads as a carousel, one that bleeds reads as a gallery. */
+  .gal {
+    --gal-gap: 10px;
+    display: grid; gap: var(--gal-gap);
+    width: 100vw; margin-left: calc(50% - 50vw);
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
   }
-  .grid .media { box-shadow: none; border-radius: var(--r-sm); }
-  .grid .media img { transition: transform 1.2s var(--ease); }
-  .grid .media:hover img { transform: scale(1.05); }
+  .gal-row { overflow: hidden; }
+  .gal-track {
+    display: flex; width: max-content;
+    animation: galDrift 64s linear infinite;
+    will-change: transform;
+  }
+  /* second row runs the other way and slightly slower, so the two never lock
+     into a visible rhythm with each other */
+  .gal-row-b .gal-track { animation-duration: 82s; animation-direction: reverse; }
+  @keyframes galDrift { to { transform: translateX(-50%); } }
 
-  /* mobile: feature spans 2 wide and 2 tall, then pairs, then a wide closer */
-  .cell:nth-child(6n + 1) { grid-column: span 2; grid-row: span 2; }
-  .cell:nth-child(6n) { grid-column: span 2; }
+  /* Hovering anywhere over the gallery holds BOTH rows — pausing only the row
+     under the cursor looks like a glitch. */
+  .gal:hover .gal-track { animation-play-state: paused; }
 
-  @media (min-width: 820px) {
-    .grid {
-      grid-template-columns: repeat(4, 1fr);
-      grid-auto-rows: clamp(104px, 11vw, 150px);
-      gap: 10px;
-    }
-    .cell:nth-child(6n + 1) { grid-column: span 2; grid-row: span 3; }
-    .cell:nth-child(6n + 2),
-    .cell:nth-child(6n + 3) { grid-column: span 1; grid-row: span 1; }
-    .cell:nth-child(6n + 4) { grid-column: span 2; grid-row: span 2; }
-    .cell:nth-child(6n + 5),
-    .cell:nth-child(6n) { grid-column: span 2; grid-row: span 1; }
+  .gal-item {
+    flex: none;
+    height: clamp(150px, 21vw, 280px);
+    margin-right: var(--gal-gap);
+    border-radius: var(--r-sm);
+    box-shadow: none;
+  }
+  /* varied aspects give the row rhythm instead of a conveyor of equal boxes */
+  .gal-item:nth-child(3n + 1) { aspect-ratio: 4 / 5; }
+  .gal-item:nth-child(3n + 2) { aspect-ratio: 16 / 10; }
+  .gal-item:nth-child(3n + 3) { aspect-ratio: 1 / 1; }
+  .gal-item img { transition: transform 1.2s var(--ease); }
+  .gal-item:hover img { transform: scale(1.06); }
+
+  /* Motion off: hold the rows still and let them wrap into a plain block. */
+  @media (prefers-reduced-motion: reduce) {
+    .gal-track { animation: none; flex-wrap: wrap; width: 100%; justify-content: center; }
+    .gal-row-b { display: none; }
+    .gal { mask-image: none; -webkit-mask-image: none; }
   }
 
   /* ------------------------------ reviews ------------------------------ */
