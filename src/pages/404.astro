@@ -1,0 +1,56 @@
+---
+import '../styles/theme.css';
+import Icon from '../components/Icon.astro';
+
+// Deliberately shop-agnostic: a 404 can't know which salon the visitor wanted, and
+// it must NOT link to "/" — that's the internal launcher listing every competitor.
+// So: say what happened, offer "go back", and nothing else.
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Pagina niet gevonden</title>
+    <meta name="theme-color" content="#f1f0ec" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+
+  <body>
+    <main class="nf">
+      <p class="eyebrow">404</p>
+      <h1>Deze pagina<br />bestaat niet</h1>
+      <p class="lede">Misschien is de link verouderd of staat er een typefout in.</p>
+      <button class="btn btn-lg" id="back">
+        <Icon name="arrow" size={17} stroke={2} />Ga terug
+      </button>
+    </main>
+
+    <script>
+      const b = document.getElementById('back');
+      // history.back() only helps if there IS history; otherwise hide the button
+      // rather than leave a control that does nothing.
+      if (history.length > 1) b.addEventListener('click', () => history.back());
+      else b.hidden = true;
+    </script>
+
+    <style>
+      body { background: var(--bg); color: var(--ink); }
+      .nf {
+        min-height: 100svh;
+        display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
+        gap: var(--s3);
+        max-width: var(--max); margin: 0 auto; padding: 0 var(--gut);
+      }
+      .nf h1 { font-size: clamp(2.6rem, 9vw, 4.6rem); }
+      .nf .lede { margin-top: 0; }
+      .nf .btn { margin-top: var(--s2); }
+      .nf .btn svg { transform: rotate(180deg); }
+      .nf [hidden] { display: none !important; }
+    </style>
+  </body>
+</html>
