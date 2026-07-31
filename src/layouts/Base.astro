@@ -168,7 +168,7 @@ const links = [
     )}
   </head>
 
-  <body>
+  <body class={shop.splash ? 'has-intro' : undefined}>
     <!-- ============================ INTRO ============================
          Opt-in per shop ("splash": true). Three rules keep it from becoming
          the usual splash-screen tax:
@@ -184,6 +184,8 @@ const links = [
          keyboard skip straight to the nav. -->
     {shop.splash && (
       <div class="intro" aria-hidden="true" inert>
+        <i class="intro-panel intro-t"></i>
+        <i class="intro-panel intro-b"></i>
         <div class="intro-in">
           {shop.logo && <img src={shop.logo} alt="" />}
           <span class="intro-name">{shop.name}</span>
@@ -292,34 +294,85 @@ const links = [
         z-index: 200;
         display: grid;
         place-items: center;
-        background: var(--brand);
-        animation: introLift 0.8s var(--ease-out) 1.15s forwards;
+        /* No background here — the two panels carry it, so that when they part
+           the container itself is already invisible and only has to stop
+           catching clicks. */
+        animation: introGone 0.01s linear 2.45s forwards;
       }
-      /* visibility, not just transform: once lifted it must not sit over the
-         page swallowing clicks along its old edge. */
-      @keyframes introLift {
-        to { transform: translateY(-101%); visibility: hidden; }
-      }
+      @keyframes introGone { to { visibility: hidden; } }
 
-      .intro-in { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+      /* The curtain. One panel lifting was serviceable but read as a page
+         transition; parting from the centre reads as something opening, which
+         is the feeling worth paying for. 50.4% and the -0.4% offset overlap the
+         halves slightly, otherwise sub-pixel rounding leaves a bright hairline
+         down the middle on fractional-DPR screens. */
+      .intro-panel {
+        position: absolute; left: 0; right: 0; height: 50.4%;
+        background: var(--brand);
+      }
+      .intro-t { top: 0; animation: introPartT 1.15s var(--ease-out) 1.3s forwards; }
+      .intro-b { bottom: 0; animation: introPartB 1.15s var(--ease-out) 1.3s forwards; }
+      @keyframes introPartT { to { transform: translateY(-100.4%); } }
+      @keyframes introPartB { to { transform: translateY(100.4%); } }
+
+      .intro-in {
+        position: relative; z-index: 2;
+        display: flex; flex-direction: column; align-items: center; gap: 16px;
+        animation: introMarkOut 0.55s var(--ease-out) 1.22s forwards;
+      }
+      /* Resolving out of a blur is what separates this from a fade. It is one
+         small element for under a second, so the filter cost is negligible. */
       .intro img {
         height: clamp(72px, 16vw, 104px); width: auto;
-        animation: introMark 0.9s var(--ease-out) both;
+        animation: introMark 1s var(--ease-out) both;
       }
       .intro-name {
         color: #fff; font-weight: 600; font-size: clamp(1.1rem, 4vw, 1.45rem);
         letter-spacing: -0.03em;
-        animation: introFade 0.7s var(--ease-out) 0.26s both;
+        animation: introFade 0.7s var(--ease-out) 0.3s both;
       }
       /* scaleX rather than animating width — width would relayout every frame */
       .intro-rule {
         width: clamp(64px, 14vw, 92px); height: 2px; border-radius: 2px;
         background: var(--gold); transform: scaleX(0);
-        animation: introRule 0.6s var(--ease-out) 0.44s forwards;
+        animation: introRule 0.65s var(--ease-out) 0.5s forwards;
       }
-      @keyframes introMark { from { opacity: 0; transform: translateY(14px) scale(0.9); } }
+      @keyframes introMark {
+        from { opacity: 0; transform: translateY(16px) scale(0.88); filter: blur(7px); }
+        to   { opacity: 1; transform: none;                         filter: blur(0); }
+      }
       @keyframes introFade { from { opacity: 0; transform: translateY(8px); } }
       @keyframes introRule { to { transform: scaleX(1); } }
+      /* The mark pushes very slightly toward the viewer as it leaves, so it
+         reads as the curtain passing over it rather than the logo dying. */
+      @keyframes introMarkOut { to { opacity: 0; transform: scale(1.06); } }
+
+      /* The hero is settling out of a slow push-in underneath the whole time,
+         so the moment the curtain parts the photo is still moving. That
+         residual motion is what gives the reveal depth — a static image behind
+         a parting curtain looks like a screenshot. Gated on the body class so
+         the nine shops without an intro are untouched.
+         The hero already push-ins on load (heroIn, 1.08 to 1 over 1.6s), so
+         this stretches that rather than stacking a second animation on the
+         same element. It finished at 1.6s, half a second before the curtain
+         even starts to part, which left a dead-still photo behind a moving
+         curtain. At 3.4s the photo is still settling as the halves separate,
+         and that residual motion is the whole reason the reveal reads as
+         depth rather than as a screenshot behind a door.
+         The extra `.hero` in the selector is deliberate: Astro's scoped rule
+         is (0,3,1) and a :global() one gets no cid attributes, so without the
+         extra class this loses on specificity and silently does nothing.
+         html:not(.seen-intro) ties it to the curtain — on the second view
+         there is no curtain, and a lone slow drift would look like a bug. */
+      :global(html:not(.seen-intro) body.has-intro .hero .hero-frame img) {
+        animation-duration: 3.4s;
+        /* The duration alone did nothing visible: --ease-out is expo-shaped and
+           spends ~80% of its travel in the first fifth, so at the moment the
+           curtain parted the photo had already arrived (measured scale 1.002 of
+           a 1.08 start). A gentler curve spreads the same movement across the
+           whole reveal, which is the point. */
+        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      }
 
       /* Second view in the same session, and anyone who asked their OS for
          less motion, skip it entirely. */
@@ -384,13 +437,12 @@ const links = [
       /* One size in both states. Growing it on stick was defensible in theory —
          the pill boxes the logo in and can carry more — but in practice the
          logo visibly resized under the cursor while scrolling, and a mark that
-         changes size reads as a glitch, not as a flourish. 38px splits the two
-         sizes and holds up over the hero and inside the pill alike. */
-      .mark img { height: 38px; width: auto; display: block; flex: none; }
+         changes size reads as a glitch, not as a flourish. */
+      .mark img { height: 32px; width: auto; display: block; flex: none; }
       .mark span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       @media (max-width: 520px) {
         .mark { gap: 7px; }
-        .mark img { height: 32px; }
+        .mark img { height: 28px; }
       }
 
       .nav-links { display: none; align-items: center; gap: 4px; }
