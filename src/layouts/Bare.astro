@@ -4,6 +4,7 @@ import Icon from '../components/Icon.astro';
 import { t } from '../i18n/ui.js';
 import { brandVars } from '../lib/brand.js';
 import { pathFor } from '../lib/shops.js';
+import { ClientRouter } from 'astro:transitions';
 const { shop, title, lang = 'nl' } = Astro.props;
 const T = t(lang);
 const tel = shop.phone ? `tel:${shop.phone.replace(/\s/g, '')}` : null;
@@ -16,6 +17,23 @@ const tel = shop.phone ? `tel:${shop.phone.replace(/\s/g, '')}` : null;
     <meta name="robots" content="noindex, nofollow" />
     <title>{title} — {shop.name}</title>
     <meta name="theme-color" content="#f1f0ec" />
+
+    <!-- Both layouts need the router, or leaving the wizard for the homepage
+         falls back to a hard load and only half the site feels stitched.
+         Same after-swap restore as Base: someone can land on /boeken first, and
+         then this is the only copy of the listener that exists. -->
+    <ClientRouter />
+    <script is:inline>
+      if (!window.__vtBound) {
+        window.__vtBound = true;
+        document.addEventListener('astro:after-swap', function () {
+          document.documentElement.classList.add('js');
+          try {
+            if (sessionStorage.getItem('seenIntro')) document.documentElement.classList.add('seen-intro');
+          } catch (e) {}
+        });
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />

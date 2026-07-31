@@ -5,6 +5,7 @@ import { t, base, UI } from '../i18n/ui.js';
 import Flag from '../components/Flag.astro';
 import { brandVars } from '../lib/brand.js';
 import { pathFor } from '../lib/shops.js';
+import { ClientRouter } from 'astro:transitions';
 const { shop, lang = 'nl', langs = ['nl'] } = Astro.props;
 // URL prefix for THIS shop + language; every internal link hangs off it.
 const B = pathFor(shop.slug, lang);
@@ -93,7 +94,29 @@ const links = [
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
+    <ClientRouter />
+
     <script is:inline>document.documentElement.classList.add('js');</script>
+
+    <!-- Astro swaps the document on navigation and takes the <html> attributes
+         from the incoming page, which wipes any class added at runtime. Both of
+         the ones below are added at runtime, and losing them is not subtle:
+         without `js` every .rise/.stagger block stays at opacity 0 forever, and
+         without `seen-intro` the opening replays every time you come back from
+         the booking page. Re-applied in after-swap, which runs before paint.
+         Guarded because this inline script re-executes on every navigation and
+         would otherwise stack a listener per page view. -->
+    <script is:inline>
+      if (!window.__vtBound) {
+        window.__vtBound = true;
+        document.addEventListener('astro:after-swap', function () {
+          document.documentElement.classList.add('js');
+          try {
+            if (sessionStorage.getItem('seenIntro')) document.documentElement.classList.add('seen-intro');
+          } catch (e) {}
+        });
+      }
+    </script>
 
     <!-- Must run before first paint, or the intro flashes for a frame on the
          second page view. Sets a class rather than touching the element,
@@ -575,6 +598,13 @@ const links = [
     </style>
 
     <script>
+  // Bound to astro:page-load, not run at parse time. With client-side
+  // routing a bundled module executes once for the whole session, so
+  // everything below would work on the first page and silently do
+  // nothing after any in-app navigation. astro:page-load also fires on
+  // the initial load, so this covers both.
+  function initChrome() {
+
       // stagger + rise reveals
       const io = new IntersectionObserver(
         (entries) => {
@@ -594,6 +624,9 @@ const links = [
       const onScroll = () => nav.classList.toggle('stuck', window.scrollY > 80);
       onScroll();
       addEventListener('scroll', onScroll, { passive: true });
+  }
+  document.addEventListener('astro:page-load', initChrome);
+
     </script>
 
   </body>

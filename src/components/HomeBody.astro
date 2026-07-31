@@ -445,6 +445,13 @@ const setAt = (url, widths) =>
 })} />
 
 <script>
+  // Bound to astro:page-load, not run at parse time. With client-side
+  // routing a bundled module executes once for the whole session, so
+  // everything below would work on the first page and silently do
+  // nothing after any in-app navigation. astro:page-load also fires on
+  // the initial load, so this covers both.
+  function initHome() {
+
   /* ---------- live open/closed status ---------- */
   {
     const el = document.getElementById('hcToday');
@@ -566,6 +573,9 @@ const setAt = (url, widths) =>
       target = FAST;
     });
   }
+  }
+  document.addEventListener('astro:page-load', initHome);
+
 </script>
 
 <style>

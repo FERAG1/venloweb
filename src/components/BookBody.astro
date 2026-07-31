@@ -152,6 +152,16 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
 <script type="application/json" id="bkCfg" set:html={JSON.stringify(cfg)}></script>
 
 <script>
+  // Bound to astro:page-load, not run at parse time. With client-side
+  // routing a bundled module executes once for the whole session, so
+  // everything below would work on the first page and silently do
+  // nothing after any in-app navigation. astro:page-load also fires on
+  // the initial load, so this covers both.
+  function initBooking() {
+    // Bail on any page without the wizard — this listener outlives the
+    // page that registered it.
+    if (!document.getElementById('bkCfg')) return;
+
   const cfg = JSON.parse(document.getElementById('bkCfg').textContent);
   const T = cfg.t;   // UI strings, serialised in by the page
   const fmt = (str, vars = {}) => String(str).replace(/\{(\w+)\}/g, (m, k) => (vars[k] ?? ''));
@@ -561,6 +571,9 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
   }
 
   paint();
+  }
+  document.addEventListener('astro:page-load', initBooking);
+
 </script>
 
 <style is:global>
