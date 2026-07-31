@@ -6,6 +6,7 @@ import Flag from '../components/Flag.astro';
 import { brandVars } from '../lib/brand.js';
 import { pathFor } from '../lib/shops.js';
 import { ClientRouter } from 'astro:transitions';
+import { BUILD_ID } from '../lib/build.js';
 const { shop, lang = 'nl', langs = ['nl'] } = Astro.props;
 // URL prefix for THIS shop + language; every internal link hangs off it.
 const B = pathFor(shop.slug, lang);
@@ -94,6 +95,7 @@ const links = [
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
+    <meta name="build-id" content={BUILD_ID} />
     <ClientRouter />
 
     <script is:inline>document.documentElement.classList.add('js');</script>
@@ -114,6 +116,19 @@ const links = [
           try {
             if (sessionStorage.getItem('seenIntro')) document.documentElement.classList.add('seen-intro');
           } catch (e) {}
+        });
+        // A script module loads once per session, so a tab open across a deploy
+        // keeps the old code and swaps in the new markup. When the incoming page
+        // came from a different build, fall back to a real navigation so the
+        // fresh bundle is fetched.
+        document.addEventListener('astro:before-swap', function (e) {
+          var m = 'meta[name="build-id"]';
+          var incoming = e.newDocument.querySelector(m);
+          var current = document.querySelector(m);
+          if (incoming && current && incoming.content !== current.content) {
+            e.preventDefault();
+            window.location.assign(e.to.href);
+          }
         });
       }
     </script>

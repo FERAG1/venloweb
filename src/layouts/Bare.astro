@@ -5,6 +5,7 @@ import { t } from '../i18n/ui.js';
 import { brandVars } from '../lib/brand.js';
 import { pathFor } from '../lib/shops.js';
 import { ClientRouter } from 'astro:transitions';
+import { BUILD_ID } from '../lib/build.js';
 const { shop, title, lang = 'nl' } = Astro.props;
 const T = t(lang);
 const tel = shop.phone ? `tel:${shop.phone.replace(/\s/g, '')}` : null;
@@ -22,6 +23,7 @@ const tel = shop.phone ? `tel:${shop.phone.replace(/\s/g, '')}` : null;
          falls back to a hard load and only half the site feels stitched.
          Same after-swap restore as Base: someone can land on /boeken first, and
          then this is the only copy of the listener that exists. -->
+    <meta name="build-id" content={BUILD_ID} />
     <ClientRouter />
     <script is:inline>
       if (!window.__vtBound) {
@@ -31,6 +33,19 @@ const tel = shop.phone ? `tel:${shop.phone.replace(/\s/g, '')}` : null;
           try {
             if (sessionStorage.getItem('seenIntro')) document.documentElement.classList.add('seen-intro');
           } catch (e) {}
+        });
+        // A script module loads once per session, so a tab open across a deploy
+        // keeps the old code and swaps in the new markup. When the incoming page
+        // came from a different build, fall back to a real navigation so the
+        // fresh bundle is fetched.
+        document.addEventListener('astro:before-swap', function (e) {
+          var m = 'meta[name="build-id"]';
+          var incoming = e.newDocument.querySelector(m);
+          var current = document.querySelector(m);
+          if (incoming && current && incoming.content !== current.content) {
+            e.preventDefault();
+            window.location.assign(e.to.href);
+          }
         });
       }
     </script>
