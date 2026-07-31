@@ -95,6 +95,26 @@ const links = [
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
+    <!-- The hero photo is the largest paint on the page, and the parser only
+         discovers it well down the body. Preloading starts the fetch with the
+         document instead. imagesrcset/imagesizes mirror the <img> exactly — if
+         they drift, the browser fetches one file to satisfy the preload and a
+         second to satisfy the image, making this slower than doing nothing. -->
+    <link
+      rel="preload"
+      as="image"
+      href={shop.hero}
+      imagesrcset={[640, 960, 1280, 1800].map((w) => `${shop.hero.replace(/w=\d+/, `w=${w}`)} ${w}w`).join(', ')}
+      imagesizes="100vw"
+      fetchpriority="high"
+    />
+
+    <!-- With an intro, the logo is the first thing anyone sees and nothing else
+         is on screen while it loads. It was the slowest request on the page. -->
+    {shop.splash && shop.logo && (
+      <link rel="preload" as="image" href={shop.logo} fetchpriority="high" />
+    )}
+
     <meta name="build-id" content={BUILD_ID} />
     <ClientRouter />
 
@@ -151,7 +171,7 @@ const links = [
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet" />
 
     <!-- LocalBusiness: this is what Google reads for the local pack. -->
     <script type="application/ld+json" set:html={JSON.stringify({
