@@ -112,16 +112,6 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
           <button type="button" id="bkRetry">{T.retryBtn}</button>
         </div>
 
-        <div class="done-acts">
-          <a class="btn btn-lg full" id="bkCal" href="#" target="_blank" rel="noopener">
-            <Icon name="calendar" size={17} />{T.addCal}
-          </a>
-          <!-- The repeat-visit nudge: an all-day reminder 4 weeks out, which is
-               roughly when a cut grows out. Costs the customer one tap. -->
-          <a class="btn btn-lg btn-light full" id="bkCalNext" href="#" target="_blank" rel="noopener">
-            <Icon name="clock" size={17} stroke={2} />{T.remindMe}
-          </a>
-        </div>
 
         <p class="done-foot">
           <a href={homeHref}>{T.backToSite}</a> · {T.ratherCall}
@@ -441,36 +431,6 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
     $('bkDoneSub').innerHTML = fmt(T.doneSub, { first, shop: cfg.shopName });
     $('bkDoneSum').innerHTML = ticketHTML();
 
-    // Google Calendar link — works on every platform, no .ics download
-    const d = days[state.day].date;
-    const start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), Math.floor(state.slot / 60), state.slot % 60);
-    const end = new Date(start.getTime() + durOf(state.service) * 60000);
-    const pad = (n) => String(n).padStart(2, '0');
-    const stamp = (x) => `${x.getFullYear()}${pad(x.getMonth() + 1)}${pad(x.getDate())}T${pad(x.getHours())}${pad(x.getMinutes())}00`;
-    const q = new URLSearchParams({
-      action: 'TEMPLATE',
-      text: `${state.service.name} ${T.calAt} ${cfg.shopName}`,
-      dates: `${stamp(start)}/${stamp(end)}`,
-      details: `${T.calBarber}: ${state.barber}\n${T.calTel}: ${cfg.phone}`,
-      location: cfg.address,
-      ctz: 'Europe/Amsterdam',
-    });
-    $('bkCal').href = `https://calendar.google.com/calendar/render?${q}`;
-
-    // All-day nudge 4 weeks out — Google wants an exclusive end date, hence +1.
-    const back = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 28);
-    const backEnd = new Date(back.getFullYear(), back.getMonth(), back.getDate() + 1);
-    const dstamp = (x) => `${x.getFullYear()}${pad(x.getMonth() + 1)}${pad(x.getDate())}`;
-    const q2 = new URLSearchParams({
-      action: 'TEMPLATE',
-      text: `${T.calRemind} — ${cfg.shopName}`,
-      dates: `${dstamp(back)}/${dstamp(backEnd)}`,
-      details: `${T.calLastTime}: ${state.service.name} ${T.calAt} ${state.barber}.\n\n`
-        + `${T.calRebook}: ${location.origin}${cfg.base}/boeken`,
-      location: cfg.address,
-      ctz: 'Europe/Amsterdam',
-    });
-    $('bkCalNext').href = `https://calendar.google.com/calendar/render?${q2}`;
 
     saveLast();
     state.step = 5;
@@ -895,12 +855,9 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
     text-decoration: underline; text-underline-offset: 3px;
   }
 
-  #bkPage .done-acts { display: grid; gap: 10px; margin-top: var(--s4); }
-  #bkPage .done-acts .btn { width: 100%; }
   #bkPage .done-foot { margin-top: var(--s3); font-size: 0.88rem; color: var(--ink-soft); }
   #bkPage .done-foot a { color: var(--ink); font-weight: 550; text-underline-offset: 3px; }
   @media (min-width: 560px) {
-    #bkPage .done-acts { grid-template-columns: 1fr 1fr; }
   }
   @media (prefers-reduced-motion: reduce) {
     #bkPage .tick-ring, #bkPage .tick-mark { animation: none; stroke-dashoffset: 0; }
