@@ -144,13 +144,15 @@ export const UI = {
     // lands mid-haircut: when, what, who. Labels beat a compact
     // dot-separated line here — he never has to learn the format, and it
     // reads the same whether it is his first booking or his hundredth.
-    waNew: 'NIEUWE AFSPRAAK',
-    waWhen: 'WANNEER',
-    waWhat: 'WAT',
-    waWho: 'WIE',
-    waNote: 'OPMERKING',
-    waWith: 'Bij',
-    waSentVia: 'Aanvraag via je website. Bel of app de klant even om te bevestigen.',
+    // Emoji are the owner's explicit choice. The pipeline is UTF-8 end to
+    // end and encodeURIComponent emits correct bytes for every one of these
+    // (verified: the barber pole leaves as %F0%9F%92%88). Whether they draw
+    // is down to the receiving client owning an emoji font — phones do,
+    // WhatsApp Desktop on a bare machine may not. Set emoji:false in a
+    // shop's JSON to fall back to a plain-text version of this same layout.
+    waNew: 'Nieuwe afspraak',
+    waWebReq: 'Website aanvraag',
+    waConfirm: 'Tik op het nummer hierboven om de afspraak te bevestigen.',
   },
 
   de: {
@@ -271,13 +273,9 @@ export const UI = {
     calLastTime: 'Letztes Mal',
     calRebook: 'Neu buchen',
 
-    waNew: 'NEUER TERMIN',
-    waWhen: 'WANN',
-    waWhat: 'WAS',
-    waWho: 'WER',
-    waNote: 'ANMERKUNG',
-    waWith: 'Bei',
-    waSentVia: 'Anfrage über deine Website. Kurz anrufen oder schreiben zum Bestätigen.',
+    waNew: 'Neuer Termin',
+    waWebReq: 'Anfrage über die Website',
+    waConfirm: 'Tippe auf die Nummer oben, um den Termin zu bestätigen.',
   },
 };
 

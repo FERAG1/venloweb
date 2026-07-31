@@ -17,5 +17,10 @@ export const bookingCfg = (shop, lang) => ({
   maps: shop.address.maps,
   locale: t(lang).locale,
   base: pathFor(shop.slug, lang),
+  // Emoji in the WhatsApp message. Defaults on; set "emoji": false in a shop's
+  // JSON if that owner's client renders them as tofu boxes. Encoding is not the
+  // variable here — the URL carries correct UTF-8 either way — the variable is
+  // whether their device has a font for the glyphs, which differs per owner.
+  emoji: shop.emoji !== false,
   t: t(lang),
 });
