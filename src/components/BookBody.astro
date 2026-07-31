@@ -391,32 +391,42 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
     //
     // Bold, blank lines and the middle dot carry the hierarchy instead. Every
     // character below is in latin-1, so it survives any client anywhere.
-    // One icon per line, each labelling the line it opens. `ic` is the single
-    // switch: cfg.emoji false drops every glyph and the layout still stands,
-    // because the line breaks carry the structure rather than the icons.
-    // That matters — some clients have no emoji font and draw tofu, and the
-    // fallback has to be a message you would still be happy to send.
-    const ic = (e) => (cfg.emoji === false ? '' : e + ' ');
+    // Emoji only when BOTH hold:
+    //   cfg.emoji  — per shop, for owners whose client has no emoji font
+    //   isTouch    — the device composing the message
+    //
+    // The second is a partial fix and worth being honest about: the glyphs are
+    // drawn by whichever device READS the message, so this cannot protect an
+    // owner reading on a desktop with no emoji font. What it does prevent is a
+    // customer on a desktop watching a wall of tofu while they hit send, which
+    // is its own bad impression. The owner's side is cfg.emoji's job.
+    const useEmoji = cfg.emoji !== false && isTouch;
+    const ic = (e) => (useEmoji ? e + ' ' : '');
 
     // Trimmed, not just truthy: a stray space passes `if (value)`.
     const opm = f.opm.value.trim();
 
     const lines = [
-      `${ic('💈')}${T.waNew}`,
+      `${ic('💈')}*${T.waNew}*`,
       '',
-      `${ic('📅')}${cap(fmtDay(d))}`,
-      `${ic('🕜')}${toHM(state.slot)}`,
+      `${ic('📅')}*${cap(fmtDay(d))}*`,
+      `${ic('🕜')}*${toHM(state.slot)}*`,
       '',
-      `${ic('✂️')}${state.service.name}`,
-      `${state.service.time} • €${state.service.price}`,
+      `${ic('✂️')}*${T.waService}:* ${state.service.name}`,
+      `${ic('⏳')}*${T.waDuration}:* ${state.service.time}`,
+      `${ic('💰')}*${T.waPrice}:* €${state.service.price}`,
       '',
-      `${ic('👤')}${naam}`,
-      `${ic('📞')}${tel}`,
-      '',
-      `${ic('💺')}${state.barber}`,
+      `${ic('👤')}*${T.waClient}:* ${naam}`,
+      `${ic('📞')}*${T.waPhoneLbl}:* ${tel}`,
+      `${ic('💺')}*${T.waBarberLbl}:* ${state.barber}`,
     ];
-    if (opm) lines.push('', `${ic('💬')}${opm}`);
-    lines.push('', `${ic('🌐')}${T.waWebReq}`, '', T.waConfirm);
+    if (opm) lines.push('', `${ic('💬')}*${T.waNote}:* ${opm}`);
+    lines.push(
+      '',
+      `${ic('🌐')}_${T.waSource}: ${T.waWebReq}_`,
+      '',
+      `${ic('👇')}*${T.waConfirm}*`,
+    );
 
     waUrl = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(lines.join('\n'))}`;
     // Paint the confirmation BEFORE handing off, so the page they come back to is

@@ -150,9 +150,19 @@ export const UI = {
     // is down to the receiving client owning an emoji font — phones do,
     // WhatsApp Desktop on a bare machine may not. Set emoji:false in a
     // shop's JSON to fall back to a plain-text version of this same layout.
+    // Labelled rows: the owner never has to learn a format, and a glance
+    // finds the field he wants by its label rather than by position.
     waNew: 'Nieuwe afspraak',
+    waService: 'Behandeling',
+    waDuration: 'Duur',
+    waPrice: 'Prijs',
+    waClient: 'Klant',
+    waPhoneLbl: 'Telefoon',
+    waBarberLbl: 'Barber',
+    waNote: 'Opmerking',
+    waSource: 'Bron',
     waWebReq: 'Website aanvraag',
-    waConfirm: 'Tik op het nummer hierboven om de afspraak te bevestigen.',
+    waConfirm: 'Tik op het nummer hierboven om te bellen en te bevestigen.',
   },
 
   de: {
@@ -274,8 +284,16 @@ export const UI = {
     calRebook: 'Neu buchen',
 
     waNew: 'Neuer Termin',
+    waService: 'Behandlung',
+    waDuration: 'Dauer',
+    waPrice: 'Preis',
+    waClient: 'Kunde',
+    waPhoneLbl: 'Telefon',
+    waBarberLbl: 'Barber',
+    waNote: 'Anmerkung',
+    waSource: 'Quelle',
     waWebReq: 'Anfrage über die Website',
-    waConfirm: 'Tippe auf die Nummer oben, um den Termin zu bestätigen.',
+    waConfirm: 'Tippe auf die Nummer oben, um anzurufen und zu bestätigen.',
   },
 };
 
