@@ -362,6 +362,10 @@ const links = [
          second, and at nav size it reads as a favicon on a black screen. */
       .intro img {
         height: clamp(96px, 22vw, 148px); width: auto;
+        /* vh cap so a laptop in landscape, or a phone with the keyboard up,
+           can't push the name and rule off the bottom — vw alone knows
+           nothing about how short the viewport is. */
+        max-height: 34vh;
         animation: introDrop 0.95s both;
       }
       /* Per-keyframe easing: gravity accelerating on the way down, then a
@@ -378,7 +382,7 @@ const links = [
       }
       .intro-name {
         color: #fff; font-weight: 600; font-size: clamp(1.1rem, 4vw, 1.45rem);
-        letter-spacing: -0.03em;
+        letter-spacing: -0.03em; text-align: center; padding: 0 var(--gut);
         animation: introFade 0.6s var(--ease-out) 0.86s both;
       }
       /* scaleX rather than animating width — width would relayout every frame */
