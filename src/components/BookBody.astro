@@ -378,18 +378,25 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
     // WhatsApp markup: *bold*, _italic_. Date and time lead because that's the
     // first thing the barber checks when the notification comes in.
     //
-    // Deliberately emoji-free: WhatsApp Desktop renders them as U+FFFD boxes on
-    // some setups, and a garbled message is a bad first impression of the shop.
-    // Bold and blank lines carry the hierarchy instead, and every character here
-    // is latin-1 safe so it survives any client.
+    // This was written emoji-free on the theory that WhatsApp Desktop rendered
+    // them as U+FFFD boxes. That was wrong — the garbled message traced back to
+    // the placeholder phone number, not the payload. encodeURIComponent emits
+    // correct UTF-8 for astral characters (📅 → %F0%9F%93%85) and the page is
+    // UTF-8, so the pipeline was never the problem.
+    //
+    // Three, used as section markers rather than decoration: the owner is
+    // scanning a chat thread for when and who, and an anchor on each block is
+    // faster to find than bold alone. All three are single code points with no
+    // variation selector — ✂️ is deliberately avoided, since U+FE0F lets some
+    // clients fall back to the monochrome text glyph and it looks broken.
     const lines = [
-      `*${T.waNew}*`,
+      `💈 *${T.waNew}*`,
       '',
-      `*${cap(fmtDay(d))} · ${toHM(state.slot)}*`,
+      `📅 *${cap(fmtDay(d))} · ${toHM(state.slot)}*`,
       `${state.service.name} · ${state.service.time} · *€${state.service.price}*`,
       `${T.waWith}: ${state.barber}`,
       '',
-      `*${T.waDetails}*`,
+      `👤 *${T.waDetails}*`,
       naam,
       tel,
     ];
