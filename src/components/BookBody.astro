@@ -400,7 +400,10 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
       naam,
       tel,
     ];
-    if (f.opm.value) lines.push('', `_${f.opm.value}_`);
+    // Trimmed, not just truthy: a stray space passes `if (value)` and sends a
+    // line containing nothing but italic markers.
+    const opm = f.opm.value.trim();
+    if (opm) lines.push('', `_${opm}_`);
     lines.push('', `_${fmt(T.waSentVia, { shop: cfg.shopName })}_`);
 
     waUrl = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(lines.join('\n'))}`;
