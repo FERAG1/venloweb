@@ -378,33 +378,41 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
     // WhatsApp markup: *bold*, _italic_. Date and time lead because that's the
     // first thing the barber checks when the notification comes in.
     //
-    // This was written emoji-free on the theory that WhatsApp Desktop rendered
-    // them as U+FFFD boxes. That was wrong — the garbled message traced back to
-    // the placeholder phone number, not the payload. encodeURIComponent emits
-    // correct UTF-8 for astral characters (📅 → %F0%9F%93%85) and the page is
-    // UTF-8, so the pipeline was never the problem.
+    // NO EMOJI. This has now been tried twice and failed twice on the owner's
+    // own setup, rendering as tofu boxes.
     //
-    // Three, used as section markers rather than decoration: the owner is
-    // scanning a chat thread for when and who, and an anchor on each block is
-    // faster to find than bold alone. All three are single code points with no
-    // variation selector — ✂️ is deliberately avoided, since U+FE0F lets some
-    // clients fall back to the monochrome text glyph and it looks broken.
+    // The trap is that the encoding is provably correct — encodeURIComponent
+    // emits valid UTF-8 for astral characters and the page is UTF-8, which is
+    // what I verified last time before concluding they were safe. That check
+    // proves the bytes arrive intact and proves nothing about whether the
+    // receiving client owns a font that can draw them. WhatsApp Desktop on a
+    // machine without an emoji font shows a box, and a garbled message is a
+    // worse first impression than a plain one.
+    //
+    // Bold, blank lines and the middle dot carry the hierarchy instead. Every
+    // character below is in latin-1, so it survives any client anywhere.
     const lines = [
-      `💈 *${T.waNew}*`,
+      `*${T.waNew}*`,
       '',
-      `📅 *${cap(fmtDay(d))} · ${toHM(state.slot)}*`,
-      `${state.service.name} · ${state.service.time} · *€${state.service.price}*`,
-      `${T.waWith}: ${state.barber}`,
+      `*${T.waWhen}*`,
+      `${cap(fmtDay(d))} · ${toHM(state.slot)}`,
       '',
-      `👤 *${T.waDetails}*`,
+      `*${T.waWhat}*`,
+      `${state.service.name} · ${state.service.time} · €${state.service.price}`,
+      `${T.waWith} ${state.barber}`,
+      '',
+      `*${T.waWho}*`,
       naam,
       tel,
     ];
     // Trimmed, not just truthy: a stray space passes `if (value)` and sends a
     // line containing nothing but italic markers.
     const opm = f.opm.value.trim();
-    if (opm) lines.push('', `_${opm}_`);
-    lines.push('', `_${fmt(T.waSentVia, { shop: cfg.shopName })}_`);
+    if (opm) lines.push('', `*${T.waNote}*`, opm);
+    // Closing line tells him what to do rather than where it came from. He
+    // knows it is his own site; what he needs on booking one is to know that
+    // nothing is confirmed until he replies.
+    lines.push('', `_${T.waSentVia}_`);
 
     waUrl = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(lines.join('\n'))}`;
     // Paint the confirmation BEFORE handing off, so the page they come back to is

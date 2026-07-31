@@ -140,10 +140,17 @@ export const UI = {
     calRebook: 'Opnieuw boeken',
 
     // ---- WhatsApp message ----
-    waNew: 'Nieuwe afspraak',
-    waDetails: 'Gegevens',
+    // Headed as the three questions an owner actually asks when a request
+    // lands mid-haircut: when, what, who. Labels beat a compact
+    // dot-separated line here — he never has to learn the format, and it
+    // reads the same whether it is his first booking or his hundredth.
+    waNew: 'NIEUWE AFSPRAAK',
+    waWhen: 'WANNEER',
+    waWhat: 'WAT',
+    waWho: 'WIE',
+    waNote: 'OPMERKING',
     waWith: 'Bij',
-    waSentVia: 'Verzonden via de website van {shop}',
+    waSentVia: 'Aanvraag via je website. Bel of app de klant even om te bevestigen.',
   },
 
   de: {
@@ -264,10 +271,13 @@ export const UI = {
     calLastTime: 'Letztes Mal',
     calRebook: 'Neu buchen',
 
-    waNew: 'Neuer Termin',
-    waDetails: 'Daten',
+    waNew: 'NEUER TERMIN',
+    waWhen: 'WANN',
+    waWhat: 'WAS',
+    waWho: 'WER',
+    waNote: 'ANMERKUNG',
     waWith: 'Bei',
-    waSentVia: 'Gesendet über die Website von {shop}',
+    waSentVia: 'Anfrage über deine Website. Kurz anrufen oder schreiben zum Bestätigen.',
   },
 };
 
