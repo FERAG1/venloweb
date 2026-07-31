@@ -24,6 +24,22 @@ const deHref = `${pathFor(shop.slug, 'de')}${tail === '/' ? '/' : tail}`;
 const alternates = langs.map((l) => ({ lang: l, href: `${site}${pathFor(shop.slug, l)}${tail === '/' ? '/' : tail}` }));
 const title = `${shop.name} — ${shop.tagline}`;
 
+// Embers for the intro. Generated at build time rather than by script so they
+// cost no JS and exist in the HTML — the whole opening runs even if the bundle
+// never arrives. Seeded rather than Math.random() so a rebuild produces the
+// same sparks and the diff stays empty.
+let _seed = 20260731;
+const _rnd = () => (_seed = (_seed * 1103515245 + 12345) % 2147483648) / 2147483648;
+const sparks = shop.splash
+  ? Array.from({ length: 26 }, () => ({
+      dx: Math.round((_rnd() * 2 - 1) * 300),   // sideways drift
+      dy: Math.round(52 + _rnd() * 46),         // how far down it falls, in vh
+      sz: +(2 + _rnd() * 3.4).toFixed(1),       // a spread of sizes reads as sparks; one size reads as dots
+      dl: Math.round(_rnd() * 300),             // stagger, so they don't leave as a wall
+      du: Math.round(950 + _rnd() * 620),
+    }))
+  : [];
+
 // priceRange and opening hours are derived, not hand-maintained — they can't
 // drift out of sync with the price list and hours shown on the page.
 const prices = shop.services.map((s) => Number(s.price));
@@ -186,6 +202,12 @@ const links = [
       <div class="intro" aria-hidden="true" inert>
         <i class="intro-panel intro-t"></i>
         <i class="intro-panel intro-b"></i>
+        <i class="intro-glow"></i>
+        <div class="intro-sparks">
+          {sparks.map((s) => (
+            <i style={`--dx:${s.dx}px;--dy:${s.dy}vh;--sz:${s.sz}px;--dl:${s.dl}ms;--du:${s.du}ms`}></i>
+          ))}
+        </div>
         <div class="intro-in">
           {shop.logo && <img src={shop.logo} alt="" />}
           <span class="intro-name">{shop.name}</span>
@@ -297,7 +319,7 @@ const links = [
         /* No background here — the two panels carry it, so that when they part
            the container itself is already invisible and only has to stop
            catching clicks. */
-        animation: introGone 0.01s linear 2.45s forwards;
+        animation: introGone 0.01s linear 2.95s forwards;
       }
       @keyframes introGone { to { visibility: hidden; } }
 
@@ -308,38 +330,82 @@ const links = [
          down the middle on fractional-DPR screens. */
       .intro-panel {
         position: absolute; left: 0; right: 0; height: 50.4%;
-        background: var(--brand);
+        background: #000;
       }
-      .intro-t { top: 0; animation: introPartT 1.15s var(--ease-out) 1.3s forwards; }
-      .intro-b { bottom: 0; animation: introPartB 1.15s var(--ease-out) 1.3s forwards; }
+      .intro-t { top: 0; animation: introPartT 1.05s var(--ease-out) 1.85s forwards; }
+      .intro-b { bottom: 0; animation: introPartB 1.05s var(--ease-out) 1.85s forwards; }
       @keyframes introPartT { to { transform: translateY(-100.4%); } }
       @keyframes introPartB { to { transform: translateY(100.4%); } }
 
-      .intro-in {
-        position: relative; z-index: 2;
-        display: flex; flex-direction: column; align-items: center; gap: 16px;
-        animation: introMarkOut 0.55s var(--ease-out) 1.22s forwards;
+      /* Heat bloom behind the mark. Peaks on impact and decays — without it the
+         landing is silent, and the sparks look stuck on rather than thrown. */
+      .intro-glow {
+        position: absolute; z-index: 1; left: 50%; top: 50%;
+        width: min(78vw, 620px); aspect-ratio: 1; margin: -0.5px 0 0 -0.5px;
+        translate: -50% -50%;
+        background: radial-gradient(circle, rgba(255, 148, 52, 0.5), rgba(255, 110, 20, 0.16) 42%, transparent 68%);
+        opacity: 0;
+        animation: introGlow 1.5s var(--ease-out) 0.5s forwards;
       }
-      /* Resolving out of a blur is what separates this from a fade. It is one
-         small element for under a second, so the filter cost is negligible. */
+      @keyframes introGlow {
+        0%   { opacity: 0;    transform: scale(0.35); }
+        14%  { opacity: 1;    transform: scale(1); }
+        100% { opacity: 0;    transform: scale(1.5); }
+      }
+
+      /* Embers. Every one is the same element driven by five custom properties
+         set inline per spark, so the variety costs one rule instead of 26. */
+      .intro-sparks { position: absolute; z-index: 2; left: 50%; top: 50%; }
+      .intro-sparks i {
+        position: absolute; left: 0; top: 0;
+        width: var(--sz); height: var(--sz); border-radius: 50%;
+        background: radial-gradient(circle, #fff2d0, #ff9a2e 42%, #c0430b);
+        box-shadow: 0 0 6px 1px rgba(255, 138, 40, 0.85);
+        opacity: 0;
+        animation: introSpark var(--du) cubic-bezier(0.3, 0, 0.5, 1) calc(0.58s + var(--dl)) forwards;
+      }
+      /* Out fast, then gravity takes over: the horizontal drift finishes early
+         while the fall keeps going, which is how a real spark behaves. */
+      @keyframes introSpark {
+        0%   { opacity: 0; transform: translate(0, 0) scale(0.2); }
+        10%  { opacity: 1; transform: translate(calc(var(--dx) * 0.34), calc(var(--dy) * -0.12)) scale(1); }
+        70%  { opacity: 0.9; }
+        100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.25); }
+      }
+
+      .intro-in {
+        position: relative; z-index: 3;
+        display: flex; flex-direction: column; align-items: center; gap: 16px;
+        animation: introMarkOut 0.5s var(--ease-out) 1.8s forwards;
+      }
+      /* Deliberately larger than the nav mark — it is the whole picture for a
+         second, and at nav size it reads as a favicon on a black screen. */
       .intro img {
-        height: clamp(72px, 16vw, 104px); width: auto;
-        animation: introMark 1s var(--ease-out) both;
+        height: clamp(96px, 22vw, 148px); width: auto;
+        animation: introDrop 0.95s both;
+      }
+      /* Per-keyframe easing: gravity accelerating on the way down, then a
+         decelerating settle. One timing function across the whole thing would
+         make it float down, which is the opposite of weight. */
+      @keyframes introDrop {
+        0%   { opacity: 0; transform: translateY(-62vh) scale(1.3);
+               animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5); }
+        14%  { opacity: 1; }
+        58%  { transform: translateY(0) scale(1.14);
+               animation-timing-function: cubic-bezier(0.2, 0, 0.15, 1); }
+        72%  { transform: translateY(-11%) scale(1.04); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
       }
       .intro-name {
         color: #fff; font-weight: 600; font-size: clamp(1.1rem, 4vw, 1.45rem);
         letter-spacing: -0.03em;
-        animation: introFade 0.7s var(--ease-out) 0.3s both;
+        animation: introFade 0.6s var(--ease-out) 0.86s both;
       }
       /* scaleX rather than animating width — width would relayout every frame */
       .intro-rule {
         width: clamp(64px, 14vw, 92px); height: 2px; border-radius: 2px;
         background: var(--gold); transform: scaleX(0);
-        animation: introRule 0.65s var(--ease-out) 0.5s forwards;
-      }
-      @keyframes introMark {
-        from { opacity: 0; transform: translateY(16px) scale(0.88); filter: blur(7px); }
-        to   { opacity: 1; transform: none;                         filter: blur(0); }
+        animation: introRule 0.6s var(--ease-out) 1.02s forwards;
       }
       @keyframes introFade { from { opacity: 0; transform: translateY(8px); } }
       @keyframes introRule { to { transform: scaleX(1); } }
@@ -356,7 +422,7 @@ const links = [
          this stretches that rather than stacking a second animation on the
          same element. It finished at 1.6s, half a second before the curtain
          even starts to part, which left a dead-still photo behind a moving
-         curtain. At 3.4s the photo is still settling as the halves separate,
+         curtain. At 4.2s the photo is still settling as the halves separate,
          and that residual motion is the whole reason the reveal reads as
          depth rather than as a screenshot behind a door.
          The extra `.hero` in the selector is deliberate: Astro's scoped rule
@@ -365,7 +431,7 @@ const links = [
          html:not(.seen-intro) ties it to the curtain — on the second view
          there is no curtain, and a lone slow drift would look like a bug. */
       :global(html:not(.seen-intro) body.has-intro .hero .hero-frame img) {
-        animation-duration: 3.4s;
+        animation-duration: 4.2s;
         /* The duration alone did nothing visible: --ease-out is expo-shaped and
            spends ~80% of its travel in the first fifth, so at the moment the
            curtain parted the photo had already arrived (measured scale 1.002 of
