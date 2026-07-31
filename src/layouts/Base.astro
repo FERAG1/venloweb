@@ -100,6 +100,10 @@ const links = [
          throws in private-mode Safari, hence the try. -->
     <script is:inline>
       try {
+        // ?intro replays it on demand. Showing the same owner his site twice in
+        // one sitting otherwise means closing the tab to see the opening again,
+        // which is exactly when you want it.
+        if (location.search.indexOf('intro') > -1) sessionStorage.removeItem('seenIntro');
         if (sessionStorage.getItem('seenIntro')) document.documentElement.classList.add('seen-intro');
         else sessionStorage.setItem('seenIntro', '1');
       } catch (e) {}
