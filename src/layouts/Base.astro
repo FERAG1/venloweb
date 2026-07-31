@@ -94,6 +94,17 @@ const links = [
 
     <script is:inline>document.documentElement.classList.add('js');</script>
 
+    <!-- Must run before first paint, or the intro flashes for a frame on the
+         second page view. Sets a class rather than touching the element,
+         which does not exist yet at this point in the parse. sessionStorage
+         throws in private-mode Safari, hence the try. -->
+    <script is:inline>
+      try {
+        if (sessionStorage.getItem('seenIntro')) document.documentElement.classList.add('seen-intro');
+        else sessionStorage.setItem('seenIntro', '1');
+      } catch (e) {}
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://images.unsplash.com" />
@@ -154,6 +165,29 @@ const links = [
   </head>
 
   <body>
+    <!-- ============================ INTRO ============================
+         Opt-in per shop ("splash": true). Three rules keep it from becoming
+         the usual splash-screen tax:
+           1. It dismisses itself in pure CSS. No JS runs to remove it, so a
+              script error or a blocked bundle can never leave a visitor
+              staring at a locked overlay.
+           2. Once per session, not once per page view. Clicking through to
+              /boeken and back does not replay it.
+           3. It never delays the page. The hero is fully rendered underneath
+              the whole time — this is a curtain over finished content, not a
+              loader gating it.
+         aria-hidden + inert: it is pure decoration, so screen readers and the
+         keyboard skip straight to the nav. -->
+    {shop.splash && (
+      <div class="intro" aria-hidden="true" inert>
+        <div class="intro-in">
+          {shop.logo && <img src={shop.logo} alt="" />}
+          <span class="intro-name">{shop.name}</span>
+          <i class="intro-rule"></i>
+        </div>
+      </div>
+    )}
+
     <!-- ============================== NAV ============================== -->
     <header class={`nav${tel ? "" : " no-tel"}${langs.length > 1 ? " has-lang" : ""}`} id="nav">
       <div class="nav-in">
@@ -239,6 +273,54 @@ const links = [
         box-shadow: inset 0 1px 0 #fff, var(--sh-1);
       }
       .nav.stuck .nav-lang:hover { box-shadow: inset 0 1px 0 #fff, var(--sh-2); }
+
+      /* ---------- intro ----------
+         Every animation here is opacity/transform only, so the whole sequence
+         runs on the compositor and cannot stutter the hero rendering behind
+         it. The lift is the same easing as the nav, so the site feels like
+         one object rather than an intro bolted onto a page.
+         Timing: mark 0.9s, name and rule overlap it, curtain lifts at 1.15s,
+         gone by 1.95s. Long enough to register, short enough that nobody
+         reaches for the tab close. */
+      .intro {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        display: grid;
+        place-items: center;
+        background: var(--brand);
+        animation: introLift 0.8s var(--ease-out) 1.15s forwards;
+      }
+      /* visibility, not just transform: once lifted it must not sit over the
+         page swallowing clicks along its old edge. */
+      @keyframes introLift {
+        to { transform: translateY(-101%); visibility: hidden; }
+      }
+
+      .intro-in { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+      .intro img {
+        height: clamp(72px, 16vw, 104px); width: auto;
+        animation: introMark 0.9s var(--ease-out) both;
+      }
+      .intro-name {
+        color: #fff; font-weight: 600; font-size: clamp(1.1rem, 4vw, 1.45rem);
+        letter-spacing: -0.03em;
+        animation: introFade 0.7s var(--ease-out) 0.26s both;
+      }
+      /* scaleX rather than animating width — width would relayout every frame */
+      .intro-rule {
+        width: clamp(64px, 14vw, 92px); height: 2px; border-radius: 2px;
+        background: var(--gold); transform: scaleX(0);
+        animation: introRule 0.6s var(--ease-out) 0.44s forwards;
+      }
+      @keyframes introMark { from { opacity: 0; transform: translateY(14px) scale(0.9); } }
+      @keyframes introFade { from { opacity: 0; transform: translateY(8px); } }
+      @keyframes introRule { to { transform: scaleX(1); } }
+
+      /* Second view in the same session, and anyone who asked their OS for
+         less motion, skip it entirely. */
+      .seen-intro .intro { display: none; }
+      @media (prefers-reduced-motion: reduce) { .intro { display: none; } }
 
       /* ---------- nav ---------- */
       .nav {

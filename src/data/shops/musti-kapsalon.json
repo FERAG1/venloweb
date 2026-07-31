@@ -288,5 +288,7 @@
         "a": "Etwa 15 Minuten von Kaldenkirchen und rund 30 Minuten von Mönchengladbach. Viele unserer Kunden kommen aus Deutschland."
       }
     ]
-  }
+  },
+  "splash": true,
+  "_splash": "Logo-Vorspann beim ersten Besuch pro Sitzung. Auf false setzen, um ihn abzuschalten."
 }
