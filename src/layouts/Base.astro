@@ -24,21 +24,6 @@ const deHref = `${pathFor(shop.slug, 'de')}${tail === '/' ? '/' : tail}`;
 const alternates = langs.map((l) => ({ lang: l, href: `${site}${pathFor(shop.slug, l)}${tail === '/' ? '/' : tail}` }));
 const title = `${shop.name} — ${shop.tagline}`;
 
-// Embers for the intro. Generated at build time rather than by script so they
-// cost no JS and exist in the HTML — the whole opening runs even if the bundle
-// never arrives. Seeded rather than Math.random() so a rebuild produces the
-// same sparks and the diff stays empty.
-let _seed = 20260731;
-const _rnd = () => (_seed = (_seed * 1103515245 + 12345) % 2147483648) / 2147483648;
-const sparks = shop.splash
-  ? Array.from({ length: 26 }, () => ({
-      dx: Math.round((_rnd() * 2 - 1) * 300),   // sideways drift
-      dy: Math.round(52 + _rnd() * 46),         // how far down it falls, in vh
-      sz: +(2 + _rnd() * 3.4).toFixed(1),       // a spread of sizes reads as sparks; one size reads as dots
-      dl: Math.round(_rnd() * 300),             // stagger, so they don't leave as a wall
-      du: Math.round(950 + _rnd() * 620),
-    }))
-  : [];
 
 // priceRange and opening hours are derived, not hand-maintained — they can't
 // drift out of sync with the price list and hours shown on the page.
@@ -202,14 +187,16 @@ const links = [
       <div class="intro" aria-hidden="true" inert>
         <i class="intro-panel intro-t"></i>
         <i class="intro-panel intro-b"></i>
-        <i class="intro-glow"></i>
-        <div class="intro-sparks">
-          {sparks.map((s) => (
-            <i style={`--dx:${s.dx}px;--dy:${s.dy}vh;--sz:${s.sz}px;--dl:${s.dl}ms;--du:${s.du}ms`}></i>
-          ))}
-        </div>
         <div class="intro-in">
-          {shop.logo && <img src={shop.logo} alt="" />}
+          {shop.logo && (
+            <span class="intro-mark">
+              <img src={shop.logo} alt="" />
+              {/* Masked to the logo's own alpha, so the highlight only exists
+                  where his emblem has ink. That is the difference between light
+                  moving across the metal and a white bar crossing a rectangle. */}
+              <i class="intro-sheen" style={`-webkit-mask-image:url(${shop.logo});mask-image:url(${shop.logo})`}><i></i></i>
+            </span>
+          )}
           <span class="intro-name">{shop.name}</span>
           <i class="intro-rule"></i>
         </div>
@@ -328,50 +315,43 @@ const links = [
          is the feeling worth paying for. 50.4% and the -0.4% offset overlap the
          halves slightly, otherwise sub-pixel rounding leaves a bright hairline
          down the middle on fractional-DPR screens. */
+      /* Not flat #000 — a faint warm centre lifts the mark off the background
+         and stops the screen reading as "image failed to load". Sized to the
+         viewport and anchored to opposite edges so the two halves form one
+         continuous gradient rather than each showing its own. */
       .intro-panel {
         position: absolute; left: 0; right: 0; height: 50.4%;
-        background: #000;
+        background-color: #000;
+        background-image: radial-gradient(ellipse 78vw 62vh at 50% 50%, #17120f 0%, #000 72%);
+        background-size: 100vw 100vh;
+        background-repeat: no-repeat;
       }
-      .intro-t { top: 0; animation: introPartT 1.05s var(--ease-out) 1.85s forwards; }
-      .intro-b { bottom: 0; animation: introPartB 1.05s var(--ease-out) 1.85s forwards; }
+      .intro-t { top: 0; background-position: center top;
+                 animation: introPartT 1.05s var(--ease-out) 1.85s forwards; }
+      .intro-b { bottom: 0; background-position: center bottom;
+                 animation: introPartB 1.05s var(--ease-out) 1.85s forwards; }
       @keyframes introPartT { to { transform: translateY(-100.4%); } }
       @keyframes introPartB { to { transform: translateY(100.4%); } }
 
-      /* Heat bloom behind the mark. Peaks on impact and decays — without it the
-         landing is silent, and the sparks look stuck on rather than thrown. */
-      .intro-glow {
-        position: absolute; z-index: 1; left: 50%; top: 50%;
-        width: min(78vw, 620px); aspect-ratio: 1; margin: -0.5px 0 0 -0.5px;
-        translate: -50% -50%;
-        background: radial-gradient(circle, rgba(255, 148, 52, 0.5), rgba(255, 110, 20, 0.16) 42%, transparent 68%);
-        opacity: 0;
-        animation: introGlow 1.5s var(--ease-out) 0.5s forwards;
+      /* The specular sweep. Masked to the logo's alpha and clipped, with the
+         gradient itself translating inside — transform on the mask would drag
+         the mask along with it and the highlight would never move relative to
+         the artwork. Skewed, because a vertical highlight reads as a wipe and
+         a raked one reads as a light source. */
+      .intro-mark { position: relative; display: block; }
+      .intro-sheen {
+        position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+        -webkit-mask-size: contain; mask-size: contain;
+        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+        -webkit-mask-position: center; mask-position: center;
       }
-      @keyframes introGlow {
-        0%   { opacity: 0;    transform: scale(0.35); }
-        14%  { opacity: 1;    transform: scale(1); }
-        100% { opacity: 0;    transform: scale(1.5); }
+      .intro-sheen > i {
+        position: absolute; top: -25%; bottom: -25%; left: 0; width: 42%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.92), transparent);
+        transform: translateX(-160%) skewX(-14deg);
+        animation: introSheen 1.05s cubic-bezier(0.32, 0, 0.2, 1) 0.62s forwards;
       }
-
-      /* Embers. Every one is the same element driven by five custom properties
-         set inline per spark, so the variety costs one rule instead of 26. */
-      .intro-sparks { position: absolute; z-index: 2; left: 50%; top: 50%; }
-      .intro-sparks i {
-        position: absolute; left: 0; top: 0;
-        width: var(--sz); height: var(--sz); border-radius: 50%;
-        background: radial-gradient(circle, #fff2d0, #ff9a2e 42%, #c0430b);
-        box-shadow: 0 0 6px 1px rgba(255, 138, 40, 0.85);
-        opacity: 0;
-        animation: introSpark var(--du) cubic-bezier(0.3, 0, 0.5, 1) calc(0.58s + var(--dl)) forwards;
-      }
-      /* Out fast, then gravity takes over: the horizontal drift finishes early
-         while the fall keeps going, which is how a real spark behaves. */
-      @keyframes introSpark {
-        0%   { opacity: 0; transform: translate(0, 0) scale(0.2); }
-        10%  { opacity: 1; transform: translate(calc(var(--dx) * 0.34), calc(var(--dy) * -0.12)) scale(1); }
-        70%  { opacity: 0.9; }
-        100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.25); }
-      }
+      @keyframes introSheen { to { transform: translateX(360%) skewX(-14deg); } }
 
       .intro-in {
         position: relative; z-index: 3;
