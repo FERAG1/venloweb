@@ -270,7 +270,12 @@ const setAt = (url, widths) =>
   </section>
   )}
 
-  <!-- ============================== TEAM ============================== -->
+  <!-- ============================== TEAM ==============================
+       Only when there is actually a team. A "meet the team" section listing
+       one person is filler: on a one-woman studio the intro has already said
+       who she is, so this just repeats it under a heading and a portrait,
+       which is where a stock photo does the most damage. -->
+  {shop.team.length > 1 && (
   <section>
     <div class="wrap">
       <div class="head rise">
@@ -298,6 +303,7 @@ const setAt = (url, widths) =>
       </div>
     </div>
   </section>
+  )}
 
   <!-- ============================== FAQ ============================== -->
   <section id="faq">
