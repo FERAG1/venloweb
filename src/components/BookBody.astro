@@ -199,8 +199,10 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
     // Scissors are wrong the moment the shop is not cutting anything — a brow
     // studio whose summary shows a pair of shears reads as a template nobody
     // finished. Per shop, because it depends entirely on the trade.
-    spark: '<path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4L12 3z"/>',
-    brow: '<path d="M3 14c3-5 7-7.5 11-7.5S20 8 21 10"/><path d="M4.5 17c3-3.5 6.5-5 10-4.6"/>',
+    // The same spark the rest of the site uses for the reviews nav item, rather
+    // than a shape invented for this one slot — a hand-drawn brow arc read as a
+    // squiggle at 16px, and an icon set is only legible when it is one set.
+    spark: '<path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1m0-12.8-2.1 2.1m-8.6 8.6-2.1 2.1"/>',
   };
   const svcIcon = P[cfg.serviceIcon] || P.scissors;
 
