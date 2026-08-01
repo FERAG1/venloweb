@@ -24,6 +24,13 @@ export function brandVars(shop) {
   ];
   // accent drives the hairline before every eyebrow label and the summary icons
   if (b.accent) parts.push(`--gold:${b.accent}`);
+  // Optional page tint. Buttons alone are a weak differentiator — two shops with
+  // the same paper and the same layout still read as one template with a colour
+  // swapped. Shifting the paper itself is what makes them feel like different
+  // studios. --surface-2 is derived from it so the banded sections keep their
+  // relationship to the page instead of floating a shade off.
+  if (b.bg) parts.push(`--bg:${b.bg}`);
+  if (b.bg2) parts.push(`--surface-2:${b.bg2}`);
   // Returned as an inline style for <html>, NOT a <style> block: Astro emits
   // theme.css after any inline head style, so a `:root{}` rule would lose on
   // source order. An inline style beats every stylesheet regardless of order.

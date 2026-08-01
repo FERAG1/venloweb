@@ -197,7 +197,9 @@
     "hi": "#5A4850",
     "ink": "#ffffff",
     "accent": "#C08A6E",
-    "_note": "warm aubergine-taupe with a rose-bronze accent. Deliberately not pink — a home studio selling precision reads more credible in a grown-up neutral, and it stays distinct from every barbershop in the set."
+    "_note": "warm aubergine-taupe with a rose-bronze accent, on a warmer paper than the barbershops. Deliberately not pink — a home studio selling precision reads more credible in a grown-up neutral. The page tint is the real separator: swapping only the button colour still leaves two sites on identical paper.",
+    "bg": "#F2EEEB",
+    "bg2": "#EBE5E1"
   },
   "copy": {
     "nl": {
@@ -219,9 +221,20 @@
       "altCut": "Werk van {n}",
       "altInterior": "De studio van {n}",
       "waBarberLbl": "Bij",
-      "faqFoot": "Staat je vraag er niet bij? Stuur me even een appje, ik antwoord zelf."
+      "faqFoot": "Staat je vraag er niet bij? Stuur me even een appje, ik antwoord zelf.",
+      "q1Sub": "Kies een behandeling om te beginnen.",
+      "q3Sub": "Kies een dag en daarna een tijd die jou schikt.",
+      "q4Sub": "Nog even je gegevens, dan stuur ik je een bevestiging.",
+      "formNote": "Je WhatsApp opent met de afspraak er al in — jij drukt op verzenden.",
+      "doneSub": "{first}, je aanvraag staat klaar in WhatsApp. Even op verzenden drukken — dan bevestig ik je afspraak zo snel mogelijk, meestal dezelfde dag.",
+      "doneBack": "Welkom terug{name}. Heb je in WhatsApp op verzenden gedrukt? Dan hoor je snel van me. Zo niet, dan kan het hieronder alsnog.",
+      "ratherCall": "Liever even appen?",
+      "waConfirm": "Tik op het nummer hierboven om te bellen en te bevestigen."
     }
   },
   "_todo": "PRIJZEN EN TIJDEN ZIJN AANNAMES — laten bevestigen door Mairi voordat dit live gaat. Ook nodig: telefoonnummer, haar eigen WhatsApp-nummer (staat nu op Giorgi's nummer), openingstijden checken, en echte foto's. ADRES BEWUST LEEG: thuisstudio, adres pas na bevestiging. GEEN Google Bedrijfsprofiel gevonden — grootste kans, want 'wenkbrauwen venlo' is een echte zoekterm.",
-  "_photos": "Alle foto's zijn nu stock. De voor/na-slider is het belangrijkste element op deze pagina en werkt alleen echt met háár resultaten — dat is het eerste dat vervangen moet worden."
+  "_photos": "Alle foto's zijn nu stock. De voor/na-slider is het belangrijkste element op deze pagina en werkt alleen echt met háár resultaten — dat is het eerste dat vervangen moet worden.",
+  "serviceIcon": "brow",
+  "rebook": false,
+  "_rebook": "De 'Weer hetzelfde?'-knop staat uit. Zet op true als Mairi juist wil dat vaste klanten in twee tikken herboeken."
 }

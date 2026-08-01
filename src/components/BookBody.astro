@@ -89,7 +89,7 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
         </form>
         <p class="note">
           <Icon name="check" size={14} stroke={2.4} />
-          Je WhatsApp opent met de afspraak er al in — jij drukt op verzenden.
+          {T.formNote}
         </p>
       </section>
 
@@ -196,7 +196,13 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
     clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
     cal: '<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
     users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    // Scissors are wrong the moment the shop is not cutting anything — a brow
+    // studio whose summary shows a pair of shears reads as a template nobody
+    // finished. Per shop, because it depends entirely on the trade.
+    spark: '<path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4L12 3z"/>',
+    brow: '<path d="M3 14c3-5 7-7.5 11-7.5S20 8 21 10"/><path d="M4.5 17c3-3.5 6.5-5 10-4.6"/>',
   };
+  const svcIcon = P[cfg.serviceIcon] || P.scissors;
 
   const avatar = (t, size) =>
     t && t.photo
@@ -306,7 +312,7 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
       </div>
       <div class="sum-rows">
         <div class="sum-row">
-          <span class="sum-ic">${ico(P.scissors)}</span>
+          <span class="sum-ic">${ico(svcIcon)}</span>
           <span class="sum-lbl">${state.service.name}</span>
           <b>€${state.service.price}</b>
         </div>
@@ -573,7 +579,7 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
   } else if (last) {
     const svc = cfg.services[last.i];
     $('bkAgainWhat').textContent = last.barber ? `${svc.name} bij ${last.barber}` : svc.name;
-    $('bkAgain').hidden = false;
+    if (cfg.rebook !== false) $('bkAgain').hidden = false;
     $('bkAgain').addEventListener('click', () => {
       selectService(last.i);
       if (last.barber) selectBarber(cfg.team.findIndex((t) => t.name === last.barber));

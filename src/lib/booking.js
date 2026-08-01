@@ -23,5 +23,9 @@ export const bookingCfg = (shop, lang) => ({
   // variable here — the URL carries correct UTF-8 either way — the variable is
   // whether their device has a font for the glyphs, which differs per owner.
   emoji: shop.emoji !== false,
+  // Which glyph labels the service row on the summary ticket, and whether the
+  // "book the same again" shortcut appears. Both are trade-dependent.
+  serviceIcon: shop.serviceIcon || 'scissors',
+  rebook: shop.rebook !== false,
   t: uiFor(shop, lang),
 });

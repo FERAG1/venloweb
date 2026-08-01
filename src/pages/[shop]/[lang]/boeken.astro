@@ -2,7 +2,7 @@
 import Bare from '../../../layouts/Bare.astro';
 import BookBody from '../../../components/BookBody.astro';
 import { allShops, shopBySlug } from '../../../lib/shops.js';
-import { localizedShop, availableLangs } from '../../../lib/shop.js';
+import { localizedShop, availableLangs, uiFor } from '../../../lib/shop.js';
 import { t } from '../../../i18n/ui.js';
 import { bookingCfg } from '../../../lib/booking.js';
 
@@ -16,7 +16,7 @@ export function getStaticPaths() {
 
 const { shop: shopSlug, lang } = Astro.params;
 const shop = localizedShop(shopBySlug(shopSlug), lang);
-const T = t(lang);
+const T = uiFor(shop, lang);
 ---
 
 <Bare shop={shop} lang={lang} title={T.bookTitle}>
