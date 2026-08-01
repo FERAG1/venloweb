@@ -1,5 +1,6 @@
 ---
 import Icon from './Icon.astro';
+import BeforeAfter from './BeforeAfter.astro';
 import Google from './Google.astro';
 import Flag from './Flag.astro';
 import { UI, fmt } from '../i18n/ui.js';
@@ -113,6 +114,13 @@ const setAt = (url, widths) =>
       <div class="peek-in"><img id="peekImg" alt="" /></div>
     </div>
   </div>
+
+  <!-- ========================= BEFORE / AFTER =========================
+       Sits directly under the hero when a shop has pairs. For treatments
+       where the result IS the product, this is the strongest thing on the
+       page and burying it below the price list wastes it. Renders nothing
+       at all when beforeAfter is absent, so the barbershops are untouched. -->
+  <BeforeAfter pairs={shop.beforeAfter || []} T={T} />
 
   <!-- ============================== WHY ============================== -->
   <section class="why-sec">

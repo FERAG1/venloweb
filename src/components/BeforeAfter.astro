@@ -1,0 +1,200 @@
+---
+// Drag-to-reveal comparison. For treatments where the result IS the product —
+// brows, lashes, colour — this does what a gallery cannot: it shows the change
+// rather than the outcome, which is the thing a customer is actually buying.
+//
+// The "after" sits underneath at full size and the "before" is clipped over it,
+// so nothing reflows as the handle moves and the two images can never
+// misalign. Everything animates through clip-path and transform only.
+const { pairs = [], T } = Astro.props;
+---
+
+{pairs.length > 0 && (
+  <section id="resultaat" class="ba-sec">
+    <div class="wrap">
+      <div class="head rise">
+        <div>
+          <p class="eyebrow">{T.eyebrowBefore}</p>
+          <h2>{T.beforeAfterTitle}</h2>
+        </div>
+      </div>
+
+      <div class="ba-grid stagger">
+        {pairs.map((p, i) => (
+          <figure class="ba" data-ba>
+            {/* Sliders are only obvious once you have touched one. The label
+                over the handle says what to do, and hides on first drag. */}
+            <span class="ba-hint">{T.dragToCompare}</span>
+
+            <img class="ba-after" src={p.after} alt={p.alt || ''} loading={i === 0 ? 'eager' : 'lazy'} />
+            <div class="ba-before-wrap">
+              <img class="ba-before" src={p.before} alt="" aria-hidden="true" />
+            </div>
+
+            <span class="ba-tag ba-tag-b">{T.labelBefore}</span>
+            <span class="ba-tag ba-tag-a">{T.labelAfter}</span>
+
+            <span class="ba-line" aria-hidden="true"><i></i></span>
+
+            {/* A real range input carries the whole interaction: drag, tap,
+                arrow keys and screen-reader support, none of which a div and a
+                pointermove handler would give for free. It is laid transparent
+                over the image and drives a CSS variable. */}
+            <input
+              class="ba-range"
+              type="range"
+              min="0"
+              max="100"
+              value="50"
+              aria-label={T.dragToCompare}
+            />
+            {p.caption && <figcaption>{p.caption}</figcaption>}
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .ba-sec { padding: clamp(72px, 12vw, var(--s7)) 0; }
+  .ba-grid { display: grid; gap: clamp(18px, 3vw, 30px); margin-top: var(--s5); }
+  @media (min-width: 760px) { .ba-grid { grid-template-columns: 1fr 1fr; } }
+
+  .ba {
+    --x: 50%;
+    position: relative;
+    margin: 0;
+    border-radius: var(--r);
+    overflow: hidden;
+    background: #e9e7e2;
+    box-shadow: var(--sh-2);
+    aspect-ratio: 4 / 5;
+    isolation: isolate;
+    /* the handle is dragged horizontally — let the page keep vertical scroll */
+    touch-action: pan-y;
+  }
+  .ba::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 1px var(--hair);
+    pointer-events: none;
+    z-index: 4;
+  }
+
+  .ba img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ba-after { position: absolute; inset: 0; }
+
+  /* Clipping a wrapper rather than resizing the image keeps the "before" frame
+     locked to the "after" frame — scaling either one makes the two drift apart
+     as the handle moves, which reads as a glitch rather than a comparison. */
+  .ba-before-wrap {
+    position: absolute; inset: 0;
+    clip-path: inset(0 calc(100% - var(--x)) 0 0);
+  }
+
+  .ba-line {
+    position: absolute; top: 0; bottom: 0; left: var(--x);
+    width: 2px; margin-left: -1px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.28);
+    z-index: 3;
+    pointer-events: none;
+  }
+  /* the grab knob */
+  .ba-line i {
+    position: absolute; top: 50%; left: 50%;
+    width: 42px; height: 42px; margin: -21px 0 0 -21px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.28);
+    display: grid; place-items: center;
+  }
+  .ba-line i::before,
+  .ba-line i::after {
+    content: '';
+    position: absolute;
+    width: 0; height: 0;
+    border-block: 5px solid transparent;
+  }
+  .ba-line i::before { border-right: 6px solid var(--ink); margin-left: -13px; }
+  .ba-line i::after  { border-left: 6px solid var(--ink);  margin-left: 13px; }
+
+  .ba-tag {
+    position: absolute; top: 12px;
+    z-index: 3;
+    padding: 5px 11px;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #fff;
+    background: rgba(14, 14, 16, 0.55);
+    backdrop-filter: blur(6px);
+    pointer-events: none;
+  }
+  .ba-tag-b { left: 12px; }
+  .ba-tag-a { right: 12px; }
+
+  .ba-hint {
+    position: absolute; left: 50%; bottom: 14px;
+    transform: translateX(-50%);
+    z-index: 3;
+    padding: 7px 14px;
+    border-radius: 100px;
+    font-size: 0.78rem;
+    font-weight: 550;
+    color: var(--ink);
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: var(--sh-1);
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+  }
+  .ba[data-touched] .ba-hint { opacity: 0; transform: translate(-50%, 6px); }
+
+  .ba-range {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    z-index: 5;
+  }
+  /* the whole surface is the target, not a 20px thumb */
+  .ba-range::-webkit-slider-thumb { -webkit-appearance: none; width: 46px; height: 100%; }
+  .ba-range::-moz-range-thumb { width: 46px; height: 100%; border: 0; opacity: 0; }
+  .ba-range:focus-visible { outline: none; }
+  .ba:has(.ba-range:focus-visible) { outline: 2px solid var(--brand); outline-offset: 3px; }
+
+  .ba figcaption {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    z-index: 2;
+    padding: 26px 16px 12px;
+    font-size: 0.84rem;
+    color: #fff;
+    background: linear-gradient(transparent, rgba(9, 9, 11, 0.6));
+    pointer-events: none;
+  }
+</style>
+
+<script>
+  function initBeforeAfter() {
+    document.querySelectorAll('[data-ba]').forEach((el) => {
+      const range = el.querySelector('.ba-range');
+      if (!range || el.dataset.bound) return;
+      el.dataset.bound = '1';
+
+      const apply = () => {
+        el.style.setProperty('--x', range.value + '%');
+      };
+      range.addEventListener('input', () => {
+        el.setAttribute('data-touched', '');
+        apply();
+      });
+      apply();
+    });
+  }
+  document.addEventListener('astro:page-load', initBeforeAfter);
+</script>

@@ -78,3 +78,15 @@ export function localizedShop(shop, lang = 'nl') {
 
 // A shop only gets a language toggle once someone has actually written the copy.
 export const availableLangs = (shop) => ['nl', ...['de'].filter((l) => shop[l])];
+
+// UI strings for a shop: the shared set, with anything in the shop's `copy`
+// block laid over the top.
+//
+// The base strings were written for barbershops and say so — "Je barbers",
+// "Vers geknipt", "verse coupe", "Bij wie wil je zitten". On a brow studio run
+// by one person out of her house, every one of those is wrong, and a template
+// that can only be sold to barbers is worth a fraction of one that can't.
+// Override only what differs; everything unlisted falls through unchanged.
+//
+//   "copy": { "nl": { "teamTitle": "..." }, "de": { ... } }
+export const uiFor = (shop, lang = 'nl') => ({ ...t(lang), ...(shop?.copy?.[lang] || {}) });

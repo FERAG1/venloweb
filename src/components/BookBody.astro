@@ -158,6 +158,16 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
   const $ = (id) => document.getElementById(id);
   const state = { step: 1, service: null, barber: null, day: null, slot: null };
 
+  // Solo operator. Asking "who would you like?" when there is exactly one
+  // answer is a step that costs a tap and tells the customer nothing — and on a
+  // one-person studio it actively reads wrong, like the page was written for
+  // somebody else. Her name is filled in behind the scenes so the WhatsApp
+  // message is unchanged, and the rail drops to three steps.
+  const solo = cfg.team.length <= 1;
+  // Step 2 is skipped in both directions rather than removed, so every existing
+  // step number and pane keeps its meaning.
+  const hop = (s, dir) => (solo && s === 2 ? (dir > 0 ? 3 : 1) : s);
+
   // "09:00 – 18:00" → [540, 1080]. Note: en-dash, not hyphen.
   const parseHours = (t) => {
     const m = t.match(/(\d{1,2}):(\d{2})\s*[–-]\s*(\d{1,2}):(\d{2})/);
@@ -350,12 +360,15 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
     paint();
   });
 
-  $('bkBack').addEventListener('click', () => { state.step--; paint(); scrollTo({ top: 0 }); });
+  $('bkBack').addEventListener('click', () => {
+    state.step = hop(state.step - 1, -1);
+    paint(); scrollTo({ top: 0 });
+  });
 
   $('bkNext').addEventListener('click', () => {
     if (!canAdvance()) return;
     if (state.step === 4) return submit();
-    state.step++;
+    state.step = hop(state.step + 1, 1);
     if (state.step === 3) renderSlots();
     if (state.step === 4) summary();
     paint();
@@ -543,10 +556,20 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
   const deepIdx = wanted ? cfg.services.findIndex((s) => s.slug === wanted) : -1;
   const last = readLast();
 
+  if (solo) {
+    // Fill her in silently so the summary and the WhatsApp message are
+    // identical to a multi-person shop, then take the step off the rail. The
+    // <li> is removed rather than hidden so the count and the numbering agree.
+    selectBarber(0);
+    document.querySelector('#bkSteps li[data-s="2"]')?.remove();
+    document.querySelectorAll('#bkSteps li i').forEach((el, i) => { el.textContent = String(i + 1); });
+  }
+
   if (deepIdx !== -1) {
     // Came from a price row — service is settled, start at the barber step.
     selectService(deepIdx);
-    state.step = 2;
+    state.step = hop(2, 1);
+    if (state.step === 3) renderSlots();
   } else if (last) {
     const svc = cfg.services[last.i];
     $('bkAgainWhat').textContent = last.barber ? `${svc.name} bij ${last.barber}` : svc.name;
@@ -555,7 +578,7 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
       selectService(last.i);
       if (last.barber) selectBarber(cfg.team.findIndex((t) => t.name === last.barber));
       // Skip to the date step when we know both, otherwise just the barber step.
-      state.step = last.barber ? 3 : 2;
+      state.step = last.barber ? 3 : hop(2, 1);
       if (state.step === 3) renderSlots();
       paint();
       scrollTo({ top: 0 });

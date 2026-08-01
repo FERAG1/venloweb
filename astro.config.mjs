@@ -17,6 +17,11 @@ const site =
 export default defineConfig({
   // Demos are unlisted — never index a spec site built on someone else's branding.
   site,
+
+  // `astro dev` binds 4321 regardless of the PORT environment variable, so two
+  // sessions of this project collide on the same port. Reading PORT here lets
+  // the launcher assign a free one; 4321 stays the default when nothing sets it.
+  server: { port: Number(process.env.PORT) || 4321, host: true },
   build: { inlineStylesheets: 'always' },
 
   vite: {

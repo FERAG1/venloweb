@@ -1,4 +1,5 @@
 import { t } from '../i18n/ui.js';
+import { uiFor } from './shop.js';
 import { pathFor } from './shops.js';
 
 // Everything the booking wizard's client script needs, serialised into the page
@@ -22,5 +23,5 @@ export const bookingCfg = (shop, lang) => ({
   // variable here — the URL carries correct UTF-8 either way — the variable is
   // whether their device has a font for the glyphs, which differs per owner.
   emoji: shop.emoji !== false,
-  t: t(lang),
+  t: uiFor(shop, lang),
 });

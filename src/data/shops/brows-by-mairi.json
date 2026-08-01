@@ -1,0 +1,227 @@
+{
+  "slug": "brows-by-mairi",
+  "name": "Brows by Mairi",
+  "logo": "",
+  "tagline": "Wenkbrauwstudio aan huis in Venlo",
+  "intro": "Ik ben Mairi. Ik werk vanuit mijn eigen studio thuis in Venlo — één klant tegelijk, geen wachtrij, geen haast. We kijken samen naar je gezicht en bouwen een vorm die bij jóu past, niet naar een trend van dit seizoen.",
+  "address": {
+    "street": "",
+    "postcode": "",
+    "city": "Venlo",
+    "maps": ""
+  },
+  "phone": "",
+  "whatsapp": "995551258383",
+  "booking": "",
+  "todayLine": "",
+  "marquee": [
+    {
+      "label": "Wenkbrauwen",
+      "img": "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?w=1200&q=80&auto=format&fit=crop"
+    },
+    {
+      "label": "Brow lamination",
+      "img": "https://images.unsplash.com/photo-1595475207225-428b62bda831?w=1200&q=80&auto=format&fit=crop"
+    },
+    {
+      "label": "Henna brows",
+      "img": "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&q=80&auto=format&fit=crop"
+    },
+    {
+      "label": "Wimperlift",
+      "img": "https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=1200&q=80&auto=format&fit=crop"
+    },
+    {
+      "label": "Harsen",
+      "img": "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=1200&q=80&auto=format&fit=crop"
+    },
+    {
+      "label": "Alleen op afspraak",
+      "img": "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80&auto=format&fit=crop"
+    }
+  ],
+  "hours": [
+    {
+      "day": "Maandag",
+      "time": "Gesloten"
+    },
+    {
+      "day": "Dinsdag",
+      "time": "09:30 – 17:00"
+    },
+    {
+      "day": "Woensdag",
+      "time": "09:30 – 17:00"
+    },
+    {
+      "day": "Donderdag",
+      "time": "12:00 – 20:00"
+    },
+    {
+      "day": "Vrijdag",
+      "time": "09:30 – 17:00"
+    },
+    {
+      "day": "Zaterdag",
+      "time": "09:00 – 14:00"
+    },
+    {
+      "day": "Zondag",
+      "time": "Gesloten"
+    }
+  ],
+  "services": [
+    {
+      "name": "Wenkbrauwen epileren",
+      "desc": "Harsen of pincet, jouw vorm",
+      "price": "15",
+      "time": "20 min"
+    },
+    {
+      "name": "Epileren + verven",
+      "desc": "Vorm en kleur in één",
+      "price": "22",
+      "time": "30 min"
+    },
+    {
+      "name": "Henna brows",
+      "desc": "Vult op, houdt langer",
+      "price": "32",
+      "time": "45 min"
+    },
+    {
+      "name": "Brow lamination",
+      "desc": "Vol en opgekamd effect",
+      "price": "45",
+      "time": "60 min"
+    },
+    {
+      "name": "Wimperlift + verven",
+      "desc": "Krul en kleur, geen extensions",
+      "price": "45",
+      "time": "60 min"
+    },
+    {
+      "name": "Bovenlip of kin",
+      "desc": "Snel en netjes mee",
+      "price": "8",
+      "time": "10 min"
+    }
+  ],
+  "team": [
+    {
+      "name": "Mairi",
+      "role": "Wenkbrauwen & wimpers",
+      "photo": "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=800&q=80&auto=format&fit=crop"
+    }
+  ],
+  "hero": "https://images.unsplash.com/photo-1571875257727-256c39da42af?w=1800&q=80&auto=format&fit=crop",
+  "beforeAfter": [
+    {
+      "before": "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1000&q=80&auto=format&fit=crop",
+      "after": "https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=1000&q=80&auto=format&fit=crop",
+      "alt": "Wenkbrauwen voor en na een behandeling bij Brows by Mairi",
+      "caption": "Epileren + verven · 30 min"
+    },
+    {
+      "before": "https://images.unsplash.com/photo-1470259078422-826894b933aa?w=1000&q=80&auto=format&fit=crop",
+      "after": "https://images.unsplash.com/photo-1595475207225-428b62bda831?w=1000&q=80&auto=format&fit=crop",
+      "alt": "Wenkbrauwen voor en na een brow lamination",
+      "caption": "Brow lamination · 60 min"
+    }
+  ],
+  "gallery": [
+    "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1457972729786-0411a3b2b626?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1595475207225-428b62bda831?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1571875257727-256c39da42af?w=1200&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=1200&q=80&auto=format&fit=crop"
+  ],
+  "storefront": "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80&auto=format&fit=crop",
+  "ctaImage": "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=1800&q=80&auto=format&fit=crop",
+  "why": [
+    {
+      "icon": "clock",
+      "title": "Eén klant tegelijk",
+      "text": "Je zit nooit in een wachtruimte. Ik plan ruim in, zodat we rustig kunnen kijken wat bij je past."
+    },
+    {
+      "icon": "razor",
+      "title": "Jouw vorm, geen sjabloon",
+      "text": "Wenkbrauwen bepalen je hele gezicht. We meten op jouw botstructuur, niet op wat nu populair is."
+    },
+    {
+      "icon": "tag",
+      "title": "Vaste prijzen",
+      "text": "Wat op de lijst staat, betaal je. Contant of via een tikkie, allebei prima."
+    }
+  ],
+  "reviews": [],
+  "geo": {
+    "lat": "",
+    "lng": ""
+  },
+  "faq": [
+    {
+      "q": "Waar zit de studio precies?",
+      "a": "Ik werk vanuit mijn eigen studio thuis in Venlo. Het exacte adres stuur ik erbij zodra je afspraak bevestigd is — zo blijft het rustig voor mij en mijn buren. Parkeren kan gewoon voor de deur."
+    },
+    {
+      "q": "Kan ik zonder afspraak langskomen?",
+      "a": "Nee, alleen op afspraak. Ik plan één klant tegelijk in, dus ik kan er niemand tussendoor nemen. Meestal kan je binnen een week terecht, vaak eerder."
+    },
+    {
+      "q": "Ik weet niet welke behandeling ik nodig heb.",
+      "a": "Geen probleem. Boek dan gewoon een epileerbeurt, dan kijken we samen. Als er iets beters bij je past hoor je dat, zonder dat je meteen iets duurders moet nemen."
+    },
+    {
+      "q": "Hoe lang blijft henna of lamination zitten?",
+      "a": "Henna op de huid houdt ongeveer een week, op de haartjes zo'n vier weken. Een lamination gaat zes tot acht weken mee. Ik zeg er eerlijk bij wanneer het bij jouw haartjes korter zal zijn."
+    },
+    {
+      "q": "Eerste keer wenkbrauwen laten doen?",
+      "a": "Dan nemen we extra tijd en beginnen we voorzichtig. We halen liever te weinig weg dan te veel — bijwerken kan altijd, terugplakken niet."
+    },
+    {
+      "q": "Hoe kan ik betalen?",
+      "a": "Contant of met een tikkie. Je krijgt het bedrag gewoon van tevoren te horen."
+    }
+  ],
+  "rating": {
+    "score": "",
+    "count": 0
+  },
+  "brand": {
+    "base": "#4A3B40",
+    "hi": "#5A4850",
+    "ink": "#ffffff",
+    "accent": "#C08A6E",
+    "_note": "warm aubergine-taupe with a rose-bronze accent. Deliberately not pink — a home studio selling precision reads more credible in a grown-up neutral, and it stays distinct from every barbershop in the set."
+  },
+  "copy": {
+    "nl": {
+      "whyHeadA": "Wenkbrauwen die",
+      "whyHeadB": "bij jóu passen.",
+      "heroWalkIn": "Alleen op afspraak · meestal binnen een week terecht",
+      "eyebrowPrices": "Behandelingen",
+      "pricesNote": "Vaste prijzen. Contant of tikkie, allebei prima.",
+      "eyebrowWork": "Mijn werk",
+      "workTitle": "Recent gedaan",
+      "eyebrowTeam": "Even voorstellen",
+      "teamTitle": "Wie ben ik",
+      "eyebrowBefore": "Het verschil",
+      "beforeAfterTitle": "Voor en na",
+      "ctaTitleA": "Klaar voor",
+      "ctaTitleB": "nieuwe wenkbrauwen?",
+      "ctaSub": "Boek online in 30 seconden. Ik bevestig persoonlijk, meestal dezelfde dag.",
+      "heroSlotsToday": "Vandaag nog plek vrij",
+      "altCut": "Werk van {n}",
+      "altInterior": "De studio van {n}",
+      "waBarberLbl": "Bij",
+      "faqFoot": "Staat je vraag er niet bij? Stuur me even een appje, ik antwoord zelf."
+    }
+  },
+  "_todo": "PRIJZEN EN TIJDEN ZIJN AANNAMES — laten bevestigen door Mairi voordat dit live gaat. Ook nodig: telefoonnummer, haar eigen WhatsApp-nummer (staat nu op Giorgi's nummer), openingstijden checken, en echte foto's. ADRES BEWUST LEEG: thuisstudio, adres pas na bevestiging. GEEN Google Bedrijfsprofiel gevonden — grootste kans, want 'wenkbrauwen venlo' is een echte zoekterm.",
+  "_photos": "Alle foto's zijn nu stock. De voor/na-slider is het belangrijkste element op deze pagina en werkt alleen echt met háár resultaten — dat is het eerste dat vervangen moet worden."
+}

@@ -5,12 +5,13 @@ import { t, base, UI } from '../i18n/ui.js';
 import Flag from '../components/Flag.astro';
 import { brandVars } from '../lib/brand.js';
 import { pathFor } from '../lib/shops.js';
+import { uiFor } from '../lib/shop.js';
 import { ClientRouter } from 'astro:transitions';
 import { BUILD_ID } from '../lib/build.js';
 const { shop, lang = 'nl', langs = ['nl'] } = Astro.props;
 // URL prefix for THIS shop + language; every internal link hangs off it.
 const B = pathFor(shop.slug, lang);
-const T = t(lang);
+const T = uiFor(shop, lang);
 const a = shop.address;
 const book = shop.booking || `${B}/boeken`;
 const bookAttrs = shop.booking ? { target: '_blank', rel: 'noopener' } : {};

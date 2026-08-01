@@ -2,8 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import HomeBody from '../../components/HomeBody.astro';
 import { allShops, shopBySlug } from '../../lib/shops.js';
-import { localizedShop, availableLangs } from '../../lib/shop.js';
-import { t } from '../../i18n/ui.js';
+import { localizedShop, availableLangs, uiFor } from '../../lib/shop.js';
 
 // One page per file in src/data/shops/. Dutch lives at the shop root.
 export function getStaticPaths() {
@@ -17,5 +16,5 @@ const langs = availableLangs(raw);
 ---
 
 <Base shop={shop} lang={lang} langs={langs}>
-  <HomeBody shop={shop} lang={lang} langs={langs} T={t(lang)} />
+  <HomeBody shop={shop} lang={lang} langs={langs} T={uiFor(shop, lang)} />
 </Base>
