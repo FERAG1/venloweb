@@ -203,6 +203,11 @@ const homeHref = `${pathFor(shop.slug, lang)}/`;
     // than a shape invented for this one slot — a hand-drawn brow arc read as a
     // squiggle at 16px, and an icon set is only legible when it is one set.
     spark: '<path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1m0-12.8-2.1 2.1m-8.6 8.6-2.1 2.1"/>',
+    // Drawn from the same primitives as the rest of the set — an open C with
+    // two crossbars — rather than a text glyph, so it inherits the stroke
+    // weight and line caps and sits at the same visual weight as the calendar
+    // and clock beneath it.
+    euro: '<path d="M17.6 6.3a7.2 7.2 0 1 0 0 11.4"/><path d="M4.6 10.6h9.6"/><path d="M4.6 13.9h8.2"/>',
   };
   const svcIcon = P[cfg.serviceIcon] || P.scissors;
 
